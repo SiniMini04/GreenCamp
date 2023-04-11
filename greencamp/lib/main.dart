@@ -7,80 +7,49 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final List<Map<String, double>> positions = [
-      //Camping Position 32-17
-      {'bottom': 0.666, 'left': 0.345},
-      {'bottom': 0.645, 'left': 0.385},
-      {'bottom': 0.63, 'left': 0.425},
-      {'bottom': 0.615, 'left': 0.465},
-      {'bottom': 0.6, 'left': 0.505},
-      {'bottom': 0.585, 'left': 0.542},
-      {'bottom': 0.57, 'left': 0.581},
-      {'bottom': 0.555, 'left': 0.619},
-      {'bottom': 0.56, 'left': 0.657},
-      {'bottom': 0.555, 'left': 0.705},
-      {'bottom': 0.55, 'left': 0.745},
-      {'bottom': 0.545, 'left': 0.785},
-      {'bottom': 0.53, 'left': 0.82},
-      {'bottom': 0.51, 'left': 0.855},
-      {'bottom': 0.485, 'left': 0.885},
-      {'bottom': 0.46, 'left': 0.915},
-      //
-      {'bottom': 0.84, 'left': 0.35},
-      {'bottom': 0.81, 'left': 0.4},
-      {'bottom': 0.78, 'left': 0.45},
-      {'bottom': 0.75, 'left': 0.5},
-      {'bottom': 0.72, 'left': 0.55},
-      {'bottom': 0.69, 'left': 0.6},
-      {'bottom': 0.66, 'left': 0.65},
-      {'bottom': 0.63, 'left': 0.7},
-      {'bottom': 0.6, 'left': 0.75},
-      {'bottom': 0.57, 'left': 0.8},
-      {'bottom': 0.54, 'left': 0.85},
-      {'bottom': 0.51, 'left': 0.9},
-      {'bottom': 0.48, 'left': 0.95},
-      {'bottom': 0.68, 'left': 0.41},
-      {'bottom': 0.65, 'left': 0.46},
-      {'bottom': 0.62, 'left': 0.51},
-      {'bottom': 0.59, 'left': 0.56},
-    ];
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: MediaQuery(
-        data: MediaQuery.of(context),
-        child: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/Campingplatz_Layout.jpg'),
-              fit: BoxFit.cover,
-            ),
+      home: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/Campingplatz_Layout.jpg'),
+            fit: BoxFit.cover,
           ),
-          child: Scaffold(
-            backgroundColor: Colors.transparent,
-            body: Stack(
-              alignment: Alignment.center,
-              children: [
-                for (final position in positions)
-                  Positioned(
-                    bottom: position['bottom']! *
-                        MediaQuery.of(context).size.height,
-                    left: position['left']! * MediaQuery.of(context).size.width,
-                    child: FractionallySizedBox(
-                      widthFactor: 0.05,
-                      heightFactor: 0.05,
-                      child: IconButton(
-                        onPressed: () {},
-                        icon: const Icon(Icons.fiber_manual_record),
-                        color: Colors.green,
-                        splashColor: Colors.transparent,
-                        highlightColor: Colors.transparent,
-                        hoverColor: Colors.transparent,
-                      ),
-                    ),
-                  )
-              ],
-            ),
+        ),
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Stack(
+            alignment: Alignment.center,
+            children: [
+              //Camping Position 1-11
+              for (int i = 0; i < 11; i++)
+                Positioned(
+                  bottom: 615 - i * 15,
+                  left: 325 + i * 40,
+                  child: IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.fiber_manual_record),
+                    color: Colors.red,
+                    splashColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    hoverColor: Colors.transparent,
+                  ),
+                ),
+              //Camping Position 12-16
+              for (int i = 12; i <= 16; i++)
+                Positioned(
+                  bottom: 485 - (i - 12) * 15,
+                  left: 760 + (i - 12) * 35,
+                  child: IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.fiber_manual_record),
+                    color: Colors.red,
+                    splashColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    hoverColor: Colors.transparent,
+                  ),
+                )
+            ],
           ),
         ),
       ),
@@ -88,11 +57,185 @@ class MyApp extends StatelessWidget {
   }
 }
 
-
-
 /*
 
-
+//Camping Position 32-17
+            Positioned(
+                bottom: 660,
+                left: 345,
+                child: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.fiber_manual_record),
+                  color: Colors.red,
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  hoverColor: Colors.transparent,
+                )),
+            Positioned(
+                bottom: 645,
+                left: 385,
+                child: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.fiber_manual_record),
+                  color: Colors.red,
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  hoverColor: Colors.transparent,
+                )),
+            Positioned(
+                bottom: 630,
+                left: 425,
+                child: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.fiber_manual_record),
+                  color: Colors.red,
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  hoverColor: Colors.transparent,
+                )),
+            Positioned(
+                bottom: 615,
+                left: 465,
+                child: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.fiber_manual_record),
+                  color: Colors.red,
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  hoverColor: Colors.transparent,
+                )),
+            Positioned(
+                bottom: 600,
+                left: 505,
+                child: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.fiber_manual_record),
+                  color: Colors.red,
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  hoverColor: Colors.transparent,
+                )),
+            Positioned(
+                bottom: 585,
+                left: 542,
+                child: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.fiber_manual_record),
+                  color: Colors.red,
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  hoverColor: Colors.transparent,
+                )),
+            Positioned(
+                bottom: 570,
+                left: 581,
+                child: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.fiber_manual_record),
+                  color: Colors.red,
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  hoverColor: Colors.transparent,
+                )),
+            Positioned(
+                bottom: 555,
+                left: 619,
+                child: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.fiber_manual_record),
+                  color: Colors.red,
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  hoverColor: Colors.transparent,
+                )),
+            Positioned(
+                bottom: 560,
+                left: 657,
+                child: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.fiber_manual_record),
+                  color: Colors.red,
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  hoverColor: Colors.transparent,
+                )),
+            Positioned(
+                bottom: 555,
+                left: 705,
+                child: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.fiber_manual_record),
+                  color: Colors.red,
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  hoverColor: Colors.transparent,
+                )),
+            Positioned(
+                bottom: 550,
+                left: 745,
+                child: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.fiber_manual_record),
+                  color: Colors.red,
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  hoverColor: Colors.transparent,
+                )),
+            Positioned(
+                bottom: 545,
+                left: 785,
+                child: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.fiber_manual_record),
+                  color: Colors.red,
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  hoverColor: Colors.transparent,
+                )),
+            Positioned(
+                bottom: 530,
+                left: 820,
+                child: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.fiber_manual_record),
+                  color: Colors.red,
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  hoverColor: Colors.transparent,
+                )),
+            Positioned(
+                bottom: 510,
+                left: 855,
+                child: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.fiber_manual_record),
+                  color: Colors.red,
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  hoverColor: Colors.transparent,
+                )),
+            Positioned(
+                bottom: 485,
+                left: 885,
+                child: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.fiber_manual_record),
+                  color: Colors.red,
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  hoverColor: Colors.transparent,
+                )),
+            Positioned(
+                bottom: 460,
+                left: 915,
+                child: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.fiber_manual_record),
+                  color: Colors.red,
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  hoverColor: Colors.transparent,
+                )),
 //Camping Position 33-45B
             Positioned(
                 bottom: 715,
