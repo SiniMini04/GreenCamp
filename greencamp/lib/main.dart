@@ -145,15 +145,10 @@ void main() {
                   highlightColor: Colors.transparent,
                   hoverColor: Colors.transparent,
                   key: ValueKey(campingPlaceKey++),
-                  ),
-          ],
-        ),
-      ),
-    ),
-  ));
-}
+                ),
+              ),
 
-// 197
+            // 197
             Positioned(
                 bottom: 380,
                 right: 800,
@@ -2382,3 +2377,9 @@ void main() {
                 hoverColor: Colors.transparent,
               ),
             ),
+          ],
+        ),
+      ),
+    ),
+  ));
+}
