@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'datenbankabfrage.dart';
 
 void main() {
+  selectQuery();
+
   final List<Map<String, double>> positions = [
     //Camping Position 1-11
     {'bottom': 615, 'left': 325},
