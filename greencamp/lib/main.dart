@@ -1,8 +1,21 @@
 import 'package:flutter/material.dart';
+import 'datenbankabfrage.dart';
 import 'positions.dart';
 
 void main() {
-  runApp(MaterialApp(
+  selectQuery();
+  runApp();
+}
+
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  Widget build(BuildContext context) {
+    MaterialApp(
     debugShowCheckedModeBanner: false,
     home: Builder(
       builder: (context) {
@@ -11,6 +24,7 @@ void main() {
           decoration: const BoxDecoration(
             image: DecorationImage(
               image: AssetImage('assets/Campingplatz_Layout.jpg'),
+              
               fit: BoxFit.cover,
             ),
           ),
@@ -33,7 +47,9 @@ void main() {
                     child: IconButton(
                       onPressed: () {},
                       icon: const Icon(Icons.fiber_manual_record),
-                      color: Colors.green,
+                      color: changeColorFromButton(campingPlaceKey)
+                      ? Colors.red
+                      : Colors.green,
                       splashColor: Colors.transparent,
                       highlightColor: Colors.transparent,
                       hoverColor: Colors.transparent,
@@ -47,4 +63,8 @@ void main() {
       },
     ),
   ));
+
+    return Container();
+  }
+
 }
