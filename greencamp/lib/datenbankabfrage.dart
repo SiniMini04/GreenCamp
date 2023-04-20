@@ -6,8 +6,15 @@ var logger = Logger(
   printer: PrettyPrinter(),
 );
 
+bool isResultEmpty = false;
+
 bool returnColorOption(int buttonId) {
-  return false;
+  changeColorFromButton(buttonId);
+  if (isResultEmpty) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 Future<bool> changeColorFromButton(int buttonId) async {
@@ -20,10 +27,14 @@ Future<bool> changeColorFromButton(int buttonId) async {
   ));
   final results =
       await conn.query('select * from TCampsite where CampNr=?', [buttonId]);
+
   if (results.isNotEmpty) {
-    return true;
+    logger.d('True');
+    isResultEmpty = true;
   }
-  return false;
+  logger.d('false');
+  isResultEmpty = false;
+  return true;
 }
 
 Future<Results> selectQuery() async {
