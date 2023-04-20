@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:mysql1/mysql1.dart';
 import 'package:logger/logger.dart';
 
@@ -7,15 +6,6 @@ var logger = Logger(
 );
 
 bool isResultEmpty = false;
-
-bool returnColorOption(int buttonId) {
-  changeColorFromButton(buttonId);
-  if (isResultEmpty) {
-    return true;
-  } else {
-    return false;
-  }
-}
 
 Future<bool> changeColorFromButton(int buttonId) async {
   final conn = await MySqlConnection.connect(ConnectionSettings(
@@ -28,14 +18,28 @@ Future<bool> changeColorFromButton(int buttonId) async {
   final results = await conn.query(
       "select * from TCampsite where CampNr=? AND CampBesetzt='Ja'",
       [buttonId]);
-  await conn.close();
+
   logger.d(results);
   if (results.isNotEmpty) {
+    logger.i("not Empty");
     isResultEmpty = true;
+    await conn.close();
+    return false;
+  } else {
+    isResultEmpty = false;
+    await conn.close();
+    return true;
+  }
+}
+
+bool returnColorOption(int buttonId) {
+  changeColorFromButton(buttonId);
+  if (isResultEmpty) {
+    logger.d('true');
+    return true;
+  } else {
     return false;
   }
-  isResultEmpty = false;
-  return true;
 }
 
 Future<Results> selectQuery() async {
