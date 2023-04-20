@@ -6,7 +6,27 @@ var logger = Logger(
   printer: PrettyPrinter(),
 );
 
-Future<void> selectQuery() async {
+bool returnColorOption(int buttonId) {
+  return false;
+}
+
+Future<bool> changeColorFromButton(int buttonId) async {
+  final conn = await MySqlConnection.connect(ConnectionSettings(
+    host: 'localhost',
+    port: 3306,
+    user: 'root',
+    password: '1234',
+    db: 'mydb',
+  ));
+  final results =
+      await conn.query('select * from TCampsite where CampNr=?', [buttonId]);
+  if (results.isNotEmpty) {
+    return true;
+  }
+  return false;
+}
+
+Future<Results> selectQuery() async {
   final conn = await MySqlConnection.connect(ConnectionSettings(
     host: 'localhost',
     port: 3306,
@@ -32,11 +52,5 @@ Future<void> selectQuery() async {
   //logger.i('Inserted record with ID: ${results}');
 
   await conn.close();
-  // Do smth with the results gotten from the Select Query
-  //for (var row in results) {
-  //final id = row[0];
-  //final name = row[1];
-  //final email = row[2];
-  // ...
-  //}
+  return results;
 }
