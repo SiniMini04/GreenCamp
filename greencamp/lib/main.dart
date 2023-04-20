@@ -3,8 +3,8 @@ import 'datenbankabfrage.dart';
 import 'positions.dart';
 
 void main() {
-  selectQuery();
   runApp(MyApp());
+  selectQuery();
 }
 
 class MyApp extends StatefulWidget {
@@ -15,7 +15,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Builder(
         builder: (context) {
@@ -62,7 +62,5 @@ class _MyAppState extends State<MyApp> {
         },
       ),
     );
-
-    return Container();
   }
 }

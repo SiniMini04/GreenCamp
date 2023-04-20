@@ -25,14 +25,15 @@ Future<bool> changeColorFromButton(int buttonId) async {
     password: '1234',
     db: 'mydb',
   ));
-  final results =
-      await conn.query('select * from TCampsite where CampNr=?', [buttonId]);
-
+  final results = await conn.query(
+      "select * from TCampsite where CampNr=? AND CampBesetzt='Ja'",
+      [buttonId]);
+  await conn.close();
+  logger.d(results);
   if (results.isNotEmpty) {
-    logger.d('True');
     isResultEmpty = true;
+    return false;
   }
-  logger.d('false');
   isResultEmpty = false;
   return true;
 }
