@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'datenbankabfrage.dart';
 import 'positions.dart';
+import 'popup.dart';
 
 void main() {
   runApp(MyApp());
@@ -44,11 +45,14 @@ class _MyAppState extends State<MyApp> {
                           ? mediaSize.width * (positions[index]['right'] ?? 0)
                           : null,
                       child: IconButton(
-                        onPressed: () {},
+                        onPressed: () async {
+                          await positioninfos(context);
+                        },
                         icon: const Icon(Icons.fiber_manual_record),
-                        color: returnColorOption(index)
+                        color: Colors.green,
+                        /*color: returnColorOption(index)
                             ? Colors.red
-                            : Colors.green,
+                            : Colors.green,*/
                         splashColor: Colors.transparent,
                         highlightColor: Colors.transparent,
                         hoverColor: Colors.transparent,
@@ -64,3 +68,5 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
+
+class BasicDialogAlert {}
