@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:mysql1/mysql1.dart';
 import 'package:logger/logger.dart';
 
@@ -10,20 +11,20 @@ Future<void> selectQuery() async {
     host: 'localhost',
     port: 3306,
     user: 'root',
-    password: '',
+    password: '1234',
     db: 'mydb',
   ));
 
-  List<Map<String, dynamic>> results =
-      await database.rawQuery('SELECT * FROM my_table');
+// Select Query
+  final results = await conn.query('select * from TCampsite;');
+
   for (var row in results) {
-    logger.d('ID: ${row['id']}, Name: ${row['name']}, Age: ${row['age']}');
+    logger.d(
+        'ID: ${row['CampNr']}, CampNr: ${row['CampActuallNr']}, CampBesetzt: ${row['CampBesetzt']}');
   }
-  // Select Query
-  //final results = await conn.query('SELECT * FROM TCampsite');
 
   // Insert Query
-  // var result = await conn
+  // var result = await conny
   // .query('INSERT INTO mytable (name, age) VALUES (?, ?)', ['John Doe', 30]);
 
   // Result
