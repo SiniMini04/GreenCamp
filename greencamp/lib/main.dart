@@ -43,16 +43,31 @@ class _MyAppState extends State<MyApp> {
                       right: positions[index].containsKey('right')
                           ? mediaSize.width * (positions[index]['right'] ?? 0)
                           : null,
-                      child: IconButton(
-                        onPressed: () async {},
-                        icon: const Icon(Icons.fiber_manual_record),
-                        color: returnColorOption(index)
-                            ? Colors.red
-                            : Colors.green,
-                        splashColor: Colors.transparent,
-                        highlightColor: Colors.transparent,
-                        hoverColor: Colors.transparent,
-                        key: ValueKey(index),
+                      child: Stack(
+                        children: [
+                          IconButton(
+                            onPressed: () async {},
+                            icon: const Icon(Icons.fiber_manual_record),
+                            color: returnColorOption(index)
+                                ? Colors.red
+                                : Colors.green,
+                            splashColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
+                            hoverColor: Colors.transparent,
+                            key: ValueKey(index),
+                          ),
+                          if (positions[index]['electricityConnection'] == true)
+                            Positioned.fill(
+                              child: IconButton(
+                                onPressed: () {},
+                                icon: const Icon(Icons.bolt),
+                                color: Colors.yellow,
+                                splashColor: Colors.transparent,
+                                highlightColor: Colors.transparent,
+                                hoverColor: Colors.transparent,
+                              ),
+                            ),
+                        ],
                       ),
                     ),
                 ],
@@ -66,18 +81,3 @@ class _MyAppState extends State<MyApp> {
 }
 
 class BasicDialogAlert {}
-
-  if (position['electricityConnection'] == true) {
-    return Positioned(
-      bottom: position['bottom'],
-      left: position['left'],
-      child: IconButton(
-        onPressed: () {},
-        icon: const Icon(Icons.bolt),
-        color: Colors.yellow,
-        splashColor: Colors.transparent,
-        highlightColor: Colors.transparent,
-        hoverColor: Colors.transparent,
-      ),
-    );
-  }
