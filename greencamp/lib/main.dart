@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'datenbankabfrage.dart';
 import 'positions.dart';
-import 'popup.dart';
+import 'gridinfos.dart';
 
 void main() {
   runApp(MyApp());
@@ -49,10 +49,9 @@ class _MyAppState extends State<MyApp> {
                           await positioninfos(context);
                         },
                         icon: const Icon(Icons.fiber_manual_record),
-                        color: Colors.green,
-                        /*color: returnColorOption(index)
+                        color: returnColorOption(index)
                             ? Colors.red
-                            : Colors.green,*/
+                            : Colors.green,
                         splashColor: Colors.transparent,
                         highlightColor: Colors.transparent,
                         hoverColor: Colors.transparent,
