@@ -66,3 +66,18 @@ class _MyAppState extends State<MyApp> {
 }
 
 class BasicDialogAlert {}
+
+  if (position['electricityConnection'] == true) {
+    return Positioned(
+      bottom: position['bottom'],
+      left: position['left'],
+      child: IconButton(
+        onPressed: () {},
+        icon: const Icon(Icons.bolt),
+        color: Colors.yellow,
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        hoverColor: Colors.transparent,
+      ),
+    );
+  }
