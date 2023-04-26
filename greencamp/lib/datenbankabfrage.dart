@@ -24,8 +24,8 @@ Future<void> changeColorFromButton(int buttonId) async {
 
   logger.d(results);
   if (results.isNotEmpty) {
-    logger.i("not Empty");
     isResultEmpty = true;
+
     await conn.close();
   } else {
     isResultEmpty = false;
@@ -34,13 +34,12 @@ Future<void> changeColorFromButton(int buttonId) async {
 }
 
 bool returnColorOption(int buttonId) {
-  bool result = false;
   changeColorFromButton(buttonId);
-  if (isResultEmpty) {
-    logger.d('true');
-    result = true;
+  logger.i(isResultEmpty);
+  if (!isResultEmpty) {
+    return false;
   }
-  return result;
+  return true;
 }
 
 Future<Results> selectQuery() async {
