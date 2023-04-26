@@ -1,5 +1,6 @@
 import 'package:mysql1/mysql1.dart';
 import 'package:logger/logger.dart';
+import 'dart:async';
 
 var logger = Logger(
   printer: PrettyPrinter(),
@@ -7,7 +8,9 @@ var logger = Logger(
 
 bool isResultEmpty = false;
 
-Future<bool> changeColorFromButton(int buttonId) async {
+Future<void> changeColorFromButton(int buttonId) async {
+  buttonId += 1;
+
   final conn = await MySqlConnection.connect(ConnectionSettings(
     host: 'localhost',
     port: 3306,
@@ -24,22 +27,20 @@ Future<bool> changeColorFromButton(int buttonId) async {
     logger.i("not Empty");
     isResultEmpty = true;
     await conn.close();
-    return false;
   } else {
     isResultEmpty = false;
     await conn.close();
-    return true;
   }
 }
 
 bool returnColorOption(int buttonId) {
+  bool result = false;
   changeColorFromButton(buttonId);
   if (isResultEmpty) {
     logger.d('true');
-    return true;
-  } else {
-    return false;
+    result = true;
   }
+  return result;
 }
 
 Future<Results> selectQuery() async {

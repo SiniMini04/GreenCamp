@@ -4,7 +4,6 @@ import 'positions.dart';
 
 void main() {
   runApp(MyApp());
-  selectQuery();
 }
 
 class MyApp extends StatefulWidget {
