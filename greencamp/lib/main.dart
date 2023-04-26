@@ -48,9 +48,10 @@ class _MyAppState extends State<MyApp> {
                           IconButton(
                             onPressed: () async {},
                             icon: const Icon(Icons.fiber_manual_record),
-                            color: returnColorOption(index)
+                            color: Colors.green,
+                            /*color: returnColorOption(index)
                                 ? Colors.red
-                                : Colors.green,
+                                : Colors.green,*/
                             splashColor: Colors.transparent,
                             highlightColor: Colors.transparent,
                             hoverColor: Colors.transparent,
@@ -58,15 +59,11 @@ class _MyAppState extends State<MyApp> {
                           ),
                           if (positions[index]['electricityConnection'] == true)
                             Positioned.fill(
-                              child: IconButton(
-                                onPressed: () {},
-                                icon: const Icon(Icons.bolt),
-                                color: Colors.yellow,
-                                splashColor: Colors.transparent,
-                                highlightColor: Colors.transparent,
-                                hoverColor: Colors.transparent,
-                              ),
-                            ),
+                                child: Icon(
+                              Icons.bolt,
+                              color: Colors.yellow,
+                              size: 15.0,
+                            )),
                         ],
                       ),
                     ),
