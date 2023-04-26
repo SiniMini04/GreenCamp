@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'datenbankabfrage.dart';
 import 'positions.dart';
+import 'package:logger/logger.dart';
+import 'package:mysql1/mysql1.dart';
+import 'dart:async';
 
 void main() {
   runApp(MyApp());
@@ -9,6 +11,37 @@ void main() {
 class MyApp extends StatefulWidget {
   @override
   _MyAppState createState() => _MyAppState();
+}
+
+bool isButtonFree = false;
+bool dbAbfrage = false;
+
+var logger = Logger(
+  printer: PrettyPrinter(),
+);
+
+Future<bool> checkButtonStatus(int buttonId) async {
+  buttonId += 1;
+  final conn = await MySqlConnection.connect(ConnectionSettings(
+    host: 'localhost',
+    port: 3306,
+    user: 'root',
+    password: '1234',
+    db: 'mydb',
+  ));
+  final results = await conn.query(
+      "select * from TCampsite where CampNr=? AND CampBesetzt='Ja'",
+      [buttonId]);
+  bool isButtonOccupied = false;
+  logger.d(results, dbAbfrage);
+  if (results.isNotEmpty) {
+    isButtonOccupied = true;
+  } else {
+    isButtonOccupied = false;
+  }
+
+  await conn.close();
+  return isButtonOccupied;
 }
 
 class _MyAppState extends State<MyApp> {
@@ -42,16 +75,26 @@ class _MyAppState extends State<MyApp> {
                       right: positions[index].containsKey('right')
                           ? mediaSize.width * (positions[index]['right'] ?? 0)
                           : null,
-                      child: IconButton(
-                        onPressed: () {},
-                        icon: const Icon(Icons.fiber_manual_record),
-                        color: returnColorOption(index)
-                            ? Colors.red
-                            : Colors.green,
-                        splashColor: Colors.transparent,
-                        highlightColor: Colors.transparent,
-                        hoverColor: Colors.transparent,
-                        key: ValueKey(index),
+                      child: FutureBuilder<bool>(
+                        future: changeColorFromButton(index),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<bool> snapshot) {
+                          logger.d(isButtonFree);
+                          if (!dbAbfrage) {
+                            return IconButton(
+                              onPressed: () {},
+                              icon: const Icon(Icons.fiber_manual_record),
+                              color: isButtonFree ? Colors.red : Colors.green,
+                              splashColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              hoverColor: Colors.transparent,
+                              key: ValueKey(index),
+                            );
+                          } else {
+                            // Display a loading indicator while the future is being resolved
+                            return CircularProgressIndicator();
+                          }
+                        },
                       ),
                     ),
                 ],
@@ -62,4 +105,11 @@ class _MyAppState extends State<MyApp> {
       ),
     );
   }
+}
+
+Future<bool> changeColorFromButton(int index) async {
+  dbAbfrage = true;
+  await checkButtonStatus(index).then((value) => isButtonFree = value);
+  dbAbfrage = false;
+  return isButtonFree;
 }
