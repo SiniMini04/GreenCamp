@@ -8,9 +8,11 @@ var logger = Logger(
 
 bool isResultEmpty = false;
 
-Future<void> changeColorFromButton(int buttonId) async {
-  buttonId += 1;
+bool isButtonFree = false;
+bool dbAbfrage = false;
 
+Future<bool> checkButtonStatus(int buttonId) async {
+  buttonId += 1;
   final conn = await MySqlConnection.connect(ConnectionSettings(
     host: 'localhost',
     port: 3306,
@@ -21,25 +23,25 @@ Future<void> changeColorFromButton(int buttonId) async {
   final results = await conn.query(
       "select * from TCampsite where CampNr=? AND CampBesetzt='Ja'",
       [buttonId]);
-
-  logger.d(results);
+  bool isButtonOccupied = false;
+  // logger.d(results, dbAbfrage);
   if (results.isNotEmpty) {
-    isResultEmpty = true;
-
-    await conn.close();
+    isButtonOccupied = true;
   } else {
-    isResultEmpty = false;
-    await conn.close();
+    isButtonOccupied = false;
   }
+
+  await conn.close();
+  return isButtonOccupied;
 }
 
-bool returnColorOption(int buttonId) {
-  changeColorFromButton(buttonId);
-  logger.i(isResultEmpty);
-  if (!isResultEmpty) {
-    return false;
-  }
-  return true;
+Future<bool> changeColorFromButton(int index) async {
+  dbAbfrage = true;
+  bool buttonStatus = await checkButtonStatus(index);
+  isButtonFree = buttonStatus;
+  logger.i(isButtonFree);
+  dbAbfrage = false;
+  return isButtonFree;
 }
 
 Future<Results> selectQuery() async {
