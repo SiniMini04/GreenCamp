@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'datenbankabfrage.dart';
 import 'positions.dart';
+import 'gridinfos.dart';
 
 void main() {
   runApp(MyApp());
@@ -43,6 +44,7 @@ class _MyAppState extends State<MyApp> {
                       right: positions[index].containsKey('right')
                           ? mediaSize.width * (positions[index]['right'] ?? 0)
                           : null,
+
                       child: Stack(
                         children: [
                           IconButton(
