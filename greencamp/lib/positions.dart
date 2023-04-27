@@ -1,5 +1,3 @@
-
-import 'package:flutter/gestures.dart';
 final List<Map<String, dynamic>> positions = [
   //Camping Position 1-11
   {'bottom': 0.60471976, 'left': 0.16927083, 'electricityConnection': false},

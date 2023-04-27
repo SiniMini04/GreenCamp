@@ -67,18 +67,18 @@ class _MyAppState extends State<MyApp> {
                       child: Stack(
                         children: [
                           _isLoading
-                          ? CircularProgressIndicator()
-                          : IconButton(
-                              onPressed: positioninfos(),
-                              icon: const Icon(Icons.fiber_manual_record),
-                              color: _isButtonFree[index]
-                                  ? Colors.red
-                                  : Colors.green,
-                              splashColor: Colors.transparent,
-                              highlightColor: Colors.transparent,
-                              hoverColor: Colors.transparent,
-                              key: ValueKey(index),
-                            ),
+                              ? CircularProgressIndicator()
+                              : IconButton(
+                                  onPressed: (() => positioninfos(context)),
+                                  icon: const Icon(Icons.fiber_manual_record),
+                                  color: _isButtonFree[index]
+                                      ? Colors.red
+                                      : Colors.green,
+                                  splashColor: Colors.transparent,
+                                  highlightColor: Colors.transparent,
+                                  hoverColor: Colors.transparent,
+                                  key: ValueKey(index),
+                                ),
                           if (positions[index]['electricityConnection'] == true)
                             Positioned.fill(
                                 child: Icon(
