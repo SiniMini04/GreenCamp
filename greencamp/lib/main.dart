@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'positions.dart';
 import 'datenbankabfrage.dart';
+import 'gridinfos.dart';
 
 void main() {
   runApp(MyApp());
@@ -63,7 +64,9 @@ class _MyAppState extends State<MyApp> {
                       right: positions[index].containsKey('right')
                           ? mediaSize.width * (positions[index]['right'] ?? 0)
                           : null,
-                      child: _isLoading
+                      child: Stack(
+                        children: [
+                          _isLoading
                           ? CircularProgressIndicator()
                           : IconButton(
                               onPressed: positioninfos(),
@@ -76,6 +79,15 @@ class _MyAppState extends State<MyApp> {
                               hoverColor: Colors.transparent,
                               key: ValueKey(index),
                             ),
+                          if (positions[index]['electricityConnection'] == true)
+                            Positioned.fill(
+                                child: Icon(
+                              Icons.bolt,
+                              color: Colors.yellow,
+                              size: 15.0,
+                            )),
+                        ],
+                      ),
                     ),
                 ],
               ),
@@ -86,3 +98,5 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
+
+class BasicDialogAlert {}
