@@ -14,11 +14,11 @@ bool dbAbfrage = false;
 Future<bool> checkButtonStatus(int buttonId) async {
   buttonId += 1;
   final conn = await MySqlConnection.connect(ConnectionSettings(
-    host: 'localhost',
+    host: 'w01cc2a0.kasserver.com',
     port: 3306,
-    user: 'root',
-    password: '1234',
-    db: 'mydb',
+    user: 'd03ce24d',
+    password: 'Skilla303!',
+    db: 'd03ce24d',
   ));
   final results = await conn.query(
       "select * from TCampsite where CampNr=? AND CampBesetzt='Ja'",
