@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'datenbankabfrage.dart';
 import 'positions.dart';
+import 'datenbankabfrage.dart';
 import 'gridinfos.dart';
 
 void main() {
   runApp(MyApp());
-  selectQuery();
 }
 
 class MyApp extends StatefulWidget {
@@ -14,6 +13,27 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  bool _isLoading = true;
+  List<bool> _isButtonFree = List.filled(positions.length, false);
+
+  @override
+  void initState() {
+    super.initState();
+    _getButtonFreeStatuses();
+  }
+
+  Future<void> _getButtonFreeStatuses() async {
+    for (var index = 0; index < positions.length; index++) {
+      final isButtonFree = await changeColorFromButton(index);
+      setState(() {
+        _isButtonFree[index] = isButtonFree;
+      });
+    }
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -44,21 +64,21 @@ class _MyAppState extends State<MyApp> {
                       right: positions[index].containsKey('right')
                           ? mediaSize.width * (positions[index]['right'] ?? 0)
                           : null,
-
                       child: Stack(
                         children: [
-                          IconButton(
-                            onPressed: () async {},
-                            icon: const Icon(Icons.fiber_manual_record),
-                            color: Colors.green,
-                            /*color: returnColorOption(index)
-                                ? Colors.red
-                                : Colors.green,*/
-                            splashColor: Colors.transparent,
-                            highlightColor: Colors.transparent,
-                            hoverColor: Colors.transparent,
-                            key: ValueKey(index),
-                          ),
+                          _isLoading
+                          ? CircularProgressIndicator()
+                          : IconButton(
+                              onPressed: positioninfos(),
+                              icon: const Icon(Icons.fiber_manual_record),
+                              color: _isButtonFree[index]
+                                  ? Colors.red
+                                  : Colors.green,
+                              splashColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              hoverColor: Colors.transparent,
+                              key: ValueKey(index),
+                            ),
                           if (positions[index]['electricityConnection'] == true)
                             Positioned.fill(
                                 child: Icon(

@@ -1,5 +1,6 @@
 import 'package:mysql1/mysql1.dart';
 import 'package:logger/logger.dart';
+import 'dart:async';
 
 var logger = Logger(
   printer: PrettyPrinter(),
@@ -7,7 +8,11 @@ var logger = Logger(
 
 bool isResultEmpty = false;
 
-Future<bool> changeColorFromButton(int buttonId) async {
+bool isButtonFree = false;
+bool dbAbfrage = false;
+
+Future<bool> checkButtonStatus(int buttonId) async {
+  buttonId += 1;
   final conn = await MySqlConnection.connect(ConnectionSettings(
     host: 'localhost',
     port: 3306,
@@ -18,28 +23,25 @@ Future<bool> changeColorFromButton(int buttonId) async {
   final results = await conn.query(
       "select * from TCampsite where CampNr=? AND CampBesetzt='Ja'",
       [buttonId]);
-
-  logger.d(results);
+  bool isButtonOccupied = false;
+  // logger.d(results, dbAbfrage);
   if (results.isNotEmpty) {
-    logger.i("not Empty");
-    isResultEmpty = true;
-    await conn.close();
-    return false;
+    isButtonOccupied = true;
   } else {
-    isResultEmpty = false;
-    await conn.close();
-    return true;
+    isButtonOccupied = false;
   }
+
+  await conn.close();
+  return isButtonOccupied;
 }
 
-bool returnColorOption(int buttonId) {
-  changeColorFromButton(buttonId);
-  if (isResultEmpty) {
-    logger.d('true');
-    return true;
-  } else {
-    return false;
-  }
+Future<bool> changeColorFromButton(int index) async {
+  dbAbfrage = true;
+  bool buttonStatus = await checkButtonStatus(index);
+  isButtonFree = buttonStatus;
+  logger.i(isButtonFree);
+  dbAbfrage = false;
+  return isButtonFree;
 }
 
 Future<Results> selectQuery() async {
