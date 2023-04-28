@@ -42,8 +42,8 @@ Future<List<Map<String, dynamic>>> getLendStatus(int campNr) async {
       strasse = row['KundAdresse'];
       plzOrt = row['KundVorname'];
       kreditKarte = row['KundKreditkartenNr'].toString();
-      mietBeginn = row['KundVorname'];
-      mietEnde = row['KundVorname'];
+      mietBeginn = row['KundBeginMiete'];
+      mietEnde = row['KundEndeMiete'];
     }
   }
 
@@ -162,7 +162,7 @@ Future<void> positioninfos(BuildContext context, int campNr) async {
               Row(
                 children: [
                   Expanded(child: const Text('Mietdauer:')),
-                  Flexible(child: Text('22.06.2023 - 25.06.2023')),
+                  Flexible(child: Text(mietBeginn + ' - ' + mietEnde)),
                 ],
               ),
               const SizedBox(height: 8),

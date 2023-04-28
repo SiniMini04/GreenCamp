@@ -14,11 +14,11 @@ bool dbAbfrage = false;
 Future<bool> checkButtonStatus(int buttonId) async {
   buttonId += 1;
   final conn = await MySqlConnection.connect(ConnectionSettings(
-    host: 'localhost',
+    host: 'w01cc2a0.kasserver.com',
     port: 3306,
-    user: 'root',
-    password: '1234',
-    db: 'mydb',
+    user: 'd03ce24d',
+    password: 'Skilla303!',
+    db: 'd03ce24d',
   ));
   final results = await conn.query(
       "select * from TCampsite where CampNr=? AND CampBesetzt='Ja'",
@@ -46,16 +46,16 @@ Future<bool> changeColorFromButton(int index) async {
 
 Future<Results> selectQuery(int campNr) async {
   final conn = await MySqlConnection.connect(ConnectionSettings(
-    host: 'localhost',
+    host: 'w01cc2a0.kasserver.com',
     port: 3306,
-    user: 'root',
-    password: '1234',
-    db: 'mydb',
+    user: 'd03ce24d',
+    password: 'Skilla303!',
+    db: 'd03ce24d',
   ));
 
 // Select Query
   final results = await conn.query(
-      'select KundVorname, KundName, KundEMail, KundTelefonNr, KundAdresse, KundKreditkartenNr from TCampsite c, TBelege b, TKunden k where c.CampNr = ? and c.CampNr = b.CampNr and b.KundId = k.KundId;',
+      'select KundVorname, KundName, KundEMail, KundTelefonNr, KundAdresse, KundKreditkartenNr, KundBeginMiete, KundEndeMiete from TCampsite c, TBelege b, TKunden k where c.CampNr = ? and c.CampNr = b.CampNr and b.KundId = k.KundId;',
       [campNr]);
 
   for (var row in results) {
