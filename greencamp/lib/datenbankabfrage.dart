@@ -1,6 +1,5 @@
 import 'package:mysql1/mysql1.dart';
 import 'package:logger/logger.dart';
-
 import 'dart:async';
 
 var logger = Logger(
@@ -107,6 +106,8 @@ Future<void> insertData(vorname, name, adresse, kreditkarteNr, mail, telefon,
         "insert into TBelege (KundId, CampNr) values (?,?);",
         [firstKundId, campNr]);
 
+    var updateCamp = await conn.query(
+        "UPDATE TCampsite SET CampBesetzt = 'Ja' WHERE CampNr = ?;", [campNr]);
     //logger.i('Inserted record with ID: ${results}');
   }
   await conn.close();

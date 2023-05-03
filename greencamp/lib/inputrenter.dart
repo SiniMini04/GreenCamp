@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'datenbankabfrage.dart';
-import 'gridinfos.dart';
+import 'gridInfoInsert.dart';
 
 String vorname = "";
 String nachname = "";
@@ -251,7 +251,7 @@ Future<void> inputRenter(BuildContext context, int campNr) async {
                                 mietEnde,
                                 campNr);
                             Navigator.of(context).pop();
-                            positioninfos(context, campNr);
+                            gridInfoAfterInsert(context, campNr);
                           },
                           child: Text('Speichern')))
                 ],
