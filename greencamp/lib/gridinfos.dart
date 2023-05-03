@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:greencamp/datenbankabfrage.dart';
 import 'package:mysql1/src/single_connection.dart';
+import 'inputrenter.dart';
+
 
 String vorname = "";
 String nachname = "";
@@ -173,7 +175,10 @@ Future<void> positioninfos(BuildContext context, int campNr) async {
                           onPressed: () {}, child: Text('Bearbeiten'))),
                   Expanded(
                       child: TextButton(
-                          onPressed: () {}, child: Text('Hinzufügen')))
+                          onPressed: () {
+                            inputRenter(context);
+                          },
+                          child: Text('Hinzufügen')))
                 ],
               ),
             ],
