@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'inputrenter.dart';
 
 Future<void> positioninfos(BuildContext context) async {
   await showDialog<String>(
@@ -122,7 +123,10 @@ Future<void> positioninfos(BuildContext context) async {
                           onPressed: () {}, child: Text('Bearbeiten'))),
                   Expanded(
                       child: TextButton(
-                          onPressed: () {}, child: Text('Hinzufügen')))
+                          onPressed: () {
+                            inputRenter(context);
+                          },
+                          child: Text('Hinzufügen')))
                 ],
               ),
             ],
