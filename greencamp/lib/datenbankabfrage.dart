@@ -11,7 +11,11 @@ bool isResultEmpty = false;
 bool isButtonFree = false;
 bool dbAbfrage = false;
 
+var firstKundId = 0;
+
 Future<bool> checkButtonStatus(int buttonId) async {
+  buttonId += 1;
+
   final conn = await MySqlConnection.connect(ConnectionSettings(
     host: 'localhost',
     port: 3306,
@@ -72,4 +76,37 @@ Future<Results> selectQuery(int campNr) async {
 
   await conn.close();
   return results;
+}
+
+Future<void> insertData(vorname, name, adresse, kreditkarteNr, mail, telefon,
+    begin, ende, campNr) async {
+  final conn = await MySqlConnection.connect(ConnectionSettings(
+    host: 'localhost',
+    port: 3306,
+    user: 'root',
+    password: '1234',
+    db: 'mydb',
+  ));
+
+  var checkForRent = await conn
+      .query("select * from TBelege, TKunden where CampNr=? ", [campNr]);
+  // Insert Query
+  if (checkForRent.isEmpty) {
+    var kundenInsert = await conn.query(
+        "insert into TKunden (KundVorname, KundName, KundAdresse, KundKreditkartenNr, KundEmail, KundTelefonNr, KundBeginMiete, KundEndeMiete) values (?, ?, ?,?,?,?,?,?);",
+        [vorname, name, adresse, kreditkarteNr, mail, telefon, begin, ende]);
+
+    final getKundId = await conn
+        .query("select KundId from TKunden where KundName = ?", [name]);
+    for (var row in getKundId) {
+      firstKundId = row["KundId"];
+    }
+
+    var belegInsert = await conn.query(
+        "insert into TBelege (KundId, CampNr) values (?,?);",
+        [firstKundId, campNr]);
+
+    //logger.i('Inserted record with ID: ${results}');
+  }
+  await conn.close();
 }

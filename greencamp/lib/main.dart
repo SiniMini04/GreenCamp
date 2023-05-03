@@ -54,7 +54,7 @@ class _MyAppState extends State<MyApp> {
                 alignment: Alignment.center,
                 children: [
                   // Adding IconButtons to Image on every single Camping grid
-                  for (var index = 1; index < positions.length + 1; index++)
+                  for (var index = 0; index < positions.length; index++)
                     Positioned(
                       bottom:
                           mediaSize.height * (positions[index]['bottom'] ?? 0),

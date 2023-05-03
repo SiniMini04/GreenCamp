@@ -3,7 +3,6 @@ import 'package:greencamp/datenbankabfrage.dart';
 import 'package:mysql1/src/single_connection.dart';
 import 'inputrenter.dart';
 
-
 String vorname = "";
 String nachname = "";
 String mail = "";
@@ -176,7 +175,7 @@ Future<void> positioninfos(BuildContext context, int campNr) async {
                   Expanded(
                       child: TextButton(
                           onPressed: () {
-                            inputRenter(context);
+                            inputRenter(context, campNr);
                           },
                           child: Text('Hinzufügen')))
                 ],

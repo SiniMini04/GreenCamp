@@ -1,6 +1,18 @@
 import 'package:flutter/material.dart';
+import 'datenbankabfrage.dart';
 
-Future<void> inputRenter(BuildContext context) async {
+String vorname = "";
+String nachname = "";
+String mail = "";
+String telefon = "";
+String strasse = "";
+String plzOrt = "";
+String land = "";
+String kreditKarte = "";
+String mietBeginn = "";
+String mietEnde = "";
+
+Future<void> inputRenter(BuildContext context, int campNr) async {
   await showDialog<String>(
     context: context,
     builder: (BuildContext context) => Dialog(
@@ -43,7 +55,7 @@ Future<void> inputRenter(BuildContext context) async {
                       ),
                       controller: TextEditingController(text: ''),
                       onChanged: (value) {
-                        // Hier können Sie den eingegebenen Wert verarbeiten
+                        vorname = value;
                       },
                     ),
                   ),
@@ -59,7 +71,7 @@ Future<void> inputRenter(BuildContext context) async {
                       ),
                       controller: TextEditingController(text: ''),
                       onChanged: (value) {
-                        // Hier können Sie den eingegebenen Wert verarbeiten
+                        nachname = value;
                       },
                     ),
                   ),
@@ -75,7 +87,7 @@ Future<void> inputRenter(BuildContext context) async {
                       ),
                       controller: TextEditingController(text: ''),
                       onChanged: (value) {
-                        // Hier können Sie den eingegebenen Wert verarbeiten
+                        mail = value;
                       },
                     ),
                   ),
@@ -91,7 +103,7 @@ Future<void> inputRenter(BuildContext context) async {
                       ),
                       controller: TextEditingController(text: ''),
                       onChanged: (value) {
-                        // Hier können Sie den eingegebenen Wert verarbeiten
+                        telefon = value;
                       },
                     ),
                   ),
@@ -116,7 +128,7 @@ Future<void> inputRenter(BuildContext context) async {
                       ),
                       controller: TextEditingController(text: ''),
                       onChanged: (value) {
-                        // Hier können Sie den eingegebenen Wert verarbeiten
+                        strasse = value;
                       },
                     ),
                   ),
@@ -132,7 +144,7 @@ Future<void> inputRenter(BuildContext context) async {
                       ),
                       controller: TextEditingController(text: ''),
                       onChanged: (value) {
-                        // Hier können Sie den eingegebenen Wert verarbeiten
+                        plzOrt = value;
                       },
                     ),
                   ),
@@ -173,7 +185,7 @@ Future<void> inputRenter(BuildContext context) async {
                       ),
                       controller: TextEditingController(text: ''),
                       onChanged: (value) {
-                        // Hier können Sie den eingegebenen Wert verarbeiten
+                        kreditKarte = value;
                       },
                     ),
                   ),
@@ -198,7 +210,7 @@ Future<void> inputRenter(BuildContext context) async {
                       ),
                       controller: TextEditingController(text: ''),
                       onChanged: (value) {
-                        // Hier können Sie den eingegebenen Wert verarbeiten
+                        mietBeginn = value;
                       },
                     ),
                   ),
@@ -215,7 +227,7 @@ Future<void> inputRenter(BuildContext context) async {
                       ),
                       controller: TextEditingController(text: ''),
                       onChanged: (value) {
-                        // Hier können Sie den eingegebenen Wert verarbeiten
+                        mietEnde = value;
                       },
                     ),
                   ),
@@ -226,10 +238,11 @@ Future<void> inputRenter(BuildContext context) async {
                 children: [
                   Expanded(
                       child: TextButton(
-                          onPressed: () {}, child: Text('Bearbeiten'))),
-                  Expanded(
-                      child: TextButton(
-                          onPressed: () {}, child: Text('Hinzufügen')))
+                          onPressed: () {
+                            insertData(vorname, nachname, strasse, kreditKarte,
+                                mail, telefon, mietBeginn, mietEnde, campNr);
+                          },
+                          child: Text('Speichern')))
                 ],
               ),
             ],
