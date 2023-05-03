@@ -175,6 +175,7 @@ Future<void> positioninfos(BuildContext context, int campNr) async {
                   Expanded(
                       child: TextButton(
                           onPressed: () {
+                            Navigator.of(context).pop();
                             inputRenter(context, campNr);
                           },
                           child: Text('Hinzufügen')))

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'datenbankabfrage.dart';
+import 'gridinfos.dart';
 
 String vorname = "";
 String nachname = "";
@@ -238,9 +239,19 @@ Future<void> inputRenter(BuildContext context, int campNr) async {
                 children: [
                   Expanded(
                       child: TextButton(
-                          onPressed: () {
-                            insertData(vorname, nachname, strasse, kreditKarte,
-                                mail, telefon, mietBeginn, mietEnde, campNr);
+                          onPressed: () async {
+                            await insertData(
+                                vorname,
+                                nachname,
+                                strasse,
+                                kreditKarte,
+                                mail,
+                                telefon,
+                                mietBeginn,
+                                mietEnde,
+                                campNr);
+                            Navigator.of(context).pop();
+                            positioninfos(context, campNr);
                           },
                           child: Text('Speichern')))
                 ],
