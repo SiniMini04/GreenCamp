@@ -12,13 +12,12 @@ bool isButtonFree = false;
 bool dbAbfrage = false;
 
 Future<bool> checkButtonStatus(int buttonId) async {
-  buttonId += 1;
   final conn = await MySqlConnection.connect(ConnectionSettings(
-    host: 'w01cc2a0.kasserver.com',
+    host: 'localhost',
     port: 3306,
-    user: 'd03ce24d',
-    password: 'Skilla303!',
-    db: 'd03ce24d',
+    user: 'root',
+    password: '1234',
+    db: 'mydb',
   ));
   final results = await conn.query(
       "select * from TCampsite where CampNr=? AND CampBesetzt='Ja'",
@@ -46,11 +45,11 @@ Future<bool> changeColorFromButton(int index) async {
 
 Future<Results> selectQuery(int campNr) async {
   final conn = await MySqlConnection.connect(ConnectionSettings(
-    host: 'w01cc2a0.kasserver.com',
+    host: 'localhost',
     port: 3306,
-    user: 'd03ce24d',
-    password: 'Skilla303!',
-    db: 'd03ce24d',
+    user: 'root',
+    password: '1234',
+    db: 'mydb',
   ));
 
 // Select Query
