@@ -50,6 +50,33 @@ class _MyAppState extends State<MyApp> {
             ),
             child: Scaffold(
               backgroundColor: Colors.transparent,
+              appBar: PreferredSize(
+                preferredSize: Size.fromHeight(35.0),
+                child: AppBar(
+                  title: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          'Left',
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          'Center',
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          'Right',
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
               body: Stack(
                 alignment: Alignment.center,
                 children: [
