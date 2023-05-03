@@ -57,7 +57,7 @@ class _MyAppState extends State<MyApp> {
                     children: [
                       Expanded(
                         child: Text(
-                          'Left',
+                          'GreenCamp',
                           textAlign: TextAlign.center,
                         ),
                       ),
