@@ -68,9 +68,15 @@ class _MyAppState extends State<MyApp> {
                         ),
                       ),
                       Expanded(
-                        child: Text(
-                          'Right',
-                          textAlign: TextAlign.center,
+                        child: ElevatedButton(
+                          child: Text(
+                            'User',
+                            textAlign: TextAlign.center,
+                          ),
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                            elevation: 0,
+                          ),
                         ),
                       ),
                     ],
@@ -96,7 +102,7 @@ class _MyAppState extends State<MyApp> {
                           _isLoading
                               ? CircularProgressIndicator()
                               : IconButton(
-                                  onPressed: (() => positioninfos(context)),
+                                  onPressed: () => positioninfos(context),
                                   icon: const Icon(Icons.fiber_manual_record),
                                   color: _isButtonFree[index]
                                       ? Colors.red
@@ -108,11 +114,12 @@ class _MyAppState extends State<MyApp> {
                                 ),
                           if (positions[index]['electricityConnection'] == true)
                             Positioned.fill(
-                                child: Icon(
-                              Icons.bolt,
-                              color: Colors.yellow,
-                              size: 15.0,
-                            )),
+                              child: Icon(
+                                Icons.bolt,
+                                color: Colors.yellow,
+                                size: 15.0,
+                              ),
+                            ),
                         ],
                       ),
                     ),
@@ -125,5 +132,3 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
-
-class BasicDialogAlert {}
