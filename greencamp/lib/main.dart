@@ -69,7 +69,8 @@ class _MyAppState extends State<MyApp> {
                           _isLoading
                               ? CircularProgressIndicator()
                               : IconButton(
-                                  onPressed: (() => positioninfos(context)),
+                                  onPressed: (() =>
+                                      positioninfos(context, index)),
                                   icon: const Icon(Icons.fiber_manual_record),
                                   color: _isButtonFree[index]
                                       ? Colors.red
