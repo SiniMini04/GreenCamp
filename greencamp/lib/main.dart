@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'positions.dart';
 import 'datenbankabfrage.dart';
 import 'gridinfos.dart';
+import 'gridInfoInsert.dart';
 
 void main() {
   runApp(MyApp());
@@ -69,8 +70,13 @@ class _MyAppState extends State<MyApp> {
                           _isLoading
                               ? CircularProgressIndicator()
                               : IconButton(
-                                  onPressed: (() =>
-                                      positioninfos(context, index)),
+                                  onPressed: () async {
+                                    if (await checkWhichPopUp(index)) {
+                                      gridInfoAfterInsert(context, index);
+                                    } else {
+                                      positioninfos(context, index);
+                                    }
+                                  },
                                   icon: const Icon(Icons.fiber_manual_record),
                                   color: _isButtonFree[index]
                                       ? Colors.red

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:greencamp/datenbankabfrage.dart';
 import 'package:mysql1/src/single_connection.dart';
-import 'inputrenter.dart';
 
 String vorname = "";
 String nachname = "";
@@ -14,7 +13,21 @@ String kreditKarte = "";
 String mietBeginn = "";
 String mietEnde = "";
 
+void resetInputs() {
+  vorname = "-";
+  nachname = "-";
+  mail = "-";
+  telefon = "-";
+  strasse = "-";
+  plzOrt = "-";
+  land = "-";
+  kreditKarte = "-";
+  mietBeginn = "-";
+  mietEnde = "-";
+}
+
 Future<List<Map<String, dynamic>>> getLendStatus(int campNr) async {
+  resetInputs();
   List<Map<String, dynamic>> resultList = [];
 
   Results queryResult = await selectQuery(campNr);

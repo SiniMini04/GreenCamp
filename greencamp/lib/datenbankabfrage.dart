@@ -11,7 +11,11 @@ bool isResultEmpty = false;
 bool isButtonFree = false;
 bool dbAbfrage = false;
 
+bool campSiteFree = false;
+
 var firstKundId = 0;
+
+int count = 0;
 
 Future<bool> checkButtonStatus(int buttonId) async {
   buttonId += 1;
@@ -76,6 +80,45 @@ Future<Results> selectQuery(int campNr) async {
 
   await conn.close();
   return results;
+}
+
+Future<bool> checkWhichPopUp(int campNr) async {
+  final conn = await MySqlConnection.connect(ConnectionSettings(
+    host: 'localhost',
+    port: 3306,
+    user: 'root',
+    password: '1234',
+    db: 'mydb',
+  ));
+
+  final results = await conn.query(
+      'select * from TBelege b, TCampsite c where b.CampNr=c.CampNr and c.CampNr = ?;',
+      [campNr]);
+
+  await conn.close();
+  if (results.isNotEmpty) {
+    dbAbfrage = false;
+    campSiteFree = true;
+    return true;
+  }
+  dbAbfrage = false;
+  campSiteFree = false;
+  return false;
+}
+
+bool checkingStatus(int campNr) {
+  dbAbfrage = true;
+  checkWhichPopUp(campNr);
+
+  while (dbAbfrage) {
+    count++;
+    Future.delayed(Duration(seconds: 5));
+  }
+
+  if (campSiteFree) {
+    return true;
+  }
+  return false;
 }
 
 Future<void> insertData(vorname, name, adresse, kreditkarteNr, mail, telefon,
