@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'positions.dart';
 import 'datenbankabfrage.dart';
 import 'gridinfos.dart';
@@ -13,6 +14,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  DateTime currentDate = DateTime.now();
+  String shownDate = "Datum";
   bool _isLoading = true;
   List<bool> _isButtonFree = List.filled(positions.length, false);
 
@@ -36,6 +39,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    String shownDate = DateFormat('dd.MM.yyyy').format(currentDate);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Builder(
@@ -62,20 +66,47 @@ class _MyAppState extends State<MyApp> {
                         ),
                       ),
                       Expanded(
-                        child: Text(
-                          'Center',
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
+                          child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          TextButton(
+                            onPressed: () => {},
+                            child: Text('<'),
+                            style: TextButton.styleFrom(
+                                backgroundColor: Colors.transparent,
+                                primary: Colors.white),
+                          ),
+                          TextButton(
+                            onPressed: () {},
+                            child: Text(shownDate),
+                            style: TextButton.styleFrom(
+                                backgroundColor: Colors.transparent,
+                                primary: Colors.white),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              DateTime date =
+                                  DateFormat('dd.MM.yyyy').parse(shownDate);
+                              date = date.add(const Duration(days: 1));
+                              shownDate = DateFormat('dd.MM.yyyy').format(date);
+                            },
+                            child: Text('>'),
+                            style: TextButton.styleFrom(
+                                backgroundColor: Colors.transparent,
+                                primary: Colors.white),
+                          )
+                        ],
+                      )),
                       Expanded(
-                        child: ElevatedButton(
+                        child: TextButton(
                           child: Text(
                             'User',
                             textAlign: TextAlign.center,
                           ),
                           onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            elevation: 0,
+                          style: TextButton.styleFrom(
+                            backgroundColor: Colors.transparent,
+                            primary: Colors.white,
                           ),
                         ),
                       ),
