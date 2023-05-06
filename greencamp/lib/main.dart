@@ -14,8 +14,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  DateTime currentDate = DateTime.now();
-  String shownDate = "Datum";
+  String shownDate = DateFormat('dd.MM.yyyy').format(DateTime.now());
   bool _isLoading = true;
   List<bool> _isButtonFree = List.filled(positions.length, false);
 
@@ -37,9 +36,23 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  Future<void> _showDatePicker(BuildContext context) async {
+    DateTime date = DateFormat('dd.MM.yyyy').parse(shownDate);
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: date,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+    if (pickedDate != null && pickedDate != date) {
+      setState(() {
+        shownDate = DateFormat('dd.MM.yyyy').format(pickedDate);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    String shownDate = DateFormat('dd.MM.yyyy').format(currentDate);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Builder(
@@ -66,18 +79,29 @@ class _MyAppState extends State<MyApp> {
                         ),
                       ),
                       Expanded(
-                          child: Row(
+                          child: Container(
+                              child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           TextButton(
-                            onPressed: () => {},
+                            onPressed: () {
+                              setState(() {
+                                DateTime date =
+                                    DateFormat('dd.MM.yyyy').parse(shownDate);
+                                date = date.subtract(const Duration(days: 1));
+                                shownDate =
+                                    DateFormat('dd.MM.yyyy').format(date);
+                              });
+                            },
                             child: Text('<'),
                             style: TextButton.styleFrom(
                                 backgroundColor: Colors.transparent,
                                 primary: Colors.white),
                           ),
                           TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              _showDatePicker(context);
+                            },
                             child: Text(shownDate),
                             style: TextButton.styleFrom(
                                 backgroundColor: Colors.transparent,
@@ -85,10 +109,13 @@ class _MyAppState extends State<MyApp> {
                           ),
                           TextButton(
                             onPressed: () {
-                              DateTime date =
-                                  DateFormat('dd.MM.yyyy').parse(shownDate);
-                              date = date.add(const Duration(days: 1));
-                              shownDate = DateFormat('dd.MM.yyyy').format(date);
+                              setState(() {
+                                DateTime date =
+                                    DateFormat('dd.MM.yyyy').parse(shownDate);
+                                date = date.add(const Duration(days: 1));
+                                shownDate =
+                                    DateFormat('dd.MM.yyyy').format(date);
+                              });
                             },
                             child: Text('>'),
                             style: TextButton.styleFrom(
@@ -96,7 +123,7 @@ class _MyAppState extends State<MyApp> {
                                 primary: Colors.white),
                           )
                         ],
-                      )),
+                      ))),
                       Expanded(
                         child: TextButton(
                           child: Text(
