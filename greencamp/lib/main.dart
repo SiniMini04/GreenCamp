@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'positions.dart';
 import 'datenbankabfrage.dart';
@@ -41,14 +43,45 @@ class _MyAppState extends State<MyApp> {
       home: Builder(
         builder: (context) {
           final mediaSize = MediaQuery.of(context).size;
-          return Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/Campingplatz_Layout.jpg'),
-                fit: BoxFit.cover,
+         return SafeArea(
+  child: Column(
+    children: <Widget>[
+      Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/Campingplatz_Layout.jpg'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Container(
+          margin: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: Colors.white,
+            border: Border.all(color: Colors.grey),
+          ),
+          child: Column(
+            children: const <Widget>[
+              Text(
+                'Spiegazione',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            child: Scaffold(
+              SizedBox(height: 10),
+              Text('occupato'),
+              Text('libero'),
+              Text('con l\'elettricità'),
+            ],
+          ),
+        ),
+      ),
+    ],
+  ),
+);
+            Scaffold(
               backgroundColor: Colors.transparent,
               body: Stack(
                 alignment: Alignment.center,
@@ -85,15 +118,15 @@ class _MyAppState extends State<MyApp> {
                               Icons.bolt,
                               color: Colors.yellow,
                               size: 15.0,
-                            )),
-                        ],
-                      ),
-                    ),
-                ],
-              ),
-            ),
-          );
-        },
+                            ),
+                        ),
+                    ],
+                  ),
+                ),
+            ],
+          ),
+        );
+      },
       ),
     );
   }
