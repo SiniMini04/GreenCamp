@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:greencamp/datenbankabfrage.dart';
 import 'package:mysql1/src/single_connection.dart';
-import 'inputrenter.dart';
 
 String vorname = "";
 String nachname = "";
@@ -29,7 +28,6 @@ void resetInputs() {
 
 Future<List<Map<String, dynamic>>> getLendStatus(int campNr) async {
   resetInputs();
-
   List<Map<String, dynamic>> resultList = [];
 
   Results queryResult = await selectQuery(campNr);
@@ -51,7 +49,7 @@ Future<List<Map<String, dynamic>>> getLendStatus(int campNr) async {
   return resultList;
 }
 
-Future<void> positioninfos(BuildContext context, int campNr) async {
+Future<void> gridInfoAfterInsert(BuildContext context, int campNr) async {
   await getLendStatus(campNr);
   await showDialog<String>(
     context: context,
@@ -170,15 +168,11 @@ Future<void> positioninfos(BuildContext context, int campNr) async {
               Row(
                 children: [
                   Expanded(
-                      child: TextButton(
-                          onPressed: () {}, child: Text('Bearbeiten'))),
+                      child:
+                          TextButton(onPressed: () {}, child: Text('Löschen'))),
                   Expanded(
                       child: TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                            inputRenter(context, campNr);
-                          },
-                          child: Text('Hinzufügen')))
+                          onPressed: () {}, child: Text('Bearbeiten')))
                 ],
               ),
             ],

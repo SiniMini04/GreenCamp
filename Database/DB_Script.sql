@@ -39,7 +39,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS mydb.TBelege (
   BelegId INT NOT NULL AUTO_INCREMENT,
-  KundenId INT NOT NULL,
+  KundId INT NOT NULL,
   CampNr INT NOT NULL,
   PRIMARY KEY (BelegId)
  
