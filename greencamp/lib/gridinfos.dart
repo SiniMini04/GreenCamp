@@ -1,6 +1,59 @@
 import 'package:flutter/material.dart';
+import 'package:greencamp/datenbankabfrage.dart';
+import 'package:mysql1/src/single_connection.dart';
+import 'inputrenter.dart';
 
-Future<void> positioninfos(BuildContext context) async {
+
+String vorname = "";
+String nachname = "";
+String mail = "";
+String telefon = "";
+String strasse = "";
+String plzOrt = "";
+String land = "";
+String kreditKarte = "";
+String mietBeginn = "";
+String mietEnde = "";
+
+void resetInputs() {
+  vorname = "-";
+  nachname = "-";
+  mail = "-";
+  telefon = "-";
+  strasse = "-";
+  plzOrt = "-";
+  land = "-";
+  kreditKarte = "-";
+  mietBeginn = "-";
+  mietEnde = "-";
+}
+
+Future<List<Map<String, dynamic>>> getLendStatus(int campNr) async {
+  resetInputs();
+
+  List<Map<String, dynamic>> resultList = [];
+
+  Results queryResult = await selectQuery(campNr);
+
+  for (var row in queryResult) {
+    if (queryResult.isNotEmpty) {
+      vorname = row['KundVorname'];
+      nachname = row['KundName'];
+      mail = row['KundEMail'];
+      telefon = row['KundTelefonNr'].toString();
+      strasse = row['KundAdresse'];
+      plzOrt = row['KundVorname'];
+      kreditKarte = row['KundKreditkartenNr'].toString();
+      mietBeginn = row['KundBeginMiete'];
+      mietEnde = row['KundEndeMiete'];
+    }
+  }
+
+  return resultList;
+}
+
+Future<void> positioninfos(BuildContext context, int campNr) async {
+  await getLendStatus(campNr);
   await showDialog<String>(
     context: context,
     builder: (BuildContext context) => Dialog(
@@ -36,25 +89,25 @@ Future<void> positioninfos(BuildContext context) async {
               Row(
                 children: [
                   Expanded(child: const Text('Vorname:')),
-                  Flexible(child: Text('Hans')),
+                  Flexible(child: Text(vorname)),
                 ],
               ),
               Row(
                 children: [
                   Expanded(child: const Text('Nachname:')),
-                  Flexible(child: Text('Müller')),
+                  Flexible(child: Text(nachname)),
                 ],
               ),
               Row(
                 children: [
                   Expanded(child: const Text('E-Mail:')),
-                  Flexible(child: Text('hans.mueller@gmail.com')),
+                  Flexible(child: Text(mail)),
                 ],
               ),
               Row(
                 children: [
                   Expanded(child: const Text('Telefon:')),
-                  Flexible(child: Text('+41 79 123 45 67')),
+                  Flexible(child: Text(telefon)),
                 ],
               ),
               const SizedBox(height: 8),
@@ -69,19 +122,19 @@ Future<void> positioninfos(BuildContext context) async {
               Row(
                 children: [
                   Expanded(child: const Text('Strasse:')),
-                  Flexible(child: Text('Zürcherstrasse 122')),
+                  Flexible(child: Text(strasse)),
                 ],
               ),
               Row(
                 children: [
                   Expanded(child: const Text('PLZ/Ort:')),
-                  Flexible(child: Text('8500 Frauenfeld')),
+                  Flexible(child: Text(plzOrt)),
                 ],
               ),
               Row(
                 children: [
                   Expanded(child: const Text('Land:')),
-                  Flexible(child: Text('Schweiz')),
+                  Flexible(child: Text(land)),
                 ],
               ),
               const SizedBox(height: 8),
@@ -96,7 +149,7 @@ Future<void> positioninfos(BuildContext context) async {
               Row(
                 children: [
                   Expanded(child: const Text('Kreditkarte:')),
-                  Flexible(child: Text('065641546654625')),
+                  Flexible(child: Text(kreditKarte)),
                 ],
               ),
               const SizedBox(height: 8),
@@ -111,7 +164,7 @@ Future<void> positioninfos(BuildContext context) async {
               Row(
                 children: [
                   Expanded(child: const Text('Mietdauer:')),
-                  Flexible(child: Text('22.06.2023 - 25.06.2023')),
+                  Flexible(child: Text(mietBeginn + ' - ' + mietEnde)),
                 ],
               ),
               const SizedBox(height: 8),
@@ -122,7 +175,10 @@ Future<void> positioninfos(BuildContext context) async {
                           onPressed: () {}, child: Text('Bearbeiten'))),
                   Expanded(
                       child: TextButton(
-                          onPressed: () {}, child: Text('Hinzufügen')))
+                          onPressed: () {
+                            inputRenter(context);
+                          },
+                          child: Text('Hinzufügen')))
                 ],
               ),
             ],
