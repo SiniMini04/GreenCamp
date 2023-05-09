@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'positions.dart';
 import 'datenbankabfrage.dart';
 import 'gridinfos.dart';
@@ -14,6 +15,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  String shownDate = DateFormat('dd.MM.yyyy').format(DateTime.now());
   bool _isLoading = true;
   List<bool> _isButtonFree = List.filled(positions.length, false);
 
@@ -25,7 +27,7 @@ class _MyAppState extends State<MyApp> {
 
   Future<void> _getButtonFreeStatuses() async {
     for (var index = 0; index < positions.length; index++) {
-      final isButtonFree = await changeColorFromButton(index);
+      final isButtonFree = await changeColorFromButton(index, shownDate);
       setState(() {
         _isButtonFree[index] = isButtonFree;
       });
@@ -33,6 +35,21 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       _isLoading = false;
     });
+  }
+
+  Future<void> _showDatePicker(BuildContext context) async {
+    DateTime date = DateFormat('dd.MM.yyyy').parse(shownDate);
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: date,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+    if (pickedDate != null && pickedDate != date) {
+      setState(() {
+        shownDate = DateFormat('dd.MM.yyyy').format(pickedDate);
+      });
+    }
   }
 
   @override
@@ -51,6 +68,80 @@ class _MyAppState extends State<MyApp> {
             ),
             child: Scaffold(
               backgroundColor: Colors.transparent,
+              appBar: PreferredSize(
+                preferredSize: Size.fromHeight(35.0),
+                child: AppBar(
+                  title: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          'GreenCamp',
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      Expanded(
+                          child: Container(
+                              child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              setState(() {
+                                DateTime date =
+                                    DateFormat('dd.MM.yyyy').parse(shownDate);
+                                date = date.subtract(const Duration(days: 1));
+                                shownDate =
+                                    DateFormat('dd.MM.yyyy').format(date);
+                              });
+                            },
+                            child: Text('<'),
+                            style: TextButton.styleFrom(
+                                backgroundColor: Colors.transparent,
+                                primary: Colors.white),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              _showDatePicker(context);
+                            },
+                            child: Text(shownDate),
+                            style: TextButton.styleFrom(
+                                backgroundColor: Colors.transparent,
+                                primary: Colors.white),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              setState(() {
+                                DateTime date =
+                                    DateFormat('dd.MM.yyyy').parse(shownDate);
+                                date = date.add(const Duration(days: 1));
+                                shownDate =
+                                    DateFormat('dd.MM.yyyy').format(date);
+                              });
+                            },
+                            child: Text('>'),
+                            style: TextButton.styleFrom(
+                                backgroundColor: Colors.transparent,
+                                primary: Colors.white),
+                          )
+                        ],
+                      ))),
+                      Expanded(
+                        child: TextButton(
+                          child: Text(
+                            'User',
+                            textAlign: TextAlign.center,
+                          ),
+                          onPressed: () {},
+                          style: TextButton.styleFrom(
+                            backgroundColor: Colors.transparent,
+                            primary: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
               body: Stack(
                 alignment: Alignment.center,
                 children: [
@@ -88,11 +179,12 @@ class _MyAppState extends State<MyApp> {
                                 ),
                           if (positions[index]['electricityConnection'] == true)
                             Positioned.fill(
-                                child: Icon(
-                              Icons.bolt,
-                              color: Colors.yellow,
-                              size: 15.0,
-                            )),
+                              child: Icon(
+                                Icons.bolt,
+                                color: Colors.yellow,
+                                size: 15.0,
+                              ),
+                            ),
                         ],
                       ),
                     ),
@@ -105,5 +197,3 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
-
-class BasicDialogAlert {}
