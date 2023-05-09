@@ -1,4 +1,5 @@
 import 'package:mysql1/mysql1.dart';
+import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'dart:async';
 
@@ -7,11 +8,12 @@ var logger = Logger(
 );
 
 bool isResultEmpty = false;
-
+int kundNr = 0;
 bool isButtonFree = false;
 bool dbAbfrage = false;
 
-Future<bool> checkButtonStatus(int buttonId) async {
+Future<bool> checkButtonStatus(int buttonId, String shownDate) async {
+  DateTime currentDate = DateFormat('dd.MM.yyyy').parse(shownDate);
   buttonId += 1;
   final conn = await MySqlConnection.connect(ConnectionSettings(
     host: 'localhost',
@@ -21,8 +23,8 @@ Future<bool> checkButtonStatus(int buttonId) async {
     db: 'mydb',
   ));
   final results = await conn.query(
-      "select * from TCampsite where CampNr=? AND CampBesetzt='Ja'",
-      [buttonId]);
+      "select * from TCampsite c, TBelege b, TKunden k where c.CampNr = ? AND c.CampNr=b.CampNr AND b.KundId=k.KundId AND k.KundId=? AND k.KundBeginMiete < ? AND k.KundBeginMiete > ?",
+      [buttonId, kundNr, currentDate, currentDate]);
   bool isButtonOccupied = false;
   // logger.d(results, dbAbfrage);
   if (results.isNotEmpty) {
@@ -35,9 +37,9 @@ Future<bool> checkButtonStatus(int buttonId) async {
   return isButtonOccupied;
 }
 
-Future<bool> changeColorFromButton(int index) async {
+Future<bool> changeColorFromButton(int index, String shownDate) async {
   dbAbfrage = true;
-  bool buttonStatus = await checkButtonStatus(index);
+  bool buttonStatus = await checkButtonStatus(index, shownDate);
   isButtonFree = buttonStatus;
   logger.i(isButtonFree);
   dbAbfrage = false;

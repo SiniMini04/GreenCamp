@@ -26,7 +26,7 @@ class _MyAppState extends State<MyApp> {
 
   Future<void> _getButtonFreeStatuses() async {
     for (var index = 0; index < positions.length; index++) {
-      final isButtonFree = await changeColorFromButton(index);
+      final isButtonFree = await changeColorFromButton(index, shownDate);
       setState(() {
         _isButtonFree[index] = isButtonFree;
       });
