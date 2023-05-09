@@ -1,5 +1,5 @@
-import 'package:mysql1/mysql1.dart';
 import 'package:intl/intl.dart';
+import 'package:mysql1/mysql1.dart';
 import 'package:logger/logger.dart';
 import 'dart:async';
 
@@ -19,18 +19,21 @@ var firstKundId = 0;
 int count = 0;
 
 Future<bool> checkButtonStatus(int buttonId, String shownDate) async {
-  buttonId += 1;
+  DateTime displayedDate = DateFormat("dd.MM.yyyy").parse(shownDate);
+  String fixedCurrentDate = DateFormat("yyyy-MM-dd").format(displayedDate);
 
   final conn = await MySqlConnection.connect(ConnectionSettings(
     host: 'localhost',
     port: 3306,
     user: 'root',
     password: '1234',
-    db: 'mydb',
+    db: 'greencamp',
   ));
   final results = await conn.query(
-      "select * from TCampsite c, TBelege b, TKunden k where c.CampNr = ? AND c.CampNr=b.CampNr AND b.KundId=k.KundId AND k.KundId=? AND k.KundBeginMiete < ? AND k.KundBeginMiete > ?",
-      [buttonId, kundNr, shownDate, shownDate]);
+      "select KundVorname, KundName, KundEMail, KundTelefonNr, KundStrasse, KundPlzOrt, KundLand, KundKreditkartenNr, KundBeginMiete, KundEndeMiete from TCampsite c, TBelege b, TKunden k where c.CampNr = ? AND c.CampNr=b.CampNr AND b.KundId=k.KundId AND k.KundBeginMiete < ? AND k.KundEndeMiete > ?;",
+      [buttonId, fixedCurrentDate, fixedCurrentDate]);
+
+  logger.i(results);
   bool isButtonOccupied = false;
   // logger.d(results, dbAbfrage);
   if (results.isNotEmpty) {
@@ -58,12 +61,12 @@ Future<Results> selectQuery(int campNr) async {
     port: 3306,
     user: 'root',
     password: '1234',
-    db: 'mydb',
+    db: 'greencamp',
   ));
 
 // Select Query
   final results = await conn.query(
-      'select KundVorname, KundName, KundEMail, KundTelefonNr, KundAdresse, KundKreditkartenNr, KundBeginMiete, KundEndeMiete from TCampsite c, TBelege b, TKunden k where c.CampNr = ? and c.CampNr = b.CampNr and b.KundId = k.KundId;',
+      'select KundVorname, KundName, KundEMail, KundTelefonNr, KundStrasse, KundPlzOrt, KundLand, KundKreditkartenNr, KundBeginMiete, KundEndeMiete from TCampsite c, TBelege b, TKunden k where c.CampNr = ? and c.CampNr = b.CampNr and b.KundId = k.KundId;',
       [campNr]);
 
   for (var row in results) {
@@ -89,7 +92,7 @@ Future<bool> checkWhichPopUp(int campNr) async {
     port: 3306,
     user: 'root',
     password: '1234',
-    db: 'mydb',
+    db: 'greencamp',
   ));
 
   final results = await conn.query(
@@ -122,36 +125,47 @@ bool checkingStatus(int campNr) {
   return false;
 }
 
-Future<void> insertData(vorname, name, adresse, kreditkarteNr, mail, telefon,
-    begin, ende, campNr) async {
+Future<void> insertData(vorname, name, strasse, plzOrt, land, kreditkarteNr,
+    mail, telefon, begin, ende, campNr) async {
   final conn = await MySqlConnection.connect(ConnectionSettings(
     host: 'localhost',
     port: 3306,
     user: 'root',
     password: '1234',
-    db: 'mydb',
+    db: 'greencamp',
   ));
+
+  DateTime beginDate = DateFormat("dd.MM.yyyy").parse(begin);
+  String fixedBegin = DateFormat("yyyy-MM-dd").format(beginDate);
+
+  DateTime endeDate = DateFormat("dd.MM.yyyy").parse(ende);
+  String fixedEnde = DateFormat("yyyy-MM-dd").format(endeDate);
 
   var checkForRent = await conn
       .query("select * from TBelege, TKunden where CampNr=? ", [campNr]);
   // Insert Query
   if (checkForRent.isEmpty) {
-    var kundenInsert = await conn.query(
-        "insert into TKunden (KundVorname, KundName, KundAdresse, KundKreditkartenNr, KundEmail, KundTelefonNr, KundBeginMiete, KundEndeMiete) values (?, ?, ?,?,?,?,?,?);",
-        [vorname, name, adresse, kreditkarteNr, mail, telefon, begin, ende]);
-
+    await conn.query(
+        "insert into TKunden (KundVorname, KundName, KundStrasse, KundPlzOrt, KundLand, KundKreditkartenNr, KundEmail, KundTelefonNr, KundBeginMiete, KundEndeMiete) values (?,?,?,?,?,?,?,?,?,?);",
+        [
+          vorname,
+          name,
+          strasse,
+          plzOrt,
+          land,
+          kreditkarteNr,
+          mail,
+          telefon,
+          fixedBegin,
+          fixedEnde
+        ]);
     final getKundId = await conn
         .query("select KundId from TKunden where KundName = ?", [name]);
     for (var row in getKundId) {
       firstKundId = row["KundId"];
     }
-
-    var belegInsert = await conn.query(
-        "insert into TBelege (KundId, CampNr) values (?,?);",
+    await conn.query("insert into TBelege (KundId, CampNr) values (?,?);",
         [firstKundId, campNr]);
-
-    var updateCamp = await conn.query(
-        "UPDATE TCampsite SET CampBesetzt = 'Ja' WHERE CampNr = ?;", [campNr]);
     //logger.i('Inserted record with ID: ${results}');
   }
   await conn.close();

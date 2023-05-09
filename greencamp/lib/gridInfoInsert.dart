@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:greencamp/datenbankabfrage.dart';
 import 'package:mysql1/src/single_connection.dart';
+import 'package:intl/intl.dart';
 
 String vorname = "";
 String nachname = "";
@@ -33,16 +34,28 @@ Future<List<Map<String, dynamic>>> getLendStatus(int campNr) async {
   Results queryResult = await selectQuery(campNr);
 
   for (var row in queryResult) {
+    String mieteBeginUebergang =
+        row['KundBeginMiete'].toString().substring(0, 11);
+    String mieteEndeUebergang =
+        row['KundEndeMiete'].toString().substring(0, 11);
+
+    DateTime beginDate = DateFormat("yyyy-MM-dd").parse(mieteBeginUebergang);
+    String fixedBegin = DateFormat("dd.MM.yyyy").format(beginDate);
+
+    DateTime endeDate = DateFormat("yyyy-MM-dd").parse(mieteEndeUebergang);
+    String fixedEnde = DateFormat("dd.MM.yyyy").format(endeDate);
+
     if (queryResult.isNotEmpty) {
       vorname = row['KundVorname'];
       nachname = row['KundName'];
       mail = row['KundEMail'];
       telefon = row['KundTelefonNr'].toString();
-      strasse = row['KundAdresse'];
-      plzOrt = row['KundVorname'];
+      strasse = row['KundStrasse'];
+      plzOrt = row['KundPlzOrt'];
+      land = row['KundLand'];
       kreditKarte = row['KundKreditkartenNr'].toString();
-      mietBeginn = row['KundBeginMiete'];
-      mietEnde = row['KundEndeMiete'];
+      mietBeginn = fixedBegin;
+      mietEnde = fixedEnde;
     }
   }
 

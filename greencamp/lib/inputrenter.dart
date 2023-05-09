@@ -161,7 +161,7 @@ Future<void> inputRenter(BuildContext context, int campNr) async {
                       ),
                       controller: TextEditingController(text: ''),
                       onChanged: (value) {
-                        // Hier können Sie den eingegebenen Wert verarbeiten
+                        land = value;
                       },
                     ),
                   ),
@@ -244,6 +244,8 @@ Future<void> inputRenter(BuildContext context, int campNr) async {
                                 vorname,
                                 nachname,
                                 strasse,
+                                plzOrt,
+                                land,
                                 kreditKarte,
                                 mail,
                                 telefon,

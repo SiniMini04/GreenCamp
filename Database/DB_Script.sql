@@ -32,10 +32,10 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS greencamp.TKunden (
   KundId INT NOT NULL AUTO_INCREMENT,
-  KundVorname VARCHAR(45) NOT NULL,
-  KundName VARCHAR(45) NOT NULL,
-  KundStrasse VARCHAR(45) NOT NULL,
-  KundPlzOrt VARCHAR(45) NOT NULL,
+  KundVorname VARCHAR(16) NOT NULL,
+  KundName VARCHAR(16) NOT NULL,
+  KundStrasse VARCHAR(30) NOT NULL,
+  KundPlzOrt VARCHAR(16) NOT NULL,
   KundLand Varchar(25) NOT NULL,
   KundKreditkartenNr INT NOT NULL,
   KundEMail VARCHAR(45) NOT NULL,
