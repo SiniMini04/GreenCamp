@@ -18,10 +18,7 @@ var firstKundId = 0;
 
 int count = 0;
 
-
 Future<bool> checkButtonStatus(int buttonId, String shownDate) async {
-  DateTime currentDate = DateFormat('dd.MM.yyyy').parse(shownDate);
-
   buttonId += 1;
 
   final conn = await MySqlConnection.connect(ConnectionSettings(
@@ -33,7 +30,7 @@ Future<bool> checkButtonStatus(int buttonId, String shownDate) async {
   ));
   final results = await conn.query(
       "select * from TCampsite c, TBelege b, TKunden k where c.CampNr = ? AND c.CampNr=b.CampNr AND b.KundId=k.KundId AND k.KundId=? AND k.KundBeginMiete < ? AND k.KundBeginMiete > ?",
-      [buttonId, kundNr, currentDate, currentDate]);
+      [buttonId, kundNr, shownDate, shownDate]);
   bool isButtonOccupied = false;
   // logger.d(results, dbAbfrage);
   if (results.isNotEmpty) {
