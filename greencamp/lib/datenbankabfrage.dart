@@ -55,7 +55,9 @@ Future<bool> changeColorFromButton(int index, String shownDate) async {
   return isButtonFree;
 }
 
-Future<Results> selectQuery(int campNr) async {
+Future<Results> selectQuery(int campNr, String ende) async {
+  DateTime displayedDate = DateFormat("dd.MM.yyyy").parse(ende);
+  String fixedCurrentDate = DateFormat("yyyy-MM-dd").format(displayedDate);
   final conn = await MySqlConnection.connect(ConnectionSettings(
     host: 'localhost',
     port: 3306,
@@ -66,8 +68,8 @@ Future<Results> selectQuery(int campNr) async {
 
 // Select Query
   final results = await conn.query(
-      'select KundVorname, KundName, KundEMail, KundTelefonNr, KundStrasse, KundPlzOrt, KundLand, KundKreditkartenNr, KundBeginMiete, KundEndeMiete from TCampsite c, TBelege b, TKunden k where c.CampNr = ? and c.CampNr = b.CampNr and b.KundId = k.KundId;',
-      [campNr]);
+      'select KundVorname, KundName, KundEMail, KundTelefonNr, KundStrasse, KundPlzOrt, KundLand, KundKreditkartenNr, KundBeginMiete, KundEndeMiete from TCampsite c, TBelege b, TKunden k where c.CampNr = ? and c.CampNr = b.CampNr and b.KundId = k.KundId and k.KundEndeMiete > ? and k.KundBeginMiete<?;',
+      [campNr, fixedCurrentDate, fixedCurrentDate]);
 
   for (var row in results) {
     logger.d(

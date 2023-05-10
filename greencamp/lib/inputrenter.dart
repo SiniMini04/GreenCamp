@@ -13,7 +13,7 @@ String kreditKarte = "";
 String mietBeginn = "";
 String mietEnde = "";
 
-Future<void> inputRenter(BuildContext context, int campNr) async {
+Future<void> inputRenter(BuildContext context, int campNr, String date) async {
   await showDialog<String>(
     context: context,
     builder: (BuildContext context) => Dialog(
@@ -253,7 +253,7 @@ Future<void> inputRenter(BuildContext context, int campNr) async {
                                 mietEnde,
                                 campNr);
                             Navigator.of(context).pop();
-                            gridInfoAfterInsert(context, campNr);
+                            gridInfoAfterInsert(context, campNr, date);
                           },
                           child: Text('Speichern')))
                 ],

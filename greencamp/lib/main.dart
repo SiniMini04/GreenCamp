@@ -82,107 +82,112 @@ class _MyAppState extends State<MyApp> {
                   ),
                 ),
                 child: Scaffold(
-              backgroundColor: Colors.transparent,
-              appBar: PreferredSize(
-                preferredSize: Size.fromHeight(35.0),
-                child: AppBar(
-                  title: Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          'GreenCamp',
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      Expanded(
-                          child: Container(
-                              child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                  backgroundColor: Colors.transparent,
+                  appBar: PreferredSize(
+                    preferredSize: Size.fromHeight(35.0),
+                    child: AppBar(
+                      title: Row(
                         children: [
-                          TextButton(
-                            onPressed: () {
-                              reloadButtons();
-                              setState(() {
-                                DateTime date =
-                                    DateFormat('dd.MM.yyyy').parse(shownDate);
-                                date = date.subtract(const Duration(days: 1));
-                                shownDate =
-                                    DateFormat('dd.MM.yyyy').format(date);
-                              });
-                            },
-                            child: Text('<'),
-                            style: TextButton.styleFrom(
-                                backgroundColor: Colors.transparent,
-                                primary: Colors.white),
+                          Expanded(
+                            child: Text(
+                              'GreenCamp',
+                              textAlign: TextAlign.center,
+                            ),
                           ),
-                          TextButton(
-                            onPressed: () {
-                              _showDatePicker(context);
-                            },
-                            child: Text(shownDate),
-                            style: TextButton.styleFrom(
+                          Expanded(
+                              child: Container(
+                                  child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              TextButton(
+                                onPressed: () {
+                                  reloadButtons();
+                                  setState(() {
+                                    DateTime date = DateFormat('dd.MM.yyyy')
+                                        .parse(shownDate);
+                                    date =
+                                        date.subtract(const Duration(days: 1));
+                                    shownDate =
+                                        DateFormat('dd.MM.yyyy').format(date);
+                                  });
+                                },
+                                child: Text('<'),
+                                style: TextButton.styleFrom(
+                                    backgroundColor: Colors.transparent,
+                                    primary: Colors.white),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  _showDatePicker(context);
+                                },
+                                child: Text(shownDate),
+                                style: TextButton.styleFrom(
+                                    backgroundColor: Colors.transparent,
+                                    primary: Colors.white),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  reloadButtons();
+                                  setState(() {
+                                    DateTime date = DateFormat('dd.MM.yyyy')
+                                        .parse(shownDate);
+                                    date = date.add(const Duration(days: 1));
+                                    shownDate =
+                                        DateFormat('dd.MM.yyyy').format(date);
+                                  });
+                                },
+                                child: Text('>'),
+                                style: TextButton.styleFrom(
+                                    backgroundColor: Colors.transparent,
+                                    primary: Colors.white),
+                              )
+                            ],
+                          ))),
+                          Expanded(
+                            child: TextButton(
+                              child: Text(
+                                'User',
+                                textAlign: TextAlign.center,
+                              ),
+                              onPressed: () {},
+                              style: TextButton.styleFrom(
                                 backgroundColor: Colors.transparent,
-                                primary: Colors.white),
+                                primary: Colors.white,
+                              ),
+                            ),
                           ),
-                          TextButton(
-                            onPressed: () {
-                              reloadButtons();
-                              setState(() {
-                                DateTime date =
-                                    DateFormat('dd.MM.yyyy').parse(shownDate);
-                                date = date.add(const Duration(days: 1));
-                                shownDate =
-                                    DateFormat('dd.MM.yyyy').format(date);
-                              });
-                            },
-                            child: Text('>'),
-                            style: TextButton.styleFrom(
-                                backgroundColor: Colors.transparent,
-                                primary: Colors.white),
-                          )
                         ],
-                      ))),
-                      Expanded(
-                        child: TextButton(
-                          child: Text(
-                            'User',
-                            textAlign: TextAlign.center,
-                          ),
-                          onPressed: () {},
-                          style: TextButton.styleFrom(
-                            backgroundColor: Colors.transparent,
-                            primary: Colors.white,
-                          ),
-                        ),
                       ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
-              body: Stack(
-                alignment: Alignment.center,
-                children: [
-                  // Adding IconButtons to Image on every single Camping grid
-                  for (var index = 0; index < positions.length; index++)
-                    Positioned(
-                      bottom:
-                          mediaSize.height * (positions[index]['bottom'] ?? 0),
-                      left: positions[index].containsKey('right')
-                          ? null
-                          : mediaSize.width * (positions[index]['left'] ?? 0),
-                      right: positions[index].containsKey('right')
-                          ? mediaSize.width * (positions[index]['right'] ?? 0)
-                          : null,
-                      child: Stack(
-                        children: [
-                          _isLoading
-                              ? CircularProgressIndicator()
-                              : IconButton(
+                  body: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      // Adding IconButtons to Image on every single Camping grid
+                      for (var index = 0; index < positions.length; index++)
+                        Positioned(
+                          bottom: mediaSize.height *
+                              (positions[index]['bottom'] ?? 0),
+                          left: positions[index].containsKey('right')
+                              ? null
+                              : mediaSize.width *
+                                  (positions[index]['left'] ?? 0),
+                          right: positions[index].containsKey('right')
+                              ? mediaSize.width *
+                                  (positions[index]['right'] ?? 0)
+                              : null,
+                          child: Stack(
+                            children: [
+                              _isLoading
+                                  ? CircularProgressIndicator()
+                                  : IconButton(
                                       onPressed: () async {
                                         if (await checkWhichPopUp(index)) {
-                                          gridInfoAfterInsert(context, index);
+                                          gridInfoAfterInsert(
+                                              context, index, shownDate);
                                         } else {
-                                          positioninfos(context, index);
+                                          positioninfos(
+                                              context, index, shownDate);
                                         }
                                       },
                                       icon:
@@ -194,8 +199,7 @@ class _MyAppState extends State<MyApp> {
                                       highlightColor: Colors.transparent,
                                       hoverColor: Colors.transparent,
                                       key: ValueKey(index),
-                                    )
-                                  : CircularProgressIndicator(),
+                                    ),
                               if (positions[index]['electricityConnection'] ==
                                   true)
                                 Positioned.fill(
@@ -211,7 +215,6 @@ class _MyAppState extends State<MyApp> {
                   ),
                 ),
               ),
-
               Positioned(
                   bottom: 10,
                   left: 10,
@@ -276,7 +279,6 @@ class _MyAppState extends State<MyApp> {
                               ),
                             ],
                           ),
-
                         ],
                       ),
                     ),

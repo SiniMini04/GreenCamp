@@ -27,12 +27,13 @@ void resetInputs() {
   mietEnde = "-";
 }
 
-Future<List<Map<String, dynamic>>> getLendStatus(int campNr) async {
+Future<List<Map<String, dynamic>>> getLendStatus(
+    int campNr, String date) async {
   resetInputs();
 
   List<Map<String, dynamic>> resultList = [];
 
-  Results queryResult = await selectQuery(campNr);
+  Results queryResult = await selectQuery(campNr, date);
 
   for (var row in queryResult) {
     if (queryResult.isNotEmpty) {
@@ -51,8 +52,9 @@ Future<List<Map<String, dynamic>>> getLendStatus(int campNr) async {
   return resultList;
 }
 
-Future<void> positioninfos(BuildContext context, int campNr) async {
-  await getLendStatus(campNr);
+Future<void> positioninfos(
+    BuildContext context, int campNr, String date) async {
+  await getLendStatus(campNr, date);
   await showDialog<String>(
     context: context,
     builder: (BuildContext context) => Dialog(
@@ -176,7 +178,7 @@ Future<void> positioninfos(BuildContext context, int campNr) async {
                       child: TextButton(
                           onPressed: () {
                             Navigator.of(context).pop();
-                            inputRenter(context, campNr);
+                            inputRenter(context, campNr, date);
                           },
                           child: Text('Hinzufügen')))
                 ],

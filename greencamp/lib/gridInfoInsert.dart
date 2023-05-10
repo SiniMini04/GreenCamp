@@ -27,11 +27,12 @@ void resetInputs() {
   mietEnde = "-";
 }
 
-Future<List<Map<String, dynamic>>> getLendStatus(int campNr) async {
+Future<List<Map<String, dynamic>>> getLendStatus(
+    int campNr, String date) async {
   resetInputs();
   List<Map<String, dynamic>> resultList = [];
 
-  Results queryResult = await selectQuery(campNr);
+  Results queryResult = await selectQuery(campNr, date);
 
   for (var row in queryResult) {
     String mieteBeginUebergang =
@@ -62,8 +63,9 @@ Future<List<Map<String, dynamic>>> getLendStatus(int campNr) async {
   return resultList;
 }
 
-Future<void> gridInfoAfterInsert(BuildContext context, int campNr) async {
-  await getLendStatus(campNr);
+Future<void> gridInfoAfterInsert(
+    BuildContext context, int campNr, String date) async {
+  await getLendStatus(campNr, date);
   await showDialog<String>(
     context: context,
     builder: (BuildContext context) => Dialog(
