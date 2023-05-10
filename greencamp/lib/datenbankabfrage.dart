@@ -30,7 +30,7 @@ Future<bool> checkButtonStatus(int buttonId, String shownDate) async {
     db: 'greencamp',
   ));
   final results = await conn.query(
-      "select KundVorname, KundName, KundEMail, KundTelefonNr, KundStrasse, KundPlzOrt, KundLand, KundKreditkartenNr, KundBeginMiete, KundEndeMiete from TCampsite c, TBelege b, TKunden k where c.CampNr = ? AND c.CampNr=b.CampNr AND b.KundId=k.KundId AND k.KundBeginMiete < ? AND k.KundEndeMiete > ?;",
+      "select KundVorname, KundName, KundEMail, KundTelefonNr, KundStrasse, KundPlzOrt, KundLand, KundKreditkartenNr, KundBeginMiete, KundEndeMiete from TCampsite c, TBelege b, TKunden k where c.CampNr = ? AND c.CampNr=b.CampNr AND b.KundId=k.KundId AND k.KundBeginMiete <= ? AND k.KundEndeMiete >= ?;",
       [buttonId, fixedCurrentDate, fixedCurrentDate]);
 
   logger.i(results);

@@ -46,10 +46,23 @@ class _MyAppState extends State<MyApp> {
       lastDate: DateTime(2100),
     );
     if (pickedDate != null && pickedDate != date) {
+      reloadButtons();
       setState(() {
         shownDate = DateFormat('dd.MM.yyyy').format(pickedDate);
       });
     }
+  }
+
+  Future<void> reloadButtons() async {
+    _getButtonFreeStatuses();
+    setState(() {
+      _isLoading = true;
+    });
+    Future.delayed(const Duration(seconds: 5), () {
+      setState(() {
+        _isLoading = false;
+      });
+    });
   }
 
   @override
@@ -86,6 +99,7 @@ class _MyAppState extends State<MyApp> {
                         children: [
                           TextButton(
                             onPressed: () {
+                              reloadButtons();
                               setState(() {
                                 DateTime date =
                                     DateFormat('dd.MM.yyyy').parse(shownDate);
@@ -110,6 +124,7 @@ class _MyAppState extends State<MyApp> {
                           ),
                           TextButton(
                             onPressed: () {
+                              reloadButtons();
                               setState(() {
                                 DateTime date =
                                     DateFormat('dd.MM.yyyy').parse(shownDate);
@@ -160,23 +175,26 @@ class _MyAppState extends State<MyApp> {
                         children: [
                           _isLoading
                               ? CircularProgressIndicator()
-                              : IconButton(
-                                  onPressed: () async {
-                                    if (await checkWhichPopUp(index)) {
-                                      gridInfoAfterInsert(context, index);
-                                    } else {
-                                      positioninfos(context, index);
-                                    }
-                                  },
-                                  icon: const Icon(Icons.fiber_manual_record),
-                                  color: _isButtonFree[index]
-                                      ? Colors.red
-                                      : Colors.green,
-                                  splashColor: Colors.transparent,
-                                  highlightColor: Colors.transparent,
-                                  hoverColor: Colors.transparent,
-                                  key: ValueKey(index),
-                                ),
+                              : shownDate != null
+                                  ? IconButton(
+                                      onPressed: () async {
+                                        if (await checkWhichPopUp(index)) {
+                                          gridInfoAfterInsert(context, index);
+                                        } else {
+                                          positioninfos(context, index);
+                                        }
+                                      },
+                                      icon:
+                                          const Icon(Icons.fiber_manual_record),
+                                      color: _isButtonFree[index]
+                                          ? Colors.red
+                                          : Colors.green,
+                                      splashColor: Colors.transparent,
+                                      highlightColor: Colors.transparent,
+                                      hoverColor: Colors.transparent,
+                                      key: ValueKey(index),
+                                    )
+                                  : CircularProgressIndicator(),
                           if (positions[index]['electricityConnection'] == true)
                             Positioned.fill(
                               child: Icon(
