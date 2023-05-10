@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:mysql1/mysql1.dart';
 import 'package:logger/logger.dart';
 import 'dart:async';
@@ -7,22 +8,32 @@ var logger = Logger(
 );
 
 bool isResultEmpty = false;
-
+int kundNr = 0;
 bool isButtonFree = false;
 bool dbAbfrage = false;
 
-Future<bool> checkButtonStatus(int buttonId) async {
-  buttonId += 1;
+bool campSiteFree = false;
+
+var firstKundId = 0;
+
+int count = 0;
+
+Future<bool> checkButtonStatus(int buttonId, String shownDate) async {
+  DateTime displayedDate = DateFormat("dd.MM.yyyy").parse(shownDate);
+  String fixedCurrentDate = DateFormat("yyyy-MM-dd").format(displayedDate);
+
   final conn = await MySqlConnection.connect(ConnectionSettings(
-    host: 'w01cc2a0.kasserver.com',
+    host: 'localhost',
     port: 3306,
-    user: 'd03ce24d',
-    password: 'Skilla303!',
-    db: 'd03ce24d',
+    user: 'root',
+    password: '1234',
+    db: 'greencamp',
   ));
   final results = await conn.query(
-      "select * from TCampsite where CampNr=? AND CampBesetzt='Ja'",
-      [buttonId]);
+      "select KundVorname, KundName, KundEMail, KundTelefonNr, KundStrasse, KundPlzOrt, KundLand, KundKreditkartenNr, KundBeginMiete, KundEndeMiete from TCampsite c, TBelege b, TKunden k where c.CampNr = ? AND c.CampNr=b.CampNr AND b.KundId=k.KundId AND k.KundBeginMiete <= ? AND k.KundEndeMiete >= ?;",
+      [buttonId, fixedCurrentDate, fixedCurrentDate]);
+
+  logger.i(results);
   bool isButtonOccupied = false;
   // logger.d(results, dbAbfrage);
   if (results.isNotEmpty) {
@@ -35,9 +46,9 @@ Future<bool> checkButtonStatus(int buttonId) async {
   return isButtonOccupied;
 }
 
-Future<bool> changeColorFromButton(int index) async {
+Future<bool> changeColorFromButton(int index, String shownDate) async {
   dbAbfrage = true;
-  bool buttonStatus = await checkButtonStatus(index);
+  bool buttonStatus = await checkButtonStatus(index, shownDate);
   isButtonFree = buttonStatus;
   logger.i(isButtonFree);
   dbAbfrage = false;
@@ -46,16 +57,16 @@ Future<bool> changeColorFromButton(int index) async {
 
 Future<Results> selectQuery(int campNr) async {
   final conn = await MySqlConnection.connect(ConnectionSettings(
-    host: 'w01cc2a0.kasserver.com',
+    host: 'localhost',
     port: 3306,
-    user: 'd03ce24d',
-    password: 'Skilla303!',
-    db: 'd03ce24d',
+    user: 'root',
+    password: '1234',
+    db: 'greencamp',
   ));
 
 // Select Query
   final results = await conn.query(
-      'select KundVorname, KundName, KundEMail, KundTelefonNr, KundAdresse, KundKreditkartenNr, KundBeginMiete, KundEndeMiete from TCampsite c, TBelege b, TKunden k where c.CampNr = ? and c.CampNr = b.CampNr and b.KundId = k.KundId;',
+      'select KundVorname, KundName, KundEMail, KundTelefonNr, KundStrasse, KundPlzOrt, KundLand, KundKreditkartenNr, KundBeginMiete, KundEndeMiete from TCampsite c, TBelege b, TKunden k where c.CampNr = ? and c.CampNr = b.CampNr and b.KundId = k.KundId;',
       [campNr]);
 
   for (var row in results) {
@@ -73,4 +84,89 @@ Future<Results> selectQuery(int campNr) async {
 
   await conn.close();
   return results;
+}
+
+Future<bool> checkWhichPopUp(int campNr) async {
+  final conn = await MySqlConnection.connect(ConnectionSettings(
+    host: 'localhost',
+    port: 3306,
+    user: 'root',
+    password: '1234',
+    db: 'greencamp',
+  ));
+
+  final results = await conn.query(
+      'select * from TBelege b, TCampsite c where b.CampNr=c.CampNr and c.CampNr = ?;',
+      [campNr]);
+
+  await conn.close();
+  if (results.isNotEmpty) {
+    dbAbfrage = false;
+    campSiteFree = true;
+    return true;
+  }
+  dbAbfrage = false;
+  campSiteFree = false;
+  return false;
+}
+
+bool checkingStatus(int campNr) {
+  dbAbfrage = true;
+  checkWhichPopUp(campNr);
+
+  while (dbAbfrage) {
+    count++;
+    Future.delayed(Duration(seconds: 5));
+  }
+
+  if (campSiteFree) {
+    return true;
+  }
+  return false;
+}
+
+Future<void> insertData(vorname, name, strasse, plzOrt, land, kreditkarteNr,
+    mail, telefon, begin, ende, campNr) async {
+  final conn = await MySqlConnection.connect(ConnectionSettings(
+    host: 'localhost',
+    port: 3306,
+    user: 'root',
+    password: '1234',
+    db: 'greencamp',
+  ));
+
+  DateTime beginDate = DateFormat("dd.MM.yyyy").parse(begin);
+  String fixedBegin = DateFormat("yyyy-MM-dd").format(beginDate);
+
+  DateTime endeDate = DateFormat("dd.MM.yyyy").parse(ende);
+  String fixedEnde = DateFormat("yyyy-MM-dd").format(endeDate);
+
+  var checkForRent = await conn
+      .query("select * from TBelege, TKunden where CampNr=? ", [campNr]);
+  // Insert Query
+  if (checkForRent.isEmpty) {
+    await conn.query(
+        "insert into TKunden (KundVorname, KundName, KundStrasse, KundPlzOrt, KundLand, KundKreditkartenNr, KundEmail, KundTelefonNr, KundBeginMiete, KundEndeMiete) values (?,?,?,?,?,?,?,?,?,?);",
+        [
+          vorname,
+          name,
+          strasse,
+          plzOrt,
+          land,
+          kreditkarteNr,
+          mail,
+          telefon,
+          fixedBegin,
+          fixedEnde
+        ]);
+    final getKundId = await conn
+        .query("select KundId from TKunden where KundName = ?", [name]);
+    for (var row in getKundId) {
+      firstKundId = row["KundId"];
+    }
+    await conn.query("insert into TBelege (KundId, CampNr) values (?,?);",
+        [firstKundId, campNr]);
+    //logger.i('Inserted record with ID: ${results}');
+  }
+  await conn.close();
 }

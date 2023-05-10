@@ -1,43 +1,55 @@
+/*
+Greencamp ist eine Applikation bei der man ein Campingplatz reservieren kann.
 
+Author: Bleron Regja
+Date: 09.05.2023
+
+History:
+
+version	 Date			Who		Changes
+1.1		 09.05.2023		Bleron	Script überarbeitet
+1.0		 11.04.2023		Bleron	created Script
+*/
 
 -- -----------------------------------------------------
--- Schema mydb
+-- Schema greencamp
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS mydb DEFAULT CHARACTER SET utf8mb4 collate utf8mb4_unicode_ci;
-USE mydb ;
+CREATE SCHEMA IF NOT EXISTS greencamp DEFAULT CHARACTER SET utf8mb4 collate utf8mb4_unicode_ci;
+USE greencamp ;
 
 -- -----------------------------------------------------
--- Table mydb.TCampsite
+-- Table greencamp.TCampsite
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS mydb.TCampsite (
+CREATE TABLE IF NOT EXISTS greencamp.TCampsite (
   CampNr INT NOT NULL,
   CampActuallNr VARCHAR(4) NOT NULL,
-  CampBesetzt ENUM("Ja", "Nein") NOT NULL,
   PRIMARY KEY (CampNr))
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table mydb.TKunden
+-- Table greencamp.TKunden
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS mydb.TKunden (
+CREATE TABLE IF NOT EXISTS greencamp.TKunden (
   KundId INT NOT NULL AUTO_INCREMENT,
-  KundVorname VARCHAR(45) NOT NULL,
-  KundName VARCHAR(45) NOT NULL,
-  KundAdresse VARCHAR(45) NOT NULL,
+  KundVorname VARCHAR(16) NOT NULL,
+  KundName VARCHAR(16) NOT NULL,
+  KundStrasse VARCHAR(30) NOT NULL,
+  KundPlzOrt VARCHAR(16) NOT NULL,
+  KundLand Varchar(25) NOT NULL,
   KundKreditkartenNr INT NOT NULL,
   KundEMail VARCHAR(45) NOT NULL,
   KundTelefonNr INT NOT NULL,
-  KundBeginMiete VARCHAR(45) NOT NULL,
-  KundEndeMiete VARCHAR(45) NOT NULL,
+  KundBeginMiete date NOT NULL,
+  KundEndeMiete date NOT NULL,
   PRIMARY KEY (KundId))
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table mydb.TBelege
+-- Table greencamp.TBelege
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS mydb.TBelege (
+CREATE TABLE IF NOT EXISTS greencamp.TBelege (
   BelegId INT NOT NULL AUTO_INCREMENT,
   KundId INT NOT NULL,
   CampNr INT NOT NULL,
