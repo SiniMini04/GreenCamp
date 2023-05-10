@@ -72,14 +72,16 @@ class _MyAppState extends State<MyApp> {
       home: Builder(
         builder: (context) {
           final mediaSize = MediaQuery.of(context).size;
-          return Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/Campingplatz_Layout.jpg'),
-                fit: BoxFit.cover,
-              ),
-            ),
-            child: Scaffold(
+          return Stack(
+            children: [
+              Container(
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/Campingplatz_Layout.jpg'),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                child: Scaffold(
               backgroundColor: Colors.transparent,
               appBar: PreferredSize(
                 preferredSize: Size.fromHeight(35.0),
@@ -175,8 +177,7 @@ class _MyAppState extends State<MyApp> {
                         children: [
                           _isLoading
                               ? CircularProgressIndicator()
-                              : shownDate != null
-                                  ? IconButton(
+                              : IconButton(
                                       onPressed: () async {
                                         if (await checkWhichPopUp(index)) {
                                           gridInfoAfterInsert(context, index);
@@ -195,20 +196,92 @@ class _MyAppState extends State<MyApp> {
                                       key: ValueKey(index),
                                     )
                                   : CircularProgressIndicator(),
-                          if (positions[index]['electricityConnection'] == true)
-                            Positioned.fill(
-                              child: Icon(
+                              if (positions[index]['electricityConnection'] ==
+                                  true)
+                                Positioned.fill(
+                                    child: Icon(
+                                  Icons.bolt,
+                                  color: Colors.yellow,
+                                  size: 15.0,
+                                )),
+                            ],
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+
+              Positioned(
+                  bottom: 10,
+                  left: 10,
+                  child: Container(
+                    margin: EdgeInsets.all(50),
+                    padding: EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color:
+                          Color.fromARGB(255, 227, 227, 227).withOpacity(0.8),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: const [
+                              Icon(
+                                Icons.fiber_manual_record,
+                                color: Colors.green,
+                              ),
+                              Text(
+                                'Libero',
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                    decoration: TextDecoration.none),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: const [
+                              Icon(
+                                Icons.fiber_manual_record,
+                                color: Colors.red,
+                              ),
+                              Text(
+                                'Occupato',
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                    decoration: TextDecoration.none),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: const [
+                              Icon(
                                 Icons.bolt,
                                 color: Colors.yellow,
-                                size: 15.0,
                               ),
-                            ),
+                              Text(
+                                'con l\'elettricità',
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                    decoration: TextDecoration.none),
+                              ),
+                            ],
+                          ),
+
                         ],
                       ),
                     ),
-                ],
-              ),
-            ),
+                  )),
+            ],
           );
         },
       ),
