@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:mysql1/mysql1.dart';
 import 'positions.dart';
 import 'datenbankabfrage.dart';
 import 'gridinfos.dart';
@@ -26,14 +29,47 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> _getButtonFreeStatuses() async {
-    for (var index = 0; index < positions.length; index++) {
-      final isButtonFree = await changeColorFromButton(index, shownDate);
-      setState(() {
-        _isButtonFree[index] = isButtonFree;
-      });
+    var buttonOccupied = await selctAllCampsites(shownDate);
+    for (int index = 0; index < positions.length; index++) {
+      _isButtonFree[index] = false;
     }
-    setState(() {
-      _isLoading = false;
+
+    if (buttonOccupied.isNotEmpty) {
+      for (int index = 0; index < buttonOccupied.length; index++) {
+        ResultRow currentCampsite = buttonOccupied[index];
+        int campsiteValue = currentCampsite.elementAt(0);
+        for (int i = 0; i < positions.length; i++) {
+          logger.i(campsiteValue);
+          if (_isButtonFree[i] == false) {
+            if (identical(i, campsiteValue)) {
+              setState(() {
+                _isButtonFree[i] = true;
+              });
+            }
+          }
+        }
+      }
+    } else {
+      var buttonOccupied2 = await selctAllCampsites(shownDate);
+      for (int index = 0; index < buttonOccupied2.length; index++) {
+        ResultRow currentCampsite = buttonOccupied2[index];
+        int campsiteValue = currentCampsite.elementAt(0);
+        for (int i = 0; i < positions.length; i++) {
+          logger.i(campsiteValue);
+          if (_isButtonFree[i] == false) {
+            if (identical(i, campsiteValue)) {
+              setState(() {
+                _isButtonFree[i] = true;
+              });
+            }
+          }
+        }
+      }
+    }
+    Future.delayed(const Duration(seconds: 1), () {
+      setState(() {
+        _isLoading = false;
+      });
     });
   }
 
@@ -54,15 +90,10 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> reloadButtons() async {
-    _getButtonFreeStatuses();
     setState(() {
       _isLoading = true;
     });
-    Future.delayed(const Duration(seconds: 5), () {
-      setState(() {
-        _isLoading = false;
-      });
-    });
+    _getButtonFreeStatuses();
   }
 
   @override

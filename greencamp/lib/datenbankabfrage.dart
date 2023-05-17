@@ -18,6 +18,27 @@ var firstKundId = 0;
 
 int count = 0;
 
+Future<List<ResultRow>> selctAllCampsites(String shownDate) async {
+  final conn = await MySqlConnection.connect(ConnectionSettings(
+    host: 'localhost',
+    port: 3306,
+    user: 'root',
+    password: '1234',
+    db: 'greencamp',
+  ));
+  DateTime displayedDate = DateFormat("dd.MM.yyyy").parse(shownDate);
+  String fixedCurrentDate = DateFormat("yyyy-MM-dd").format(displayedDate);
+
+  final results = await conn.query(
+      'select c.CampNr from TCampsite c, TBelege b, TKunden k where k.KundBeginMiete <= ? AND k.KundEndeMiete >=? AND k.KundId = b.KundId AND b.CampNr = c.CampNr;',
+      [fixedCurrentDate, fixedCurrentDate]);
+
+  logger.i(results);
+  await conn.close();
+
+  return results.toList();
+}
+
 Future<bool> checkButtonStatus(int buttonId, String shownDate) async {
   DateTime displayedDate = DateFormat("dd.MM.yyyy").parse(shownDate);
   String fixedCurrentDate = DateFormat("yyyy-MM-dd").format(displayedDate);
