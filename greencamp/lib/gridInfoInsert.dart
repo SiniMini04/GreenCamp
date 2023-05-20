@@ -3,6 +3,7 @@ import 'package:greencamp/datenbankabfrage.dart';
 import 'package:mysql1/src/single_connection.dart';
 import 'package:intl/intl.dart';
 import 'delete.dart';
+import 'gridBearbeiten.dart';
 
 String vorname = "";
 String nachname = "";
@@ -192,7 +193,11 @@ Future<void> gridInfoAfterInsert(
                           child: Text('Löschen'))),
                   Expanded(
                       child: TextButton(
-                          onPressed: () {}, child: Text('Bearbeiten')))
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            changeUser(context, campNr, date);
+                          },
+                          child: Text('Bearbeiten')))
                 ],
               ),
             ],

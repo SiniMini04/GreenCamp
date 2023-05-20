@@ -192,3 +192,47 @@ Future<void> deleteReservation(campNr) async {
 
   await conn.query("DELETE FROM TKunden WHERE KundId = ?", [firstKundId]);
 }
+
+Future<void> updateData(vorname, name, strasse, plzOrt, land, kreditkarteNr,
+    mail, telefon, begin, ende, campNr) async {
+  final conn = await MySqlConnection.connect(ConnectionSettings(
+    host: 'localhost',
+    port: 3306,
+    user: 'root',
+    password: '1234',
+    db: 'greencamp',
+  ));
+
+  DateTime beginDate = DateFormat("dd.MM.yyyy").parse(begin);
+  String fixedBegin = DateFormat("yyyy-MM-dd").format(beginDate);
+
+  DateTime endeDate = DateFormat("dd.MM.yyyy").parse(ende);
+  String fixedEnde = DateFormat("yyyy-MM-dd").format(endeDate);
+
+  final getKundId = await conn.query(
+      "select k.KundId from TKunden k, TBelege b where b.CampNr = ? AND b.KundId = k.KundId",
+      [campNr]);
+
+  for (var row in getKundId) {
+    firstKundId = row["KundId"];
+  }
+  // Insert Query
+
+  await conn.query(
+      "UPDATE TKunden SET KundVorname=?, KundName=?, KundStrasse=?, KundPlzOrt=?, KundLand=?, KundKreditkartenNr=?, KundEmail=?, KundTelefonNr=?, KundBeginMiete=?, KundEndeMiete=? where KundId=?;",
+      [
+        vorname,
+        name,
+        strasse,
+        plzOrt,
+        land,
+        kreditkarteNr,
+        mail,
+        telefon,
+        fixedBegin,
+        fixedEnde,
+        firstKundId
+      ]);
+
+  await conn.close();
+}
