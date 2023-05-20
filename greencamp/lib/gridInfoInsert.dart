@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:greencamp/datenbankabfrage.dart';
 import 'package:mysql1/src/single_connection.dart';
 import 'package:intl/intl.dart';
+import 'delete.dart';
 
 String vorname = "";
 String nachname = "";
@@ -183,8 +184,12 @@ Future<void> gridInfoAfterInsert(
               Row(
                 children: [
                   Expanded(
-                      child:
-                          TextButton(onPressed: () {}, child: Text('Löschen'))),
+                      child: TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            deleteUser(context, campNr, date);
+                          },
+                          child: Text('Löschen'))),
                   Expanded(
                       child: TextButton(
                           onPressed: () {}, child: Text('Bearbeiten')))

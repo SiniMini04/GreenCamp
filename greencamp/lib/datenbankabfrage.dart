@@ -172,3 +172,23 @@ Future<void> insertData(vorname, name, strasse, plzOrt, land, kreditkarteNr,
   }
   await conn.close();
 }
+
+Future<void> deleteReservation(campNr) async {
+  final conn = await MySqlConnection.connect(ConnectionSettings(
+    host: 'localhost',
+    port: 3306,
+    user: 'root',
+    password: '1234',
+    db: 'greencamp',
+  ));
+  final getKundId = await conn.query(
+      "select k.KundId from TKunden k, TBelege b where b.CampNr = ? AND b.KundId = k.KundId",
+      [campNr]);
+
+  for (var row in getKundId) {
+    firstKundId = row["KundId"];
+  }
+  await conn.query("DELETE FROM TBelege WHERE CampNr = ?;", [campNr]);
+
+  await conn.query("DELETE FROM TKunden WHERE KundId = ?", [firstKundId]);
+}
