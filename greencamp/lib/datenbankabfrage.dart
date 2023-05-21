@@ -18,10 +18,7 @@ var firstKundId = 0;
 
 int count = 0;
 
-Future<bool> checkButtonStatus(int buttonId, String shownDate) async {
-  DateTime displayedDate = DateFormat("dd.MM.yyyy").parse(shownDate);
-  String fixedCurrentDate = DateFormat("yyyy-MM-dd").format(displayedDate);
-
+Future<List<ResultRow>> selctAllCampsites(String shownDate) async {
   final conn = await MySqlConnection.connect(ConnectionSettings(
     host: 'localhost',
     port: 3306,
@@ -29,30 +26,17 @@ Future<bool> checkButtonStatus(int buttonId, String shownDate) async {
     password: '1234',
     db: 'greencamp',
   ));
+  DateTime displayedDate = DateFormat("dd.MM.yyyy").parse(shownDate);
+  String fixedCurrentDate = DateFormat("yyyy-MM-dd").format(displayedDate);
+
   final results = await conn.query(
-      "select KundVorname, KundName, KundEMail, KundTelefonNr, KundStrasse, KundPlzOrt, KundLand, KundKreditkartenNr, KundBeginMiete, KundEndeMiete from TCampsite c, TBelege b, TKunden k where c.CampNr = ? AND c.CampNr=b.CampNr AND b.KundId=k.KundId AND k.KundBeginMiete <= ? AND k.KundEndeMiete >= ?;",
-      [buttonId, fixedCurrentDate, fixedCurrentDate]);
+      'select c.CampNr from TCampsite c, TBelege b, TKunden k where k.KundBeginMiete <= ? AND k.KundEndeMiete >=? AND k.KundId = b.KundId AND b.CampNr = c.CampNr;',
+      [fixedCurrentDate, fixedCurrentDate]);
 
   logger.i(results);
-  bool isButtonOccupied = false;
-  // logger.d(results, dbAbfrage);
-  if (results.isNotEmpty) {
-    isButtonOccupied = true;
-  } else {
-    isButtonOccupied = false;
-  }
-
   await conn.close();
-  return isButtonOccupied;
-}
 
-Future<bool> changeColorFromButton(int index, String shownDate) async {
-  dbAbfrage = true;
-  bool buttonStatus = await checkButtonStatus(index, shownDate);
-  isButtonFree = buttonStatus;
-  logger.i(isButtonFree);
-  dbAbfrage = false;
-  return isButtonFree;
+  return results.toList();
 }
 
 Future<Results> selectQuery(int campNr, String ende) async {
@@ -68,21 +52,13 @@ Future<Results> selectQuery(int campNr, String ende) async {
 
 // Select Query
   final results = await conn.query(
-      'select KundVorname, KundName, KundEMail, KundTelefonNr, KundStrasse, KundPlzOrt, KundLand, KundKreditkartenNr, KundBeginMiete, KundEndeMiete from TCampsite c, TBelege b, TKunden k where c.CampNr = ? and c.CampNr = b.CampNr and b.KundId = k.KundId and k.KundEndeMiete > ? and k.KundBeginMiete<?;',
+      'select KundVorname, KundName, KundEMail, KundTelefonNr, KundStrasse, KundPlzOrt, KundLand, KundKreditkartenNr, KundBeginMiete, KundEndeMiete from TCampsite c, TBelege b, TKunden k where c.CampNr = ? and c.CampNr = b.CampNr and b.KundId = k.KundId and k.KundEndeMiete >= ? and k.KundBeginMiete<=?;',
       [campNr, fixedCurrentDate, fixedCurrentDate]);
 
   for (var row in results) {
     logger.d(
         'ID: ${row['KundVorname']}, CampNr: ${row['KundName']}, CampBesetzt: ${row['KundEMail']}');
   }
-
-  // Insert Query
-  // var result = await conny
-  // .query('INSERT INTO mytable (name, age) VALUES (?, ?)', ['John Doe', 30]);
-
-  // Result
-
-  //logger.i('Inserted record with ID: ${results}');
 
   await conn.close();
   return results;
