@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:mysql1/mysql1.dart';
 import 'positions.dart';
 import 'datenbankabfrage.dart';
 import 'gridinfos.dart';
@@ -25,7 +26,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String shownDate = DateFormat('dd.MM.yyyy').format(DateTime.now());
-  bool _isLoading = true;
+  bool _isLoading = false;
   List<bool> _isButtonFree = List.filled(positions.length, false);
 
   @override
@@ -39,14 +40,34 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> _getButtonFreeStatuses() async {
-    for (var index = 0; index < positions.length; index++) {
-      final isButtonFree = await changeColorFromButton(index, shownDate);
-      setState(() {
-        _isButtonFree[index] = isButtonFree;
-      });
-    }
     setState(() {
-      _isLoading = false;
+      _isLoading = true;
+    });
+    var buttonOccupied = await selctAllCampsites(shownDate);
+    for (int index = 0; index < positions.length; index++) {
+      _isButtonFree[index] = false;
+    }
+
+    if (buttonOccupied.isNotEmpty) {
+      for (int index = 0; index < buttonOccupied.length; index++) {
+        ResultRow currentCampsite = buttonOccupied[index];
+        int campsiteValue = currentCampsite.elementAt(0);
+        for (int i = 0; i < positions.length; i++) {
+          logger.i(campsiteValue);
+          if (_isButtonFree[i] == false) {
+            if (identical(i, campsiteValue)) {
+              setState(() {
+                _isButtonFree[i] = true;
+              });
+            }
+          }
+        }
+      }
+    }
+    Future.delayed(const Duration(milliseconds: 500), () {
+      setState(() {
+        _isLoading = false;
+      });
     });
   }
 
@@ -59,23 +80,15 @@ class _MyAppState extends State<MyApp> {
       lastDate: DateTime(2100),
     );
     if (pickedDate != null && pickedDate != date) {
-      reloadButtons();
       setState(() {
         shownDate = DateFormat('dd.MM.yyyy').format(pickedDate);
       });
+      reloadButtons();
     }
   }
 
   Future<void> reloadButtons() async {
     _getButtonFreeStatuses();
-    setState(() {
-      _isLoading = true;
-    });
-    Future.delayed(const Duration(seconds: 5), () {
-      setState(() {
-        _isLoading = false;
-      });
-    });
   }
 
   @override
@@ -115,7 +128,6 @@ class _MyAppState extends State<MyApp> {
                             children: [
                               TextButton(
                                 onPressed: () {
-                                  reloadButtons();
                                   setState(() {
                                     DateTime date = DateFormat('dd.MM.yyyy')
                                         .parse(shownDate);
@@ -124,6 +136,7 @@ class _MyAppState extends State<MyApp> {
                                     shownDate =
                                         DateFormat('dd.MM.yyyy').format(date);
                                   });
+                                  reloadButtons();
                                 },
                                 child: Text('<'),
                                 style: TextButton.styleFrom(
@@ -141,7 +154,6 @@ class _MyAppState extends State<MyApp> {
                               ),
                               TextButton(
                                 onPressed: () {
-                                  reloadButtons();
                                   setState(() {
                                     DateTime date = DateFormat('dd.MM.yyyy')
                                         .parse(shownDate);
@@ -149,12 +161,26 @@ class _MyAppState extends State<MyApp> {
                                     shownDate =
                                         DateFormat('dd.MM.yyyy').format(date);
                                   });
+                                  reloadButtons();
                                 },
                                 child: Text('>'),
                                 style: TextButton.styleFrom(
                                     backgroundColor: Colors.transparent,
                                     primary: Colors.white),
-                              )
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  reloadButtons();
+                                  setState(() {
+                                    shownDate = DateFormat('dd.MM.yyyy')
+                                        .format(DateTime.now());
+                                  });
+                                },
+                                child: Text("Heute"),
+                                style: TextButton.styleFrom(
+                                    backgroundColor: Colors.transparent,
+                                    primary: Colors.white),
+                              ),
                             ],
                           ))),
                           Expanded(
