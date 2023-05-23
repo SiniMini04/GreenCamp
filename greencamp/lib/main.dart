@@ -153,7 +153,20 @@ class _MyAppState extends State<MyApp> {
                                 style: TextButton.styleFrom(
                                     backgroundColor: Colors.transparent,
                                     primary: Colors.white),
-                              )
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  reloadButtons();
+                                  setState(() {
+                                    shownDate = DateFormat('dd.MM.yyyy')
+                                        .format(DateTime.now());
+                                  });
+                                },
+                                child: Text("Heute"),
+                                style: TextButton.styleFrom(
+                                    backgroundColor: Colors.transparent,
+                                    primary: Colors.white),
+                              ),
                             ],
                           ))),
                           Expanded(
