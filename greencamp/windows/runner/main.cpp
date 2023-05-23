@@ -32,6 +32,28 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
   }
   window.SetQuitOnClose(true);
 
+  HWND hwnd = window.GetHandle(); 
+
+auto windowHDC = GetDC(hwnd);
+int fullscreenWidth  = GetDeviceCaps(windowHDC, DESKTOPHORZRES);
+int fullscreenHeight = GetDeviceCaps(windowHDC, DESKTOPVERTRES);
+int colourBits       = GetDeviceCaps(windowHDC, BITSPIXEL);
+int refreshRate      = GetDeviceCaps(windowHDC, VREFRESH);
+
+DEVMODE fullscreenSettings;
+bool isChangeSuccessful;
+
+EnumDisplaySettings(NULL, 0, &fullscreenSettings);
+fullscreenSettings.dmPelsWidth        = fullscreenWidth;
+fullscreenSettings.dmPelsHeight       = fullscreenHeight;
+fullscreenSettings.dmBitsPerPel       = colourBits;
+fullscreenSettings.dmDisplayFrequency = refreshRate;
+
+SetWindowLongPtr(hwnd, GWL_EXSTYLE, WS_EX_APPWINDOW);
+SetWindowLongPtr(hwnd, GWL_STYLE, WS_POPUP | WS_VISIBLE);
+SetWindowPos(hwnd,0, 0, 0, fullscreenWidth, fullscreenHeight, 0);
+isChangeSuccessful = ChangeDisplaySettings(&fullscreenSettings, CDS_FULLSCREEN) == DISP_CHANGE_SUCCESSFUL;
+
   ::MSG msg;
   while (::GetMessage(&msg, nullptr, 0, 0)) {
     ::TranslateMessage(&msg);

@@ -5,9 +5,18 @@ import 'positions.dart';
 import 'datenbankabfrage.dart';
 import 'gridinfos.dart';
 import 'gridInfoInsert.dart';
+import 'package:desktop_window/desktop_window.dart';
+import 'dart:io';
 
-void main() {
+void main() async {
   runApp(MyApp());
+}
+
+void fullscreen() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await DesktopWindow.setMinWindowSize(Size(800, 600));
+  await DesktopWindow.setMaxWindowSize(Size(1920, 1080));
+  await DesktopWindow.setFullScreen(true);
 }
 
 class MyApp extends StatefulWidget {
@@ -24,6 +33,10 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     _getButtonFreeStatuses();
+  }
+
+  void closeapp() {
+    exit(0);
   }
 
   Future<void> _getButtonFreeStatuses() async {
@@ -80,6 +93,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    fullscreen();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Builder(
@@ -170,18 +184,33 @@ class _MyAppState extends State<MyApp> {
                             ],
                           ))),
                           Expanded(
-                            child: TextButton(
-                              child: Text(
-                                'User',
-                                textAlign: TextAlign.center,
-                              ),
-                              onPressed: () {},
-                              style: TextButton.styleFrom(
-                                backgroundColor: Colors.transparent,
-                                primary: Colors.white,
-                              ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                  child: TextButton(
+                                    onPressed: () {},
+                                    style: TextButton.styleFrom(
+                                      backgroundColor: Colors.transparent,
+                                      primary: Colors.white,
+                                    ),
+                                    child: Text(
+                                      'User',
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ),
+                                IconButton(
+                                  onPressed: closeapp,
+                                  icon: Icon(Icons.close),
+                                  splashColor: Colors.transparent,
+                                  highlightColor: Colors.transparent,
+                                  hoverColor: Colors.transparent,
+                                  color: Colors.white,
+                                ),
+                              ],
                             ),
-                          ),
+                          )
                         ],
                       ),
                     ),
