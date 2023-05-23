@@ -38,6 +38,8 @@ dependencies:
   logger: ^1.0.0
   intl: ^0.18.1
   date_format: ^2.0.7
+  desktop_window: ^0.4.0
+  flutter_screenutil: ^5.8.2
 
 dev_dependencies:
   flutter_test:
