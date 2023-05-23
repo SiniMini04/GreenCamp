@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'datenbankabfrage.dart';
 import 'gridInfoInsert.dart';
 import 'package:mysql1/src/single_connection.dart';
@@ -14,6 +15,82 @@ String land = "";
 String kreditKarte = "";
 String mietBeginn = "";
 String mietEnde = "";
+
+Future<void> showAlertDialog(BuildContext context, String message) async {
+  await showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Alert'),
+        content: Text(message),
+        actions: <Widget>[
+          TextButton(
+            child: Text('OK'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
+bool validateFields(BuildContext context) {
+  bool validation = true;
+  bool isMailValid = RegExp(r'^.+@[^\.].*\.[a-z]{2,3}$').hasMatch(mail);
+  bool isTelefonValid = RegExp(r'^\+\d{11}$').hasMatch(telefon);
+  bool isStrasseValid =
+      RegExp(r'^[a-zA-Z0-9]+\s\d+[a-zA-Z]?$').hasMatch(strasse);
+  bool isPlzOrtValid = RegExp(r'^\d{4,5}\s[a-zA-Z]+$').hasMatch(plzOrt);
+  bool isKreditKarteValid =
+      RegExp(r'^\d{4}(\s?\d{4}){3}$').hasMatch(kreditKarte);
+  bool isMietBeginnValid =
+      RegExp(r'^\d{2}\.\d{2}\.\d{4}$').hasMatch(mietBeginn);
+  bool isMietEndeValid = RegExp(r'^\d{2}\.\d{2}\.\d{4}$').hasMatch(mietEnde);
+
+  telefon = telefon.replaceAll(" ", "");
+  kreditKarte = kreditKarte.replaceAll(" ", "");
+
+  if (!isMailValid ||
+      !isTelefonValid ||
+      !isStrasseValid ||
+      !isPlzOrtValid ||
+      !isKreditKarteValid ||
+      !isMietBeginnValid ||
+      !isMietEndeValid) {
+    if (!isMailValid) {
+      showAlertDialog(context,
+          "Please enter a valid E-mail address! \n(max.musterman@mustermail.ch)");
+    }
+    if (!isTelefonValid) {
+      showAlertDialog(
+          context, "Please enter a valid phone number! \n(+41 12 345 67 89)");
+    }
+    if (!isStrasseValid) {
+      showAlertDialog(context,
+          "Please enter a valid street address! \n(Maxmusterstrasse 5b)");
+    }
+    if (!isPlzOrtValid) {
+      showAlertDialog(context,
+          "Please enter a valid postal code and city! \n(8500 Frauenfeld)");
+    }
+    if (!isKreditKarteValid) {
+      showAlertDialog(context,
+          "Please enter a valid credit card number! \n(1234 5678 1234 5678)");
+    }
+    if (!isMietBeginnValid) {
+      showAlertDialog(
+          context, "Please enter a valid start date! \n(01.01.2023)");
+    }
+    if (!isMietEndeValid) {
+      showAlertDialog(context, "Please enter a valid end date! \n(01.01.2023)");
+    }
+    validation = false;
+  }
+
+  return validation;
+}
 
 void resetInputs() {
   vorname = "-";
@@ -110,6 +187,9 @@ Future<void> changeUser(BuildContext context, int campNr, String date) async {
                       onChanged: (value) {
                         vorname = value;
                       },
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
+                      ],
                     ),
                   ),
                 ],
@@ -126,6 +206,9 @@ Future<void> changeUser(BuildContext context, int campNr, String date) async {
                       onChanged: (value) {
                         nachname = value;
                       },
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
+                      ],
                     ),
                   ),
                 ],
@@ -292,20 +375,22 @@ Future<void> changeUser(BuildContext context, int campNr, String date) async {
                   Expanded(
                       child: TextButton(
                           onPressed: () async {
-                            await updateData(
-                                vorname,
-                                nachname,
-                                strasse,
-                                plzOrt,
-                                land,
-                                kreditKarte,
-                                mail,
-                                telefon,
-                                mietBeginn,
-                                mietEnde,
-                                campNr);
-                            Navigator.of(context).pop();
-                            gridInfoAfterInsert(context, campNr, date);
+                            if (validateFields(context)) {
+                              await updateData(
+                                  vorname,
+                                  nachname,
+                                  strasse,
+                                  plzOrt,
+                                  land,
+                                  kreditKarte,
+                                  mail,
+                                  telefon,
+                                  mietBeginn,
+                                  mietEnde,
+                                  campNr);
+                              Navigator.of(context).pop();
+                              gridInfoAfterInsert(context, campNr, date);
+                            }
                           },
                           child: Text('Speichern'))),
                   Expanded(
