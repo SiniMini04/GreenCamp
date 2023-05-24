@@ -37,9 +37,9 @@ CREATE TABLE IF NOT EXISTS greencamp.TKunden (
   KundStrasse VARCHAR(30) NOT NULL,
   KundPlzOrt VARCHAR(16) NOT NULL,
   KundLand Varchar(25) NOT NULL,
-  KundKreditkartenNr INT NOT NULL,
+  KundKreditkartenNr VARCHAR(19) NOT NULL,
   KundEMail VARCHAR(45) NOT NULL,
-  KundTelefonNr INT NOT NULL,
+  KundTelefonNr VARCHAR(20) NOT NULL,
   KundBeginMiete date NOT NULL,
   KundEndeMiete date NOT NULL,
   PRIMARY KEY (KundId))

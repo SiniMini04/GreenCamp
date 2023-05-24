@@ -39,18 +39,16 @@ Future<void> showAlertDialog(BuildContext context, String message) async {
 bool validateFields(BuildContext context) {
   bool validation = true;
   bool isMailValid = RegExp(r'^.+@[^\.].*\.[a-z]{2,3}$').hasMatch(mail);
-  bool isTelefonValid = RegExp(r'^\+\d{11}$').hasMatch(telefon);
+  bool isTelefonValid =
+      RegExp(r'^\+\d{2}\s\d{2}\s\d{3}\s\d{2}\s\d{2}$').hasMatch(telefon);
   bool isStrasseValid =
-      RegExp(r'^[a-zA-Z0-9]+\s\d+[a-zA-Z]?$').hasMatch(strasse);
-  bool isPlzOrtValid = RegExp(r'^\d{4,5}\s[a-zA-Z]+$').hasMatch(plzOrt);
+      RegExp(r'^[a-zA-Z0-9]+\s\d+[a-zA-ZäöüÄÖÜ]?$').hasMatch(strasse);
+  bool isPlzOrtValid = RegExp(r'^\d{4,5}\s[a-zA-ZäöüÄÖÜ]+$').hasMatch(plzOrt);
   bool isKreditKarteValid =
       RegExp(r'^\d{4}(\s?\d{4}){3}$').hasMatch(kreditKarte);
   bool isMietBeginnValid =
       RegExp(r'^\d{2}\.\d{2}\.\d{4}$').hasMatch(mietBeginn);
   bool isMietEndeValid = RegExp(r'^\d{2}\.\d{2}\.\d{4}$').hasMatch(mietEnde);
-
-  telefon = telefon.replaceAll(" ", "");
-  kreditKarte = kreditKarte.replaceAll(" ", "");
 
   if (!isMailValid ||
       !isTelefonValid ||
@@ -81,10 +79,10 @@ bool validateFields(BuildContext context) {
     }
     if (!isMietBeginnValid) {
       showAlertDialog(
-          context, "Please enter a valid start date! \n(01.01.2023)");
+          context, "Please enter a valid start date! \n(dd.mm.yyyy)");
     }
     if (!isMietEndeValid) {
-      showAlertDialog(context, "Please enter a valid end date! \n(01.01.2023)");
+      showAlertDialog(context, "Please enter a valid end date! \n(dd.mm.yyyy)");
     }
     validation = false;
   }
@@ -188,7 +186,8 @@ Future<void> changeUser(BuildContext context, int campNr, String date) async {
                         vorname = value;
                       },
                       inputFormatters: [
-                        FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
+                        FilteringTextInputFormatter.allow(
+                            RegExp(r'[a-zA-ZäöüÄÖÜ]')),
                       ],
                     ),
                   ),
@@ -207,7 +206,8 @@ Future<void> changeUser(BuildContext context, int campNr, String date) async {
                         nachname = value;
                       },
                       inputFormatters: [
-                        FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
+                        FilteringTextInputFormatter.allow(
+                            RegExp(r'[a-zA-ZäöüÄÖÜ]')),
                       ],
                     ),
                   ),
@@ -298,6 +298,10 @@ Future<void> changeUser(BuildContext context, int campNr, String date) async {
                       onChanged: (value) {
                         land = value;
                       },
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(
+                            RegExp(r'[a-zA-ZäöüÄÖÜ]')),
+                      ],
                     ),
                   ),
                 ],

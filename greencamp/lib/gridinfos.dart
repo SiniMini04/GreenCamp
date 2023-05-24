@@ -40,10 +40,10 @@ Future<List<Map<String, dynamic>>> getLendStatus(
       vorname = row['KundVorname'];
       nachname = row['KundName'];
       mail = row['KundEMail'];
-      telefon = row['KundTelefonNr'].toString();
+      telefon = row['KundTelefonNr'];
       strasse = row['KundAdresse'];
       plzOrt = row['KundVorname'];
-      kreditKarte = row['KundKreditkartenNr'].toString();
+      kreditKarte = row['KundKreditkartenNr'];
       mietBeginn = row['KundBeginMiete'];
       mietEnde = row['KundEndeMiete'];
     }
