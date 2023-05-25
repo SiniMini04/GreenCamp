@@ -378,6 +378,13 @@ Future<void> changeUser(BuildContext context, int campNr, String date) async {
                 children: [
                   Expanded(
                       child: TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            gridInfoAfterInsert(context, campNr, date);
+                          },
+                          child: Text('Abbrechen'))),
+                  Expanded(
+                      child: TextButton(
                           onPressed: () async {
                             if (validateFields(context)) {
                               await updateData(
@@ -396,14 +403,7 @@ Future<void> changeUser(BuildContext context, int campNr, String date) async {
                               gridInfoAfterInsert(context, campNr, date);
                             }
                           },
-                          child: Text('Speichern'))),
-                  Expanded(
-                      child: TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                            gridInfoAfterInsert(context, campNr, date);
-                          },
-                          child: Text('Abbrechen')))
+                          child: Text('Speichern')))
                 ],
               ),
             ],
