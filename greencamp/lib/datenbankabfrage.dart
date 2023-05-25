@@ -20,11 +20,11 @@ int count = 0;
 
 Future<List<ResultRow>> selctAllCampsites(String shownDate) async {
   final conn = await MySqlConnection.connect(ConnectionSettings(
-    host: 'w01cc2a0.kasserver.com',
+    host: 'localhost',
     port: 3306,
-    user: 'd03ce24d',
-    password: 'Skilla303!',
-    db: 'd03ce24d',
+    user: 'root',
+    password: '1234',
+    db: 'greencamp',
   ));
   DateTime displayedDate = DateFormat("dd.MM.yyyy").parse(shownDate);
   String fixedCurrentDate = DateFormat("yyyy-MM-dd").format(displayedDate);
@@ -43,11 +43,11 @@ Future<Results> selectQuery(int campNr, String ende) async {
   DateTime displayedDate = DateFormat("dd.MM.yyyy").parse(ende);
   String fixedCurrentDate = DateFormat("yyyy-MM-dd").format(displayedDate);
   final conn = await MySqlConnection.connect(ConnectionSettings(
-    host: 'w01cc2a0.kasserver.com',
+    host: 'localhost',
     port: 3306,
-    user: 'd03ce24d',
-    password: 'Skilla303!',
-    db: 'd03ce24d',
+    user: 'root',
+    password: '1234',
+    db: 'greencamp',
   ));
 
 // Select Query
@@ -66,11 +66,11 @@ Future<Results> selectQuery(int campNr, String ende) async {
 
 Future<bool> checkWhichPopUp(int campNr) async {
   final conn = await MySqlConnection.connect(ConnectionSettings(
-    host: 'w01cc2a0.kasserver.com',
+    host: 'localhost',
     port: 3306,
-    user: 'd03ce24d',
-    password: 'Skilla303!',
-    db: 'd03ce24d',
+    user: 'root',
+    password: '1234',
+    db: 'greencamp',
   ));
 
   final results = await conn.query(
@@ -106,11 +106,11 @@ bool checkingStatus(int campNr) {
 Future<void> insertData(vorname, name, strasse, plzOrt, land, kreditkarteNr,
     mail, telefon, begin, ende, campNr) async {
   final conn = await MySqlConnection.connect(ConnectionSettings(
-    host: 'w01cc2a0.kasserver.com',
+    host: 'localhost',
     port: 3306,
-    user: 'd03ce24d',
-    password: 'Skilla303!',
-    db: 'd03ce24d',
+    user: 'root',
+    password: '1234',
+    db: 'greencamp',
   ));
 
   DateTime beginDate = DateFormat("dd.MM.yyyy").parse(begin);
@@ -151,11 +151,11 @@ Future<void> insertData(vorname, name, strasse, plzOrt, land, kreditkarteNr,
 
 Future<void> deleteReservation(campNr) async {
   final conn = await MySqlConnection.connect(ConnectionSettings(
-    host: 'w01cc2a0.kasserver.com',
+    host: 'localhost',
     port: 3306,
-    user: 'd03ce24d',
-    password: 'Skilla303!',
-    db: 'd03ce24d',
+    user: 'root',
+    password: '1234',
+    db: 'greencamp',
   ));
   final getKundId = await conn.query(
       "select k.KundId from TKunden k, TBelege b where b.CampNr = ? AND b.KundId = k.KundId",
@@ -172,11 +172,11 @@ Future<void> deleteReservation(campNr) async {
 Future<void> updateData(vorname, name, strasse, plzOrt, land, kreditkarteNr,
     mail, telefon, begin, ende, campNr) async {
   final conn = await MySqlConnection.connect(ConnectionSettings(
-    host: 'w01cc2a0.kasserver.com',
+    host: 'localhost',
     port: 3306,
-    user: 'd03ce24d',
-    password: 'Skilla303!',
-    db: 'd03ce24d',
+    user: 'root',
+    password: '1234',
+    db: 'greencamp',
   ));
 
   DateTime beginDate = DateFormat("dd.MM.yyyy").parse(begin);

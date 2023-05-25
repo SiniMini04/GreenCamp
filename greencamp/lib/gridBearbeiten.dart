@@ -187,7 +187,7 @@ Future<void> changeUser(BuildContext context, int campNr, String date) async {
                       },
                       inputFormatters: [
                         FilteringTextInputFormatter.allow(
-                            RegExp(r'[a-zA-ZäöüÄÖÜ]')),
+                            RegExp(r'[a-zA-ZäöüÄÖÜ\- ]')),
                       ],
                     ),
                   ),
@@ -207,7 +207,7 @@ Future<void> changeUser(BuildContext context, int campNr, String date) async {
                       },
                       inputFormatters: [
                         FilteringTextInputFormatter.allow(
-                            RegExp(r'[a-zA-ZäöüÄÖÜ]')),
+                            RegExp(r'[a-zA-ZäöüÄÖÜ\- ]')),
                       ],
                     ),
                   ),
@@ -300,7 +300,7 @@ Future<void> changeUser(BuildContext context, int campNr, String date) async {
                       },
                       inputFormatters: [
                         FilteringTextInputFormatter.allow(
-                            RegExp(r'[a-zA-ZäöüÄÖÜ]')),
+                            RegExp(r'[a-zA-ZäöüÄÖÜ\- ]')),
                       ],
                     ),
                   ),

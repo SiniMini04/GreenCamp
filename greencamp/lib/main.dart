@@ -256,23 +256,16 @@ class _MyAppState extends State<MyApp> {
                                       key: ValueKey(index),
                                     ),
                               if (positions[index]['electricityConnection'] ==
-                                    true)
-                                  Positioned.fill(
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        border: Border.all(
-                                          color: Colors.yellow,
-                                          width: 2.0,
-                                        ),
-                                      ),
-                                      child: Icon(
-                                        Icons.bolt,
-                                        color: Colors.yellow,
-                                        size: 20.0,
-                                      ),
+                                  true)
+                                Positioned.fill(
+                                  child: Container(
+                                    child: Icon(
+                                      Icons.bolt,
+                                      color: Colors.yellow,
+                                      size: 20.0,
                                     ),
                                   ),
+                                ),
                             ],
                           ),
                         ),
