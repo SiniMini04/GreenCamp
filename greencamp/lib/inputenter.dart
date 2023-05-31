@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'datenbankabfrage.dart';
 import 'gridInfoInsert.dart';
+import 'package:flutter_date_pickers/flutter_date_pickers.dart' as dp;
 
 String vorname = "";
 String nachname = "";
@@ -13,6 +14,43 @@ String land = "";
 String kreditKarte = "";
 String mietBeginn = "";
 String mietEnde = "";
+
+void buildWeekDatePicker(
+  BuildContext context,
+  DateTime selectedDate,
+  DateTime firstAllowedDate,
+  DateTime lastAllowedDate,
+  ValueChanged<dp.DatePeriod> onNewSelected,
+) {
+  dp.showWeekPicker(
+    context: context,
+    initialDate: selectedDate,
+    firstDate: firstAllowedDate,
+    lastDate: lastAllowedDate,
+    selectedPeriod: dp.DatePeriod(selectedDate, selectedDate),
+    onChanged: onNewSelected,
+    datePickerStyles: dp.DatePickerRangeStyles(
+      selectedPeriodLastDecoration: BoxDecoration(
+        color: Colors.red,
+        borderRadius: BorderRadiusDirectional.only(
+          topEnd: Radius.circular(10.0),
+          bottomEnd: Radius.circular(10.0),
+        ),
+      ),
+      selectedPeriodStartDecoration: BoxDecoration(
+        color: Colors.green,
+        borderRadius: BorderRadiusDirectional.only(
+          topStart: Radius.circular(10.0),
+          bottomStart: Radius.circular(10.0),
+        ),
+      ),
+      selectedPeriodMiddleDecoration: BoxDecoration(
+        color: Colors.yellow,
+        shape: BoxShape.rectangle,
+      ),
+    ),
+  );
+}
 
 Future<void> showAlertDialog(BuildContext context, String message) async {
   await showDialog(
@@ -297,6 +335,8 @@ Future<void> inputRenter(BuildContext context, int campNr, String date) async {
                         hintText: 'dd.mm.yyyy',
                       ),
                       controller: TextEditingController(text: ''),
+                      onTap: buildWeekDatePicker(
+                          DateTime.now(), DateTime.now(), DateTime(2100)),
                       onChanged: (value) {
                         mietBeginn = value;
                       },

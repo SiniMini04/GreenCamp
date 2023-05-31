@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:greencamp/datenbankabfrage.dart';
 import 'package:mysql1/src/single_connection.dart';
-import 'inputrenter.dart';
+import 'inputenter.dart';
 
 String vorname = "";
 String nachname = "";
