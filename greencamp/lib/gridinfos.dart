@@ -178,7 +178,10 @@ Future<void> positioninfos(
                       child: TextButton(
                           onPressed: () {
                             Navigator.of(context).pop();
-                            inputRenter(context, campNr, date);
+                            InputRenter inputRenterWidget = InputRenter();
+                            inputRenterWidget
+                                .createState()
+                                .inputRenter(context, campNr, date);
                           },
                           child: Text('Hinzufügen')))
                 ],
