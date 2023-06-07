@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_date_pickers/flutter_date_pickers.dart';
+import 'package:intl/intl.dart';
 import 'datenbankabfrage.dart';
-import 'gridInfoInsert.dart';
 
 class InputRenter extends StatefulWidget {
   @override
@@ -20,6 +20,65 @@ class _InputRenterState extends State<InputRenter> {
   String kreditKarte = "";
   String mietBeginn = "";
   String mietEnde = "";
+
+  DatePeriod _selectedPeriod = DatePeriod(
+    DateTime.now(),
+    DateTime.now(),
+  );
+
+  TextEditingController _mietBeginnController = TextEditingController();
+  TextEditingController _mietEndeController = TextEditingController();
+
+  void showRangePicker(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Select Camping Time'),
+          content: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return RangePicker(
+                initiallyShowDate: DateTime.now(),
+                selectedPeriod: _selectedPeriod,
+                onChanged: (newPeriod) {
+                  setState(() {
+                    _selectedPeriod = newPeriod;
+                  });
+                  // Retrieve the start and end dates
+                  mietBeginn = DateFormat('dd.MM.yyyy')
+                      .format(_selectedPeriod.start)
+                      .toString();
+                  mietEnde = DateFormat('dd.MM.yyyy')
+                      .format(_selectedPeriod.end)
+                      .toString();
+                },
+                firstDate: DateTime.now(),
+                lastDate: DateTime(2100),
+              );
+            },
+          ),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                _mietBeginnController.text = mietBeginn;
+                _mietEndeController.text = mietEnde;
+              },
+              child: Text('Done'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _onSelectedDateChanged(DatePeriod newPeriod) {
+    setState(() {
+      _selectedPeriod = newPeriod;
+      mietBeginn = _selectedPeriod.start.toString();
+      mietEnde = _selectedPeriod.end.toString();
+    });
+  }
 
   Future<void> showAlertDialog(BuildContext context, String message) async {
     await showDialog(
@@ -305,8 +364,10 @@ class _InputRenterState extends State<InputRenter> {
                         decoration: const InputDecoration(
                           hintText: 'dd.mm.yyyy',
                         ),
-                        controller: TextEditingController(text: ''),
-                        onTap: () {},
+                        controller: _mietBeginnController,
+                        onTap: () {
+                          showRangePicker(context);
+                        },
                         onChanged: (value) {
                           mietBeginn = value;
                         },
@@ -323,8 +384,10 @@ class _InputRenterState extends State<InputRenter> {
                         decoration: const InputDecoration(
                           hintText: 'dd.mm.yyyy',
                         ),
-                        controller: TextEditingController(text: ''),
-                        onTap: () {},
+                        controller: _mietEndeController,
+                        onTap: () {
+                          showRangePicker(context);
+                        },
                         onChanged: (value) {
                           mietEnde = value;
                         },

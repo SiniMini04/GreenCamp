@@ -259,7 +259,7 @@ class _MyAppState extends State<MyApp> {
                                   true)
                                 Positioned.fill(
                                   child: Container(
-                                    child: Icon(
+                                    child: const Icon(
                                       Icons.bolt,
                                       color: Colors.yellow,
                                       size: 20.0,
@@ -284,13 +284,13 @@ class _MyAppState extends State<MyApp> {
                           Color.fromARGB(255, 227, 227, 227).withOpacity(0.8),
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Align(
+                    child: const Align(
                       alignment: Alignment.centerLeft,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
-                            children: const [
+                            children: [
                               Icon(
                                 Icons.fiber_manual_record,
                                 color: Colors.green,
@@ -306,7 +306,7 @@ class _MyAppState extends State<MyApp> {
                             ],
                           ),
                           Row(
-                            children: const [
+                            children: [
                               Icon(
                                 Icons.fiber_manual_record,
                                 color: Colors.red,
@@ -322,7 +322,7 @@ class _MyAppState extends State<MyApp> {
                             ],
                           ),
                           Row(
-                            children: const [
+                            children: [
                               Icon(
                                 Icons.bolt,
                                 color: Colors.yellow,
