@@ -34,8 +34,8 @@ class _gridBearbeiten extends State<gridBearbeiten> {
   @override
   void initState() {
     super.initState();
-    _mietBeginnController.text = 'Initial Value';
-    print("test");
+    _mietBeginnController.text = mietBeginn;
+    _mietEndeController.text = mietEnde;
   }
 
   void showRangePicker(BuildContext context) {
@@ -214,6 +214,7 @@ class _gridBearbeiten extends State<gridBearbeiten> {
 
   Future<void> changeUser(BuildContext context, int campNr, String date) async {
     await getLendStatus(campNr, date);
+    initState();
     await showDialog<String>(
       context: context,
       builder: (BuildContext context) => Dialog(
