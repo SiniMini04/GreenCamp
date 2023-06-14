@@ -93,22 +93,22 @@ Future<void> gridInfoAfterInsert(
                 ],
               ),
               // Person
-              Row(
+              const Row(
                 children: [
                   Expanded(
-                      child: const Text('Person:',
+                      child: Text('Person:',
                           style: TextStyle(fontWeight: FontWeight.bold))),
                 ],
               ),
               Row(
                 children: [
-                  Expanded(child: const Text('Vorname:')),
+                  const Expanded(child: Text('Vorname:')),
                   Flexible(child: Text(vorname)),
                 ],
               ),
               Row(
                 children: [
-                  Expanded(child: const Text('Nachname:')),
+                  const Expanded(child: Text('Nachname:')),
                   Flexible(child: Text(nachname)),
                 ],
               ),
@@ -126,10 +126,10 @@ Future<void> gridInfoAfterInsert(
               ),
               const SizedBox(height: 8),
               // Adresse
-              Row(
+              const Row(
                 children: [
                   Expanded(
-                      child: const Text('Adresse:',
+                      child: Text('Adresse:',
                           style: TextStyle(fontWeight: FontWeight.bold))),
                 ],
               ),
@@ -153,10 +153,10 @@ Future<void> gridInfoAfterInsert(
               ),
               const SizedBox(height: 8),
               // Zahlungsmittel
-              Row(
+              const Row(
                 children: [
                   Expanded(
-                      child: const Text('Zahlungsmittel:',
+                      child: Text('Zahlungsmittel:',
                           style: TextStyle(fontWeight: FontWeight.bold))),
                 ],
               ),
@@ -168,10 +168,10 @@ Future<void> gridInfoAfterInsert(
               ),
               const SizedBox(height: 8),
               // Miete
-              Row(
+              const Row(
                 children: [
                   Expanded(
-                      child: const Text('Miete:',
+                      child: Text('Miete:',
                           style: TextStyle(fontWeight: FontWeight.bold))),
                 ],
               ),
@@ -195,7 +195,11 @@ Future<void> gridInfoAfterInsert(
                       child: TextButton(
                           onPressed: () {
                             Navigator.of(context).pop();
-                            changeUser(context, campNr, date);
+                            gridBearbeiten gridBearbeitenWidget =
+                                gridBearbeiten();
+                            gridBearbeitenWidget
+                                .createState()
+                                .changeUser(context, campNr, date);
                           },
                           child: Text('Bearbeiten')))
                 ],

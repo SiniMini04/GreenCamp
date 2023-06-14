@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_date_pickers/flutter_date_pickers.dart';
-import 'datenbankabfrage.dart';
-import 'gridInfoInsert.dart';
-import 'package:mysql1/src/single_connection.dart';
 import 'package:intl/intl.dart';
+import 'datenbankabfrage.dart';
 
-class gridBearbeiten extends StatefulWidget {
+class InputRenter extends StatefulWidget {
   @override
-  _gridBearbeiten createState() => _gridBearbeiten();
+  _InputRenterState createState() => _InputRenterState();
 }
 
-class _gridBearbeiten extends State<gridBearbeiten> {
+class _InputRenterState extends State<InputRenter> {
   String vorname = "";
   String nachname = "";
   String mail = "";
@@ -30,13 +28,6 @@ class _gridBearbeiten extends State<gridBearbeiten> {
 
   TextEditingController _mietBeginnController = TextEditingController();
   TextEditingController _mietEndeController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    _mietBeginnController.text = mietBeginn;
-    _mietEndeController.text = mietEnde;
-  }
 
   void showRangePicker(BuildContext context) {
     showDialog(
@@ -81,12 +72,39 @@ class _gridBearbeiten extends State<gridBearbeiten> {
     );
   }
 
+  void _onSelectedDateChanged(DatePeriod newPeriod) {
+    setState(() {
+      _selectedPeriod = newPeriod;
+      mietBeginn = _selectedPeriod.start.toString();
+      mietEnde = _selectedPeriod.end.toString();
+    });
+  }
+
+  Future<void> showAlertDialog(BuildContext context, String message) async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Alert'),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   bool validateFields(BuildContext context) {
     bool validation = true;
     bool isMailValid = RegExp(r'^.+@[^\.].*\.[a-z]{2,3}$').hasMatch(mail);
     bool isTelefonValid =
-        RegExp(r'^\+\d{1,3}\s?\(?\d{1,4}\)?[\s.-]?\d{1,9}[\s.-]?\d{1,9}$')
-            .hasMatch(telefon);
+        RegExp(r'^\+\d{2}\s\d{2}\s\d{3}\s\d{2}\s\d{2}$').hasMatch(telefon);
     bool isStrasseValid =
         RegExp(r'^[a-zA-Z0-9]+\s\d+[a-zA-ZäöüÄÖÜ]?$').hasMatch(strasse);
     bool isPlzOrtValid = RegExp(r'^\d{4,5}\s[a-zA-ZäöüÄÖÜ]+$').hasMatch(plzOrt);
@@ -137,85 +155,8 @@ class _gridBearbeiten extends State<gridBearbeiten> {
     return validation;
   }
 
-  void _onSelectedDateChanged(DatePeriod newPeriod) {
-    setState(() {
-      _selectedPeriod = newPeriod;
-      mietBeginn = _selectedPeriod.start.toString();
-      mietEnde = _selectedPeriod.end.toString();
-    });
-  }
-
-  Future<void> showAlertDialog(BuildContext context, String message) async {
-    await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Alert'),
-          content: Text(message),
-          actions: <Widget>[
-            TextButton(
-              child: Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void resetInputs() {
-    vorname = "-";
-    nachname = "-";
-    mail = "-";
-    telefon = "-";
-    strasse = "-";
-    plzOrt = "-";
-    land = "-";
-    kreditKarte = "-";
-    mietBeginn = "-";
-    mietEnde = "-";
-  }
-
-  Future<List<Map<String, dynamic>>> getLendStatus(
-      int campNr, String date) async {
-    List<Map<String, dynamic>> resultList = [];
-
-    Results queryResult = await selectQuery(campNr, date);
-
-    for (var row in queryResult) {
-      String mieteBeginUebergang =
-          row['KundBeginMiete'].toString().substring(0, 11);
-      String mieteEndeUebergang =
-          row['KundEndeMiete'].toString().substring(0, 11);
-
-      DateTime beginDate = DateFormat("yyyy-MM-dd").parse(mieteBeginUebergang);
-      String fixedBegin = DateFormat("dd.MM.yyyy").format(beginDate);
-
-      DateTime endeDate = DateFormat("yyyy-MM-dd").parse(mieteEndeUebergang);
-      String fixedEnde = DateFormat("dd.MM.yyyy").format(endeDate);
-
-      if (queryResult.isNotEmpty) {
-        vorname = row['KundVorname'];
-        nachname = row['KundName'];
-        mail = row['KundEMail'];
-        telefon = row['KundTelefonNr'].toString();
-        strasse = row['KundStrasse'];
-        plzOrt = row['KundPlzOrt'];
-        land = row['KundLand'];
-        kreditKarte = row['KundKreditkartenNr'].toString();
-        mietBeginn = fixedBegin;
-        mietEnde = fixedEnde;
-      }
-    }
-
-    return resultList;
-  }
-
-  Future<void> changeUser(BuildContext context, int campNr, String date) async {
-    await getLendStatus(campNr, date);
-    initState();
+  Future<void> inputRenter(
+      BuildContext context, int campNr, String date) async {
     await showDialog<String>(
       context: context,
       builder: (BuildContext context) => Dialog(
@@ -256,7 +197,7 @@ class _gridBearbeiten extends State<gridBearbeiten> {
                         decoration: const InputDecoration(
                           hintText: 'z.B. Peter',
                         ),
-                        controller: TextEditingController(text: vorname),
+                        controller: TextEditingController(text: ''),
                         onChanged: (value) {
                           vorname = value;
                         },
@@ -276,7 +217,7 @@ class _gridBearbeiten extends State<gridBearbeiten> {
                         decoration: const InputDecoration(
                           hintText: 'z.b. Müller',
                         ),
-                        controller: TextEditingController(text: nachname),
+                        controller: TextEditingController(text: ''),
                         onChanged: (value) {
                           nachname = value;
                         },
@@ -296,7 +237,7 @@ class _gridBearbeiten extends State<gridBearbeiten> {
                         decoration: const InputDecoration(
                           hintText: 'max.musterman@mustermail.ch',
                         ),
-                        controller: TextEditingController(text: mail),
+                        controller: TextEditingController(text: ''),
                         onChanged: (value) {
                           mail = value;
                         },
@@ -312,7 +253,7 @@ class _gridBearbeiten extends State<gridBearbeiten> {
                         decoration: const InputDecoration(
                           hintText: 'z.b. +41 12 345 67 89',
                         ),
-                        controller: TextEditingController(text: telefon),
+                        controller: TextEditingController(text: ''),
                         onChanged: (value) {
                           telefon = value;
                         },
@@ -337,7 +278,7 @@ class _gridBearbeiten extends State<gridBearbeiten> {
                         decoration: const InputDecoration(
                           hintText: 'z.B. Maxmusterstrasse 5b',
                         ),
-                        controller: TextEditingController(text: strasse),
+                        controller: TextEditingController(text: ''),
                         onChanged: (value) {
                           strasse = value;
                         },
@@ -353,7 +294,7 @@ class _gridBearbeiten extends State<gridBearbeiten> {
                         decoration: const InputDecoration(
                           hintText: 'z.b. 8500 Frauenfeld',
                         ),
-                        controller: TextEditingController(text: plzOrt),
+                        controller: TextEditingController(text: ''),
                         onChanged: (value) {
                           plzOrt = value;
                         },
@@ -369,7 +310,7 @@ class _gridBearbeiten extends State<gridBearbeiten> {
                         decoration: const InputDecoration(
                           hintText: 'z.b. Schweiz',
                         ),
-                        controller: TextEditingController(text: land),
+                        controller: TextEditingController(text: ''),
                         onChanged: (value) {
                           land = value;
                         },
@@ -398,7 +339,7 @@ class _gridBearbeiten extends State<gridBearbeiten> {
                         decoration: const InputDecoration(
                           hintText: 'z.b. 1234 5678 9123 4567',
                         ),
-                        controller: TextEditingController(text: kreditKarte),
+                        controller: TextEditingController(text: ''),
                         onChanged: (value) {
                           kreditKarte = value;
                         },
@@ -455,37 +396,25 @@ class _gridBearbeiten extends State<gridBearbeiten> {
                   ],
                 ),
                 const SizedBox(height: 8),
-                Row(
-                  children: [
-                    Expanded(
-                        child: TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                              gridInfoAfterInsert(context, campNr, date);
-                            },
-                            child: Text('Abbrechen'))),
-                    Expanded(
-                        child: TextButton(
-                            onPressed: () async {
-                              if (validateFields(context)) {
-                                await updateData(
-                                    vorname,
-                                    nachname,
-                                    strasse,
-                                    plzOrt,
-                                    land,
-                                    kreditKarte,
-                                    mail,
-                                    telefon,
-                                    mietBeginn,
-                                    mietEnde,
-                                    campNr);
-                                Navigator.of(context).pop();
-                                gridInfoAfterInsert(context, campNr, date);
-                              }
-                            },
-                            child: Text('Speichern')))
-                  ],
+                ElevatedButton(
+                  onPressed: () {
+                    if (validateFields(context)) {
+                      insertData(
+                          vorname,
+                          nachname,
+                          strasse,
+                          plzOrt,
+                          land,
+                          kreditKarte,
+                          mail,
+                          telefon,
+                          mietBeginn,
+                          mietEnde,
+                          campNr);
+                      Navigator.of(context).pop();
+                    }
+                  },
+                  child: const Text('Speichern'),
                 ),
               ],
             ),
@@ -501,7 +430,7 @@ class _gridBearbeiten extends State<gridBearbeiten> {
       body: Center(
         child: ElevatedButton(
           onPressed: () {
-            changeUser(context, 123, "2023-06-07");
+            inputRenter(context, 123, "2023-06-07");
           },
           child: Text('Open Input Dialog'),
         ),
