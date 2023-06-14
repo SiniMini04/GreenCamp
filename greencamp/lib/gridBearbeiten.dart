@@ -81,39 +81,12 @@ class _gridBearbeiten extends State<gridBearbeiten> {
     );
   }
 
-  void _onSelectedDateChanged(DatePeriod newPeriod) {
-    setState(() {
-      _selectedPeriod = newPeriod;
-      mietBeginn = _selectedPeriod.start.toString();
-      mietEnde = _selectedPeriod.end.toString();
-    });
-  }
-
-  Future<void> showAlertDialog(BuildContext context, String message) async {
-    await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Alert'),
-          content: Text(message),
-          actions: <Widget>[
-            TextButton(
-              child: Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   bool validateFields(BuildContext context) {
     bool validation = true;
     bool isMailValid = RegExp(r'^.+@[^\.].*\.[a-z]{2,3}$').hasMatch(mail);
     bool isTelefonValid =
-        RegExp(r'^\+\d{2}\s\d{2}\s\d{3}\s\d{2}\s\d{2}$').hasMatch(telefon);
+        RegExp(r'^\+\d{1,3}\s?\(?\d{1,4}\)?[\s.-]?\d{1,9}[\s.-]?\d{1,9}$')
+            .hasMatch(telefon);
     bool isStrasseValid =
         RegExp(r'^[a-zA-Z0-9]+\s\d+[a-zA-ZäöüÄÖÜ]?$').hasMatch(strasse);
     bool isPlzOrtValid = RegExp(r'^\d{4,5}\s[a-zA-ZäöüÄÖÜ]+$').hasMatch(plzOrt);
@@ -162,6 +135,34 @@ class _gridBearbeiten extends State<gridBearbeiten> {
     }
 
     return validation;
+  }
+
+  void _onSelectedDateChanged(DatePeriod newPeriod) {
+    setState(() {
+      _selectedPeriod = newPeriod;
+      mietBeginn = _selectedPeriod.start.toString();
+      mietEnde = _selectedPeriod.end.toString();
+    });
+  }
+
+  Future<void> showAlertDialog(BuildContext context, String message) async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Alert'),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void resetInputs() {
