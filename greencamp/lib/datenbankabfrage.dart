@@ -1,12 +1,8 @@
 import 'package:intl/intl.dart';
-import 'package:mysql1/mysql1.dart';
 import 'package:logger/logger.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
-
-String _responseText = '';
 
 var logger = Logger(
   printer: PrettyPrinter(),
@@ -23,84 +19,62 @@ var firstKundId = 0;
 
 int count = 0;
 
-Future<ResultRow> selctAllCampsites(String shownDate) async {
+Future<List<int>> selctAllCampsites(String shownDate) async {
   DateTime displayedDate = DateFormat("dd.MM.yyyy").parse(shownDate);
   String fixedCurrentDate = DateFormat("yyyy-MM-dd").format(displayedDate);
 
-  final httpClient = HttpClient();
-  final uri = Uri.http('localhost:8080', '/path/to/local/php/file.php');
+  final response = await http.post(
+      Uri.parse("https://kleeblaetter.net/greencamp/getCamp.php"),
+      body: {"date": fixedCurrentDate});
 
-  try {
-    final request = await httpClient.getUrl(uri);
-    final response = await request.close();
-
-    if (response.statusCode == HttpStatus.ok) {
-      final responseBody = await response.transform(utf8.decoder).join();
-    } else {
-      throw Exception('Fehler: ${response.statusCode}');
-    }
-  } catch (e) {
-    throw Exception('Fehler beim Aufrufen der PHP-Datei: $e');
-  } finally {
-    httpClient.close();
-  }
-
-  logger.i(response);
-
+  // Überprüfe den Statuscode der Antwort
   if (response.statusCode == 200) {
-    // Erfolgreiche Antwort erhalten
-    final jsonResponse = jsonDecode(response.body);
-    return jsonResponse;
+    // Konvertiere die Antwort von JSON zu Dart-Objekten
+    final jsonData = jsonDecode(response.body);
+
+    List<int> campNrList = [];
+
+    for (var data in jsonData) {
+      campNrList.add(data["CampNr"]);
+    }
+
+    return campNrList;
   } else {
-    // Fehler bei der Anfrage
-    throw Exception('Fehler: ${response.statusCode}');
+    throw Exception('Fehler beim Abrufen der Daten');
   }
 }
 
-Future<Results> selectQuery(int campNr, String ende) async {
+Future<List<dynamic>> selectQuery(int campNr, String ende) async {
   DateTime displayedDate = DateFormat("dd.MM.yyyy").parse(ende);
   String fixedCurrentDate = DateFormat("yyyy-MM-dd").format(displayedDate);
-  final conn = await MySqlConnection.connect(ConnectionSettings(
-    host: 'localhost',
-    port: 3306,
-    user: 'root',
-    password: '1234',
-    db: 'greencamp',
-  ));
+  final response = await http.post(
+      Uri.parse("https://kleeblaetter.net/greencamp/getKund.php"),
+      body: {"date": fixedCurrentDate, "campnr": campNr.toString()});
+  if (response.statusCode == 200) {
+    // Konvertiere die Antwort von JSON zu Dart-Objekten
 
-// Select Query
-  final results = await conn.query(
-      'select KundVorname, KundName, KundEMail, KundTelefonNr, KundStrasse, KundPlzOrt, KundLand, KundKreditkartenNr, KundBeginMiete, KundEndeMiete from TCampsite c, TBelege b, TKunden k where c.CampNr = ? and c.CampNr = b.CampNr and b.KundId = k.KundId and k.KundEndeMiete >= ? and k.KundBeginMiete<=?;',
-      [campNr, fixedCurrentDate, fixedCurrentDate]);
+    final jsonData = jsonDecode(response.body);
 
-  for (var row in results) {
-    logger.d(
-        'ID: ${row['KundVorname']}, CampNr: ${row['KundName']}, CampBesetzt: ${row['KundEMail']}');
+    return jsonData;
+  } else {
+    throw Exception('Fehler beim Abrufen der Daten');
   }
-
-  await conn.close();
-  return results;
 }
 
 Future<bool> checkWhichPopUp(int campNr) async {
-  final conn = await MySqlConnection.connect(ConnectionSettings(
-    host: 'localhost',
-    port: 3306,
-    user: 'root',
-    password: '1234',
-    db: 'greencamp',
-  ));
+  final response = await http.post(
+      Uri.parse("https://kleeblaetter.net/greencamp/popup.php"),
+      body: {"campnr": campNr.toString()});
 
-  final results = await conn.query(
-      'select * from TBelege b, TCampsite c where b.CampNr=c.CampNr and c.CampNr = ?;',
-      [campNr]);
+  String responseBody = response.body.toLowerCase();
+  bool isOccupied = responseBody.contains("true");
 
-  await conn.close();
-  if (results.isNotEmpty) {
+  if (isOccupied) {
     dbAbfrage = false;
     campSiteFree = true;
     return true;
   }
+
   dbAbfrage = false;
   campSiteFree = false;
   return false;
@@ -122,14 +96,10 @@ bool checkingStatus(int campNr) {
 }
 
 Future<void> insertData(vorname, name, strasse, plzOrt, land, kreditkarteNr,
-    mail, telefon, begin, ende, campNr) async {
-  final conn = await MySqlConnection.connect(ConnectionSettings(
-    host: 'localhost',
-    port: 3306,
-    user: 'root',
-    password: '1234',
-    db: 'greencamp',
-  ));
+    mail, telefon, begin, ende, int campNr) async {
+  final checkForRent = await http.post(
+      Uri.parse("https://kleeblaetter.net/greencamp/checkRent.php"),
+      body: {"campnr": campNr.toString()});
 
   DateTime beginDate = DateFormat("dd.MM.yyyy").parse(begin);
   String fixedBegin = DateFormat("yyyy-MM-dd").format(beginDate);
@@ -137,96 +107,91 @@ Future<void> insertData(vorname, name, strasse, plzOrt, land, kreditkarteNr,
   DateTime endeDate = DateFormat("dd.MM.yyyy").parse(ende);
   String fixedEnde = DateFormat("yyyy-MM-dd").format(endeDate);
 
-  var checkForRent = await conn
-      .query("select * from TBelege, TKunden where CampNr=? ", [campNr]);
+  String responseBody = checkForRent.body.toLowerCase();
+  bool isOccupied = responseBody.contains("true");
   // Insert Query
-  if (checkForRent.isEmpty) {
-    await conn.query(
-        "insert into TKunden (KundVorname, KundName, KundStrasse, KundPlzOrt, KundLand, KundKreditkartenNr, KundEmail, KundTelefonNr, KundBeginMiete, KundEndeMiete) values (?,?,?,?,?,?,?,?,?,?);",
-        [
-          vorname,
-          name,
-          strasse,
-          plzOrt,
-          land,
-          kreditkarteNr,
-          mail,
-          telefon,
-          fixedBegin,
-          fixedEnde
-        ]);
-    final getKundId = await conn
-        .query("select KundId from TKunden where KundName = ?", [name]);
-    for (var row in getKundId) {
+  if (!isOccupied) {
+    await http.post(
+        Uri.parse("https://kleeblaetter.net/greencamp/insertUser.php"),
+        body: {
+          "vorname": vorname,
+          "name": name,
+          "strasse": strasse,
+          "plzort": plzOrt,
+          "land": land,
+          "kreditkartennr": kreditkarteNr,
+          "mail": mail,
+          "telefon": telefon,
+          "begin": fixedBegin,
+          "ende": fixedEnde,
+        });
+
+    final getKundId = await http.post(
+        Uri.parse("https://kleeblaetter.net/greencamp/getKundId.php"),
+        body: {
+          "name": name,
+        });
+    final kundId =
+        jsonDecode(getKundId.body.toString()); // Umwandlung in String
+    for (var row in kundId) {
       firstKundId = row["KundId"];
     }
-    await conn.query("insert into TBelege (KundId, CampNr) values (?,?);",
-        [firstKundId, campNr]);
-    //logger.i('Inserted record with ID: ${results}');
+    logger.i("test");
+    await http.post(
+        Uri.parse("https://kleeblaetter.net/greencamp/insertBeleg.php"),
+        body: {
+          "kundid": firstKundId.toString(),
+          "campnr": campNr.toString()
+        }); // Umwandlung in String
+    logger.i("TEST");
   }
-  await conn.close();
 }
 
 Future<void> deleteReservation(campNr) async {
-  final conn = await MySqlConnection.connect(ConnectionSettings(
-    host: 'localhost',
-    port: 3306,
-    user: 'root',
-    password: '1234',
-    db: 'greencamp',
-  ));
-  final getKundId = await conn.query(
-      "select k.KundId from TKunden k, TBelege b where b.CampNr = ? AND b.KundId = k.KundId",
-      [campNr]);
-
-  for (var row in getKundId) {
-    firstKundId = row["KundId"];
-  }
-  await conn.query("DELETE FROM TBelege WHERE CampNr = ?;", [campNr]);
-
-  await conn.query("DELETE FROM TKunden WHERE KundId = ?", [firstKundId]);
+  await http.post(
+      Uri.parse("https://kleeblaetter.net/greencamp/deleteRent.php"),
+      body: {
+        "campnr": campNr.toString(),
+      });
 }
 
 Future<void> updateData(vorname, name, strasse, plzOrt, land, kreditkarteNr,
     mail, telefon, begin, ende, campNr) async {
-  final conn = await MySqlConnection.connect(ConnectionSettings(
-    host: 'localhost',
-    port: 3306,
-    user: 'root',
-    password: '1234',
-    db: 'greencamp',
-  ));
-
   DateTime beginDate = DateFormat("dd.MM.yyyy").parse(begin);
   String fixedBegin = DateFormat("yyyy-MM-dd").format(beginDate);
 
   DateTime endeDate = DateFormat("dd.MM.yyyy").parse(ende);
   String fixedEnde = DateFormat("yyyy-MM-dd").format(endeDate);
 
-  final getKundId = await conn.query(
-      "select k.KundId from TKunden k, TBelege b where b.CampNr = ? AND b.KundId = k.KundId",
-      [campNr]);
+  final getKundId = await http.post(
+      Uri.parse("https://kleeblaetter.net/greencamp/getKundIdCampNr.php"),
+      body: {
+        "campnr": campNr.toString(),
+      });
 
-  for (var row in getKundId) {
-    firstKundId = row["KundId"];
+  if (getKundId.statusCode == 200) {
+    final kundId =
+        jsonDecode(getKundId.body.toString()); // Umwandlung in String
+    for (var row in kundId) {
+      firstKundId = row["KundId"];
+    }
+
+    await http.post(
+        Uri.parse("https://kleeblaetter.net/greencamp/updateUser.php"),
+        body: {
+          "vorname": vorname,
+          "name": name,
+          "strasse": strasse,
+          "plzort": plzOrt,
+          "land": land,
+          "kreditkartennr": kreditkarteNr,
+          "mail": mail,
+          "telefon": telefon,
+          "begin": fixedBegin,
+          "ende": fixedEnde,
+          "kundid": firstKundId.toString() // Umwandlung in String
+        });
+  } else {
+    throw Exception('Fehler beim Abrufen der KundId');
   }
-  // Insert Query
-
-  await conn.query(
-      "UPDATE TKunden SET KundVorname=?, KundName=?, KundStrasse=?, KundPlzOrt=?, KundLand=?, KundKreditkartenNr=?, KundEmail=?, KundTelefonNr=?, KundBeginMiete=?, KundEndeMiete=? where KundId=?;",
-      [
-        vorname,
-        name,
-        strasse,
-        plzOrt,
-        land,
-        kreditkarteNr,
-        mail,
-        telefon,
-        fixedBegin,
-        fixedEnde,
-        firstKundId
-      ]);
-
-  await conn.close();
 }

@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:mysql1/mysql1.dart';
 import 'positions.dart';
 import 'datenbankabfrage.dart';
 import 'gridinfos.dart';
 import 'gridInfoInsert.dart';
 import 'package:desktop_window/desktop_window.dart';
 import 'dart:io';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'package:shelf/shelf.dart' as shelf;
-import 'package:shelf/shelf_io.dart' as shelf_io;
 
 void main() async {
   runApp(MyApp());
@@ -29,7 +24,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _responseText = '';
   String shownDate = DateFormat('dd.MM.yyyy').format(DateTime.now());
   bool _isLoading = false;
   List<bool> _isButtonFree = List.filled(positions.length, false);
@@ -38,42 +32,10 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     _getButtonFreeStatuses();
-    startServer();
   }
 
   void closeapp() {
     exit(0);
-  }
-
-  void startServer() async {
-    var handler = const shelf.Pipeline().addHandler(_handleRequest);
-
-    var server = await shelf_io.serve(handler, 'localhost', 8080);
-    print('HTTP-Server gestartet auf localhost:8080');
-  }
-
-  Future<shelf.Response> _handleRequest(shelf.Request request) async {
-    final httpClient = HttpClient();
-    final uri = Uri.http('localhost:8080', '/lib/php/api.php');
-    if (request.url.path == '/fetchData') {
-      final response =
-          await http.get(Uri.parse('http://localhost:8080/api.php'));
-      if (response.statusCode == 200) {
-        // Erfolgreiche Antwort erhalten
-        final jsonResponse = jsonDecode(response.body);
-        setState(() {
-          _responseText = jsonResponse.toString();
-        });
-
-        return shelf.Response.ok('Daten erfolgreich abgerufen');
-      } else {
-        // Fehler bei der Anfrage
-        return shelf.Response.internalServerError(
-            body: 'Fehler: ${response.statusCode}');
-      }
-    } else {
-      return shelf.Response.notFound('Route nicht gefunden');
-    }
   }
 
   Future<void> _getButtonFreeStatuses() async {
@@ -87,10 +49,9 @@ class _MyAppState extends State<MyApp> {
 
     if (buttonOccupied.isNotEmpty) {
       for (int index = 0; index < buttonOccupied.length; index++) {
-        ResultRow currentCampsite = buttonOccupied[index];
-        int campsiteValue = currentCampsite.elementAt(0);
+        int currentCampsite = buttonOccupied[index];
+        int campsiteValue = currentCampsite;
         for (int i = 0; i < positions.length; i++) {
-          logger.i(campsiteValue);
           if (_isButtonFree[i] == false) {
             if (identical(i, campsiteValue)) {
               setState(() {

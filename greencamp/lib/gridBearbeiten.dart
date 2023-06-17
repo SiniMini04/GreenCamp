@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'datenbankabfrage.dart';
 import 'gridInfoInsert.dart';
-import 'package:mysql1/src/single_connection.dart';
 import 'package:intl/intl.dart';
 
 String vorname = "";
@@ -108,13 +107,13 @@ Future<List<Map<String, dynamic>>> getLendStatus(
   resetInputs();
   List<Map<String, dynamic>> resultList = [];
 
-  Results queryResult = await selectQuery(campNr, date);
+  List<dynamic> queryResult = await selectQuery(campNr, date);
 
   for (var row in queryResult) {
     String mieteBeginUebergang =
-        row['KundBeginMiete'].toString().substring(0, 11);
+        row['KundBeginMiete'].toString().substring(0, 10);
     String mieteEndeUebergang =
-        row['KundEndeMiete'].toString().substring(0, 11);
+        row['KundEndeMiete'].toString().substring(0, 10);
 
     DateTime beginDate = DateFormat("yyyy-MM-dd").parse(mieteBeginUebergang);
     String fixedBegin = DateFormat("dd.MM.yyyy").format(beginDate);
