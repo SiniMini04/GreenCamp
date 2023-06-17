@@ -1,7 +1,12 @@
 import 'package:intl/intl.dart';
 import 'package:mysql1/mysql1.dart';
 import 'package:logger/logger.dart';
+import 'package:http/http.dart' as http;
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+
+String _responseText = '';
 
 var logger = Logger(
   printer: PrettyPrinter(),
@@ -18,25 +23,38 @@ var firstKundId = 0;
 
 int count = 0;
 
-Future<List<ResultRow>> selctAllCampsites(String shownDate) async {
-  final conn = await MySqlConnection.connect(ConnectionSettings(
-    host: 'localhost',
-    port: 3306,
-    user: 'root',
-    password: '1234',
-    db: 'greencamp',
-  ));
+Future<ResultRow> selctAllCampsites(String shownDate) async {
   DateTime displayedDate = DateFormat("dd.MM.yyyy").parse(shownDate);
   String fixedCurrentDate = DateFormat("yyyy-MM-dd").format(displayedDate);
 
-  final results = await conn.query(
-      'select c.CampNr from TCampsite c, TBelege b, TKunden k where k.KundBeginMiete <= ? AND k.KundEndeMiete >=? AND k.KundId = b.KundId AND b.CampNr = c.CampNr;',
-      [fixedCurrentDate, fixedCurrentDate]);
+  final httpClient = HttpClient();
+  final uri = Uri.http('localhost:8080', '/path/to/local/php/file.php');
 
-  logger.i(results);
-  await conn.close();
+  try {
+    final request = await httpClient.getUrl(uri);
+    final response = await request.close();
 
-  return results.toList();
+    if (response.statusCode == HttpStatus.ok) {
+      final responseBody = await response.transform(utf8.decoder).join();
+    } else {
+      throw Exception('Fehler: ${response.statusCode}');
+    }
+  } catch (e) {
+    throw Exception('Fehler beim Aufrufen der PHP-Datei: $e');
+  } finally {
+    httpClient.close();
+  }
+
+  logger.i(response);
+
+  if (response.statusCode == 200) {
+    // Erfolgreiche Antwort erhalten
+    final jsonResponse = jsonDecode(response.body);
+    return jsonResponse;
+  } else {
+    // Fehler bei der Anfrage
+    throw Exception('Fehler: ${response.statusCode}');
+  }
 }
 
 Future<Results> selectQuery(int campNr, String ende) async {
