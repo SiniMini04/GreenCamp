@@ -7,6 +7,7 @@ import 'gridinfos.dart';
 import 'gridInfoInsert.dart';
 import 'package:desktop_window/desktop_window.dart';
 import 'dart:io';
+import 'kalender.dart';
 
 void main() async {
   runApp(MyApp());
@@ -185,8 +186,22 @@ class _MyAppState extends State<MyApp> {
                           ))),
                           Expanded(
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
+                                Expanded(
+                                  child: TextButton(
+                                    onPressed: () {
+                                      showCalendar(context);
+                                    },
+                                    style: TextButton.styleFrom(
+                                      backgroundColor: Colors.transparent,
+                                      primary: Colors.white,
+                                    ),
+                                    child: Text(
+                                      'Kalender',
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ),
                                 Expanded(
                                   child: TextButton(
                                     onPressed: () {},
