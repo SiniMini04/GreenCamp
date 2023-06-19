@@ -155,13 +155,22 @@ Future<void> deleteReservation(campNr) async {
       });
 }
 
-Future<void> checkLogin(user, password) async {
-  await http.post(
+Future<bool> checkLogin(user, password) async {
+  final response = await http.post(
       Uri.parse("https://kleeblaetter.net/greencamp/checkLogin.php"),
       body: {
         "user": user,
         "password": password,
       });
+
+  String responseBody = response.body.toLowerCase();
+  bool isOccupied = responseBody.contains("true");
+
+  if (isOccupied) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 Future<void> updateData(vorname, name, strasse, plzOrt, land, kreditkarteNr,

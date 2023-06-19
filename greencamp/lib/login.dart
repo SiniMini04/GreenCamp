@@ -11,6 +11,26 @@ void resetInputs() {
   passwort = "";
 }
 
+Future<void> showAlertDialog(BuildContext context, String message) async {
+  await showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Alert'),
+        content: Text(message),
+        actions: <Widget>[
+          TextButton(
+            child: Text('OK'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
 Future<List<Map<String, dynamic>>> getLendStatus(
     int campNr, String date) async {
   resetInputs();
@@ -116,8 +136,17 @@ Future<void> loginPopUp(BuildContext context) async {
               Row(children: [
                 Expanded(
                     child: TextButton(
-                        onPressed: () {
-                          checkLogin(benutzer, passwort);
+                        onPressed: () async {
+                          bool isLoggedIn =
+                              await checkLogin(benutzer, passwort);
+                          if (isLoggedIn) {
+                            showAlertDialog(context, "Login Success");
+                            Navigator.of(context).pop();
+                          } else {
+                            showAlertDialog(context,
+                                "Benutzer und Passwort kombination falsch");
+                          }
+                          ;
                         },
                         child: Text('Einloggen'))),
               ]),

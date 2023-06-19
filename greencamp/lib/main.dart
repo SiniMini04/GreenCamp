@@ -28,6 +28,8 @@ class _MyAppState extends State<MyApp> {
   String shownDate = DateFormat('dd.MM.yyyy').format(DateTime.now());
   bool _isLoading = false;
   List<bool> _isButtonFree = List.filled(positions.length, false);
+  bool isUserLoggedIn = false;
+  String username = "";
 
   @override
   void initState() {
