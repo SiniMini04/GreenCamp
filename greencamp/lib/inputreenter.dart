@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_date_pickers/flutter_date_pickers.dart';
 import 'package:intl/intl.dart';
 import 'datenbankabfrage.dart';
+import 'gridInfoInsert.dart';
 import 'main.dart';
 
-class InputEnter extends StatefulWidget {
+class InputReEnter extends StatefulWidget {
   @override
-  _InputEnterState createState() => _InputEnterState();
+  _InputReEnterState createState() => _InputReEnterState();
 }
 
-class _InputEnterState extends State<InputEnter> {
+class _InputReEnterState extends State<InputReEnter> {
   String vorname = "";
   String nachname = "";
   String mail = "";
@@ -21,65 +21,6 @@ class _InputEnterState extends State<InputEnter> {
   String kreditKarte = "";
   String mietBeginn = "";
   String mietEnde = "";
-
-  DatePeriod _selectedPeriod = DatePeriod(
-    DateTime.now(),
-    DateTime.now(),
-  );
-
-  TextEditingController _mietBeginnController = TextEditingController();
-  TextEditingController _mietEndeController = TextEditingController();
-
-  void showRangePicker(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Select Camping Time'),
-          content: StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState) {
-              return RangePicker(
-                initiallyShowDate: DateTime.now(),
-                selectedPeriod: _selectedPeriod,
-                onChanged: (newPeriod) {
-                  setState(() {
-                    _selectedPeriod = newPeriod;
-                  });
-                  // Retrieve the start and end dates
-                  mietBeginn = DateFormat('dd.MM.yyyy')
-                      .format(_selectedPeriod.start)
-                      .toString();
-                  mietEnde = DateFormat('dd.MM.yyyy')
-                      .format(_selectedPeriod.end)
-                      .toString();
-                },
-                firstDate: DateTime.now(),
-                lastDate: DateTime(2100),
-              );
-            },
-          ),
-          actions: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                _mietBeginnController.text = mietBeginn;
-                _mietEndeController.text = mietEnde;
-              },
-              child: Text('Done'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _onSelectedDateChanged(DatePeriod newPeriod) {
-    setState(() {
-      _selectedPeriod = newPeriod;
-      mietBeginn = _selectedPeriod.start.toString();
-      mietEnde = _selectedPeriod.end.toString();
-    });
-  }
 
   Future<void> showAlertDialog(BuildContext context, String message) async {
     await showDialog(
@@ -104,9 +45,9 @@ class _InputEnterState extends State<InputEnter> {
   bool validateFields(BuildContext context) {
     bool validation = true;
     bool isMailValid = RegExp(r'^.+@[^\.].*\.[a-z]{2,3}$').hasMatch(mail);
-    bool isTelefonValid = RegExp(
-            r'^\+\d{1,3}\s?\(?\d{1,4}\)?[\s.-]?\d{1,9}[\s.-]?\d{1,9}[\s.-]?\d{1,9}$')
-        .hasMatch(telefon);
+    bool isTelefonValid =
+        RegExp(r'^\+\d{1,3}\s?\(?\d{1,4}\)?[\s.-]?\d{1,9}[\s.-]?\d{1,9}$')
+            .hasMatch(telefon);
     bool isStrasseValid =
         RegExp(r'^[a-zA-Z0-9]+\s\d+[a-zA-ZäöüÄÖÜ]?$').hasMatch(strasse);
     bool isPlzOrtValid = RegExp(r'^\d{4,5}\s[a-zA-ZäöüÄÖÜ]+$').hasMatch(plzOrt);
@@ -366,10 +307,7 @@ class _InputEnterState extends State<InputEnter> {
                         decoration: const InputDecoration(
                           hintText: 'dd.mm.yyyy',
                         ),
-                        controller: _mietBeginnController,
-                        onTap: () {
-                          showRangePicker(context);
-                        },
+                        controller: TextEditingController(text: ''),
                         onChanged: (value) {
                           mietBeginn = value;
                         },
@@ -386,10 +324,7 @@ class _InputEnterState extends State<InputEnter> {
                         decoration: const InputDecoration(
                           hintText: 'dd.mm.yyyy',
                         ),
-                        controller: _mietEndeController,
-                        onTap: () {
-                          showRangePicker(context);
-                        },
+                        controller: TextEditingController(text: ''),
                         onChanged: (value) {
                           mietEnde = value;
                         },
@@ -398,31 +333,36 @@ class _InputEnterState extends State<InputEnter> {
                   ],
                 ),
                 const SizedBox(height: 8),
-                ElevatedButton(
-                  onPressed: () {
-                    if (validateFields(context)) {
-                      insertData(
-                          vorname,
-                          nachname,
-                          strasse,
-                          plzOrt,
-                          land,
-                          kreditKarte,
-                          mail,
-                          telefon,
-                          mietBeginn,
-                          mietEnde,
-                          campNr);
-                      Navigator.of(context).pop();
-                    }
-                    final MyAppData myAppData = MyAppData();
-                    setState(() {
-                      myAppData.shownDate = DateFormat('dd.MM.yyyy')
-                          .format(mietBeginn as DateTime);
-                    });
-                    myAppData.reloadButtons();
-                  },
-                  child: const Text('Speichern'),
+                Row(
+                  children: [
+                    Expanded(
+                        child: TextButton(
+                            onPressed: () async {
+                              if (validateFields(context)) {
+                                await insertData(
+                                    vorname,
+                                    nachname,
+                                    strasse,
+                                    plzOrt,
+                                    land,
+                                    kreditKarte,
+                                    mail,
+                                    telefon,
+                                    mietBeginn,
+                                    mietEnde,
+                                    campNr);
+                                Navigator.of(context).pop();
+                                gridInfoAfterInsert(context, campNr, date);
+                              }
+                              final MyAppData myAppData = MyAppData();
+                              setState(() {
+                                myAppData.shownDate = DateFormat('dd.MM.yyyy')
+                                    .format(mietBeginn as DateTime);
+                              });
+                              myAppData.reloadButtons();
+                            },
+                            child: Text('Speichern')))
+                  ],
                 ),
               ],
             ),
