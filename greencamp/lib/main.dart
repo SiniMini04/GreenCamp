@@ -19,33 +19,20 @@ void fullscreen() async {
   await DesktopWindow.setFullScreen(true);
 }
 
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
+class MyAppData {
   String shownDate = DateFormat('dd.MM.yyyy').format(DateTime.now());
-  bool _isLoading = false;
-  List<bool> _isButtonFree = List.filled(positions.length, false);
+  bool isLoading = false;
+  List<bool> isButtonFree = List.filled(positions.length, false);
 
-  @override
-  void initState() {
-    super.initState();
-    _getButtonFreeStatuses();
-  }
-
-  void closeapp() {
+  void closeApp() {
     exit(0);
   }
 
-  Future<void> _getButtonFreeStatuses() async {
-    setState(() {
-      _isLoading = true;
-    });
+  Future<void> getButtonFreeStatuses() async {
+    isLoading = true;
     var buttonOccupied = await selctAllCampsites(shownDate);
     for (int index = 0; index < positions.length; index++) {
-      _isButtonFree[index] = false;
+      isButtonFree[index] = false;
     }
 
     if (buttonOccupied.isNotEmpty) {
@@ -54,25 +41,40 @@ class _MyAppState extends State<MyApp> {
         int campsiteValue = currentCampsite.elementAt(0);
         for (int i = 0; i < positions.length; i++) {
           logger.i(campsiteValue);
-          if (_isButtonFree[i] == false) {
+          if (isButtonFree[i] == false) {
             if (identical(i, campsiteValue)) {
-              setState(() {
-                _isButtonFree[i] = true;
-              });
+              isButtonFree[i] = true;
             }
           }
         }
       }
     }
-    Future.delayed(const Duration(milliseconds: 500), () {
-      setState(() {
-        _isLoading = false;
-      });
-    });
+
+    await Future.delayed(const Duration(milliseconds: 500));
+    isLoading = false;
   }
 
-  Future<void> _showDatePicker(BuildContext context) async {
-    DateTime date = DateFormat('dd.MM.yyyy').parse(shownDate);
+  Future<void> reloadButtons() async {
+    await getButtonFreeStatuses();
+  }
+}
+
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final MyAppData myAppData = MyAppData();
+
+  @override
+  void initState() {
+    super.initState();
+    myAppData.getButtonFreeStatuses();
+  }
+
+  Future<void> showDatePicker(BuildContext context) async {
+    DateTime date = DateFormat('dd.MM.yyyy').parse(myAppData.shownDate);
     final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: date,
@@ -80,15 +82,9 @@ class _MyAppState extends State<MyApp> {
       lastDate: DateTime(2100),
     );
     if (pickedDate != null && pickedDate != date) {
-      setState(() {
-        shownDate = DateFormat('dd.MM.yyyy').format(pickedDate);
-      });
-      reloadButtons();
+      myAppData.shownDate = DateFormat('dd.MM.yyyy').format(pickedDate);
+      myAppData.reloadButtons();
     }
-  }
-
-  Future<void> reloadButtons() async {
-    _getButtonFreeStatuses();
   }
 
   @override
@@ -130,13 +126,13 @@ class _MyAppState extends State<MyApp> {
                                 onPressed: () {
                                   setState(() {
                                     DateTime date = DateFormat('dd.MM.yyyy')
-                                        .parse(shownDate);
+                                        .parse(myAppData.shownDate);
                                     date =
                                         date.subtract(const Duration(days: 1));
-                                    shownDate =
+                                    myAppData.shownDate =
                                         DateFormat('dd.MM.yyyy').format(date);
                                   });
-                                  reloadButtons();
+                                  myAppData.reloadButtons();
                                 },
                                 child: Text('<'),
                                 style: TextButton.styleFrom(
@@ -145,9 +141,9 @@ class _MyAppState extends State<MyApp> {
                               ),
                               TextButton(
                                 onPressed: () {
-                                  _showDatePicker(context);
+                                  showDatePicker(context);
                                 },
-                                child: Text(shownDate),
+                                child: Text(myAppData.shownDate),
                                 style: TextButton.styleFrom(
                                     backgroundColor: Colors.transparent,
                                     primary: Colors.white),
@@ -156,12 +152,12 @@ class _MyAppState extends State<MyApp> {
                                 onPressed: () {
                                   setState(() {
                                     DateTime date = DateFormat('dd.MM.yyyy')
-                                        .parse(shownDate);
+                                        .parse(myAppData.shownDate);
                                     date = date.add(const Duration(days: 1));
-                                    shownDate =
+                                    myAppData.shownDate =
                                         DateFormat('dd.MM.yyyy').format(date);
                                   });
-                                  reloadButtons();
+                                  myAppData.reloadButtons();
                                 },
                                 child: Text('>'),
                                 style: TextButton.styleFrom(
@@ -170,10 +166,11 @@ class _MyAppState extends State<MyApp> {
                               ),
                               TextButton(
                                 onPressed: () {
-                                  reloadButtons();
+                                  myAppData.reloadButtons();
                                   setState(() {
-                                    shownDate = DateFormat('dd.MM.yyyy')
-                                        .format(DateTime.now());
+                                    myAppData.shownDate =
+                                        DateFormat('dd.MM.yyyy')
+                                            .format(DateTime.now());
                                   });
                                 },
                                 child: Text("Heute"),
@@ -201,7 +198,7 @@ class _MyAppState extends State<MyApp> {
                                   ),
                                 ),
                                 IconButton(
-                                  onPressed: closeapp,
+                                  onPressed: myAppData.closeApp,
                                   icon: Icon(Icons.close),
                                   splashColor: Colors.transparent,
                                   highlightColor: Colors.transparent,
@@ -233,21 +230,21 @@ class _MyAppState extends State<MyApp> {
                               : null,
                           child: Stack(
                             children: [
-                              _isLoading
+                              myAppData.isLoading
                                   ? CircularProgressIndicator()
                                   : IconButton(
                                       onPressed: () async {
                                         if (await checkWhichPopUp(index)) {
-                                          gridInfoAfterInsert(
-                                              context, index, shownDate);
+                                          gridInfoAfterInsert(context, index,
+                                              myAppData.shownDate);
                                         } else {
-                                          positioninfos(
-                                              context, index, shownDate);
+                                          positioninfos(context, index,
+                                              myAppData.shownDate);
                                         }
                                       },
                                       icon:
                                           const Icon(Icons.fiber_manual_record),
-                                      color: _isButtonFree[index]
+                                      color: myAppData.isButtonFree[index]
                                           ? Colors.red
                                           : Colors.green,
                                       splashColor: Colors.transparent,
