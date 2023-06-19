@@ -121,9 +121,7 @@ Future<void> insertData(vorname, name, strasse, plzOrt, land, kreditkarteNr,
           "land": land,
           "kreditkartennr": kreditkarteNr,
           "mail": mail,
-          "telefon": telefon,
-          "begin": fixedBegin,
-          "ende": fixedEnde,
+          "telefon": telefon
         });
 
     final getKundId = await http.post(
@@ -141,7 +139,9 @@ Future<void> insertData(vorname, name, strasse, plzOrt, land, kreditkarteNr,
         Uri.parse("https://kleeblaetter.net/greencamp/insertBeleg.php"),
         body: {
           "kundid": firstKundId.toString(),
-          "campnr": campNr.toString()
+          "campnr": campNr.toString(),
+          "begin": fixedBegin,
+          "ende": fixedEnde
         }); // Umwandlung in String
     logger.i("TEST");
   }
@@ -152,6 +152,15 @@ Future<void> deleteReservation(campNr) async {
       Uri.parse("https://kleeblaetter.net/greencamp/deleteRent.php"),
       body: {
         "campnr": campNr.toString(),
+      });
+}
+
+Future<void> checkLogin(user, password) async {
+  await http.post(
+      Uri.parse("https://kleeblaetter.net/greencamp/checkLogin.php"),
+      body: {
+        "user": user,
+        "password": password,
       });
 }
 

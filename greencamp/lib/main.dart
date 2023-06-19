@@ -6,6 +6,7 @@ import 'gridinfos.dart';
 import 'gridInfoInsert.dart';
 import 'package:desktop_window/desktop_window.dart';
 import 'dart:io';
+import 'login.dart';
 
 void main() async {
   runApp(MyApp());
@@ -187,7 +188,9 @@ class _MyAppState extends State<MyApp> {
                               children: [
                                 Expanded(
                                   child: TextButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      loginPopUp(context);
+                                    },
                                     style: TextButton.styleFrom(
                                       backgroundColor: Colors.transparent,
                                       primary: Colors.white,
