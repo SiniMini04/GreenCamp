@@ -259,10 +259,22 @@ class _MyAppState extends State<MyApp> {
                                   true)
                                 Positioned.fill(
                                   child: Container(
-                                    child: Icon(
-                                      Icons.bolt,
+                                    child: IconButton(
+                                      icon: const Icon(Icons.bolt),
                                       color: Colors.yellow,
-                                      size: 20.0,
+                                      onPressed: () async {
+                                        if (await checkWhichPopUp(index)) {
+                                          gridInfoAfterInsert(
+                                              context, index, shownDate);
+                                        } else {
+                                          positioninfos(
+                                              context, index, shownDate);
+                                        }
+                                      },
+                                      splashColor: Colors.transparent,
+                                      highlightColor: Colors.transparent,
+                                      hoverColor: Colors.transparent,
+                                      iconSize: 20,
                                     ),
                                   ),
                                 ),
