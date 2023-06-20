@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_date_pickers/flutter_date_pickers.dart';
 import 'package:intl/intl.dart';
 import 'datenbankabfrage.dart';
-import 'main.dart';
 
 class InputRenter extends StatefulWidget {
   @override
@@ -415,10 +414,6 @@ class _InputRenterState extends State<InputRenter> {
                           campNr);
                       Navigator.of(context).pop();
                     }
-                    setState(() {
-                      shownDate = DateFormat('dd.MM.yyyy').format(pickedDate);
-                    });
-                    reloadButtons();
                   },
                   child: const Text('Speichern'),
                 ),
