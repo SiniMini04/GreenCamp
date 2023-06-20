@@ -3,10 +3,28 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 List<CalendarResource> kalenderDataRecources() {
   List<CalendarResource> resourceColl = <CalendarResource>[];
-  resourceColl.add(CalendarResource(
-    displayName: 'John',
-    id: '0001',
-  ));
+
+  for (int i = 1; i <= 220; i++) {
+    int id = i;
+    String displayName = id.toString();
+
+    if (i == 45 || i == 46) {
+      resourceColl.add(CalendarResource(
+        displayName: displayName,
+        id: id,
+      ));
+
+      resourceColl.add(CalendarResource(
+        displayName: '$displayName B',
+        id: id.toString() + 'B',
+      ));
+    } else {
+      resourceColl.add(CalendarResource(
+        displayName: displayName,
+        id: id,
+      ));
+    }
+  }
 
   return resourceColl;
 }
@@ -14,7 +32,11 @@ List<CalendarResource> kalenderDataRecources() {
 List<Appointment> kalenderDataAppointments() {
   List<Appointment> appointments = <Appointment>[];
   appointments.add(Appointment(
-      startTime: DateTime(2023, 06, 19), endTime: DateTime(2023, 08, 25)));
+    startTime: DateTime(2023, 06, 19),
+    endTime: DateTime(2023, 06, 25),
+    resourceIds: <Object>[1],
+    isAllDay: true,
+  ));
 
   return appointments;
 }
@@ -28,15 +50,14 @@ Future<void> showCalendar(BuildContext context) async {
           Container(
             padding: const EdgeInsets.all(8.0),
             child: SfCalendar(
-              view: CalendarView.timelineWeek,
+              view: CalendarView.timelineMonth,
               showNavigationArrow: true,
               dataSource: MeetingDataSource(
                   kalenderDataAppointments(), kalenderDataRecources()),
               resourceViewSettings: const ResourceViewSettings(
                   displayNameTextStyle: TextStyle(color: Colors.white),
                   showAvatar: false,
-                  size: 120,
-                  visibleResourceCount: 5),
+                  size: 30),
             ),
           ),
           Positioned(
@@ -59,6 +80,6 @@ class MeetingDataSource extends CalendarDataSource {
   MeetingDataSource(
       List<Appointment> source, List<CalendarResource> resources) {
     appointments = source;
-    resources = resources;
+    this.resources = resources;
   }
 }
