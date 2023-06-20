@@ -6,9 +6,23 @@ import 'gridBearbeiten.dart';
 String benutzer = "";
 String passwort = "";
 
+bool isUserLoggedIn = false;
+
 void resetInputs() {
   benutzer = "";
   passwort = "";
+}
+
+bool getIfUserIsLoggedIn() {
+  if (isUserLoggedIn) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+void changeIfUserIsLoggedIn(newValueOfLogIn) {
+  isUserLoggedIn = newValueOfLogIn;
 }
 
 Future<void> showAlertDialog(BuildContext context, String message) async {
@@ -140,8 +154,14 @@ Future<void> loginPopUp(BuildContext context) async {
                           bool isLoggedIn =
                               await checkLogin(benutzer, passwort);
                           if (isLoggedIn) {
+                            isUserLoggedIn = isLoggedIn;
+
                             showAlertDialog(context, "Login Success");
-                            Navigator.of(context).pop();
+                            Future.delayed(const Duration(milliseconds: 1000),
+                                () {
+                              Navigator.of(context).pop();
+                              Navigator.of(context).pop();
+                            });
                           } else {
                             showAlertDialog(context,
                                 "Benutzer und Passwort kombination falsch");

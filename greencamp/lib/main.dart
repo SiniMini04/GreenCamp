@@ -7,6 +7,7 @@ import 'gridInfoInsert.dart';
 import 'package:desktop_window/desktop_window.dart';
 import 'dart:io';
 import 'login.dart';
+import 'logout.dart';
 
 void main() async {
   runApp(MyApp());
@@ -28,7 +29,7 @@ class _MyAppState extends State<MyApp> {
   String shownDate = DateFormat('dd.MM.yyyy').format(DateTime.now());
   bool _isLoading = false;
   List<bool> _isButtonFree = List.filled(positions.length, false);
-  bool isUserLoggedIn = false;
+  bool isTheUserLoggedIn = false;
   String username = "";
 
   @override
@@ -190,17 +191,34 @@ class _MyAppState extends State<MyApp> {
                               children: [
                                 Expanded(
                                   child: TextButton(
-                                    onPressed: () {
-                                      loginPopUp(context);
+                                    onPressed: () async {
+                                      if (isTheUserLoggedIn) {
+                                        await logUserOut(context);
+                                        setState(() {
+                                          isTheUserLoggedIn =
+                                              getIfUserIsLoggedIn();
+                                        });
+                                      } else {
+                                        await loginPopUp(context);
+                                        setState(() {
+                                          isTheUserLoggedIn =
+                                              getIfUserIsLoggedIn();
+                                        });
+                                      }
                                     },
                                     style: TextButton.styleFrom(
                                       backgroundColor: Colors.transparent,
                                       primary: Colors.white,
                                     ),
-                                    child: Text(
-                                      'User',
-                                      textAlign: TextAlign.center,
-                                    ),
+                                    child: isTheUserLoggedIn
+                                        ? Text(
+                                            'Log out',
+                                            textAlign: TextAlign.center,
+                                          )
+                                        : Text(
+                                            'Einloggen',
+                                            textAlign: TextAlign.center,
+                                          ),
                                   ),
                                 ),
                                 IconButton(
