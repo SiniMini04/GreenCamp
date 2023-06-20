@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:mysql1/mysql1.dart';
 import 'positions.dart';
 import 'datenbankabfrage.dart';
 import 'gridinfos.dart';
 import 'gridInfoInsert.dart';
 import 'package:desktop_window/desktop_window.dart';
 import 'dart:io';
+import 'login.dart';
+import 'logout.dart';
 import 'kalender.dart';
+
 
 void main() async {
   runApp(MyApp());
@@ -29,6 +31,8 @@ class _MyAppState extends State<MyApp> {
   String shownDate = DateFormat('dd.MM.yyyy').format(DateTime.now());
   bool _isLoading = false;
   List<bool> _isButtonFree = List.filled(positions.length, false);
+  bool isTheUserLoggedIn = false;
+  String username = "";
 
   @override
   void initState() {
@@ -51,8 +55,8 @@ class _MyAppState extends State<MyApp> {
 
     if (buttonOccupied.isNotEmpty) {
       for (int index = 0; index < buttonOccupied.length; index++) {
-        ResultRow currentCampsite = buttonOccupied[index];
-        int campsiteValue = currentCampsite.elementAt(0);
+        int currentCampsite = buttonOccupied[index];
+        int campsiteValue = currentCampsite;
         for (int i = 0; i < positions.length; i++) {
           if (_isButtonFree[i] == false) {
             if (identical(i, campsiteValue)) {
@@ -204,15 +208,34 @@ class _MyAppState extends State<MyApp> {
                                 ),
                                 Expanded(
                                   child: TextButton(
-                                    onPressed: () {},
+                                    onPressed: () async {
+                                      if (isTheUserLoggedIn) {
+                                        await logUserOut(context);
+                                        setState(() {
+                                          isTheUserLoggedIn =
+                                              getIfUserIsLoggedIn();
+                                        });
+                                      } else {
+                                        await loginPopUp(context);
+                                        setState(() {
+                                          isTheUserLoggedIn =
+                                              getIfUserIsLoggedIn();
+                                        });
+                                      }
+                                    },
                                     style: TextButton.styleFrom(
                                       backgroundColor: Colors.transparent,
                                       primary: Colors.white,
                                     ),
-                                    child: Text(
-                                      'User',
-                                      textAlign: TextAlign.center,
-                                    ),
+                                    child: isTheUserLoggedIn
+                                        ? Text(
+                                            'Log out',
+                                            textAlign: TextAlign.center,
+                                          )
+                                        : Text(
+                                            'Einloggen',
+                                            textAlign: TextAlign.center,
+                                          ),
                                   ),
                                 ),
                                 IconButton(
