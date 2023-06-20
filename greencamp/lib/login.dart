@@ -110,13 +110,13 @@ Future<void> loginPopUp(BuildContext context) async {
               Row(
                 children: [
                   Expanded(
-                      child: const Text('Login:',
+                      child: const Text('Accesso:',
                           style: TextStyle(fontWeight: FontWeight.bold))),
                 ],
               ),
               Row(
                 children: [
-                  Expanded(child: const Text('Benutzername:')),
+                  Expanded(child: const Text('Nome utente:')),
                   Flexible(
                     child: TextField(
                       decoration: const InputDecoration(
@@ -132,7 +132,7 @@ Future<void> loginPopUp(BuildContext context) async {
               ),
               Row(
                 children: [
-                  Expanded(child: const Text('Passwort:')),
+                  Expanded(child: const Text('Password:')),
                   Flexible(
                     child: TextField(
                       decoration: const InputDecoration(
@@ -156,7 +156,7 @@ Future<void> loginPopUp(BuildContext context) async {
                           if (isLoggedIn) {
                             isUserLoggedIn = isLoggedIn;
 
-                            showAlertDialog(context, "Login Success");
+                            showAlertDialog(context, "Accesso riuscito");
                             Future.delayed(const Duration(milliseconds: 1000),
                                 () {
                               Navigator.of(context).pop();
@@ -164,11 +164,11 @@ Future<void> loginPopUp(BuildContext context) async {
                             });
                           } else {
                             showAlertDialog(context,
-                                "Benutzer und Passwort kombination falsch");
+                                "Combinazione di utente e password errata");
                           }
                           ;
                         },
-                        child: Text('Einloggen'))),
+                        child: Text('Accedi'))),
               ]),
             ],
           ),

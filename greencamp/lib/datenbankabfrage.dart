@@ -40,7 +40,7 @@ Future<List<int>> selctAllCampsites(String shownDate) async {
 
     return campNrList;
   } else {
-    throw Exception('Fehler beim Abrufen der Daten');
+    throw Exception('Errore durante il recupero dei dati');
   }
 }
 
@@ -57,7 +57,7 @@ Future<List<dynamic>> selectQuery(int campNr, String ende) async {
 
     return jsonData;
   } else {
-    throw Exception('Fehler beim Abrufen der Daten');
+    throw Exception('Errore durante il recupero dei dati');
   }
 }
 
@@ -210,7 +210,7 @@ Future<void> updateData(vorname, name, strasse, plzOrt, land, kreditkarteNr,
           "kundid": firstKundId.toString() // Umwandlung in String
         });
   } else {
-    throw Exception('Fehler beim Abrufen der KundId');
+    throw Exception('Errore durante il recupero del file KundId');
   }
 }
 

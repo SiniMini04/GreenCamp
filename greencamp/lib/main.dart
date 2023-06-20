@@ -201,7 +201,7 @@ class _MyAppState extends State<MyApp> {
                                       primary: Colors.white,
                                     ),
                                     child: Text(
-                                      'Kalender',
+                                      'Calendario',
                                       textAlign: TextAlign.center,
                                     ),
                                   ),
@@ -229,11 +229,11 @@ class _MyAppState extends State<MyApp> {
                                     ),
                                     child: isTheUserLoggedIn
                                         ? Text(
-                                            'Log out',
+                                            'Disconnettersi',
                                             textAlign: TextAlign.center,
                                           )
                                         : Text(
-                                            'Einloggen',
+                                            'Accedi',
                                             textAlign: TextAlign.center,
                                           ),
                                   ),
