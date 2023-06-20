@@ -29,6 +29,8 @@ class _MyAppState extends State<MyApp> {
   bool _isLoading = false;
   List<bool> _isButtonFree = List.filled(positions.length, false);
 
+  bool wasTheUserInserted = false;
+
   @override
   void initState() {
     super.initState();
@@ -53,7 +55,6 @@ class _MyAppState extends State<MyApp> {
         ResultRow currentCampsite = buttonOccupied[index];
         int campsiteValue = currentCampsite.elementAt(0);
         for (int i = 0; i < positions.length; i++) {
-          logger.i(campsiteValue);
           if (_isButtonFree[i] == false) {
             if (identical(i, campsiteValue)) {
               setState(() {
@@ -237,11 +238,12 @@ class _MyAppState extends State<MyApp> {
                                   ? CircularProgressIndicator()
                                   : IconButton(
                                       onPressed: () async {
+                                        wasTheUserInserted = false;
                                         if (await checkWhichPopUp(index)) {
-                                          gridInfoAfterInsert(
+                                          await gridInfoAfterInsert(
                                               context, index, shownDate);
                                         } else {
-                                          positioninfos(
+                                          await positioninfos(
                                               context, index, shownDate);
                                         }
                                       },

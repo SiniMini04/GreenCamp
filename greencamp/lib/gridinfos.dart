@@ -14,6 +14,8 @@ String kreditKarte = "";
 String mietBeginn = "";
 String mietEnde = "";
 
+bool isUserInserted = false;
+
 void resetInputs() {
   vorname = "-";
   nachname = "-";
@@ -25,6 +27,18 @@ void resetInputs() {
   kreditKarte = "-";
   mietBeginn = "-";
   mietEnde = "-";
+}
+
+bool getIfUserIsInserted() {
+  if (isUserInserted) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+void changeIfUserIsInserted(bool newValueIfUserIsInserted) {
+  isUserInserted = newValueIfUserIsInserted;
 }
 
 Future<List<Map<String, dynamic>>> getLendStatus(
@@ -176,12 +190,13 @@ Future<void> positioninfos(
                           onPressed: () {}, child: Text('Bearbeiten'))),
                   Expanded(
                       child: TextButton(
-                          onPressed: () {
+                          onPressed: () async {
                             Navigator.of(context).pop();
                             InputRenter inputRenterWidget = InputRenter();
-                            inputRenterWidget
+                            await inputRenterWidget
                                 .createState()
                                 .inputRenter(context, campNr, date);
+                            Navigator.of(context).pop();
                           },
                           child: Text('Hinzufügen')))
                 ],

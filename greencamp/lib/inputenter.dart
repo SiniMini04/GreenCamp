@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_date_pickers/flutter_date_pickers.dart';
 import 'package:intl/intl.dart';
 import 'datenbankabfrage.dart';
+import 'gridinfos.dart';
+import 'main.dart';
 
 class InputRenter extends StatefulWidget {
   @override
@@ -398,7 +400,7 @@ class _InputRenterState extends State<InputRenter> {
                 ),
                 const SizedBox(height: 8),
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (validateFields(context)) {
                       insertData(
                           vorname,
@@ -412,6 +414,8 @@ class _InputRenterState extends State<InputRenter> {
                           mietBeginn,
                           mietEnde,
                           campNr);
+                      changeIfUserIsInserted(true);
+
                       Navigator.of(context).pop();
                     }
                   },
