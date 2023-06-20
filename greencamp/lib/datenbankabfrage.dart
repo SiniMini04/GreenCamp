@@ -229,7 +229,7 @@ Future<Results> getAppointments() async {
 
   for (var row in results) {
     logger.d(
-        'ID: ${row['CampNr']}, CampNr: ${row['KundBeginMiete']}, CampBesetzt: ${row['KundEndeMiete']}');
+        'CampNr: ${row['CampNr']}, KundBeginMiete: ${row['KundBeginMiete']}, KundEndeMiete: ${row['KundEndeMiete']}');
   }
 
   await conn.close();

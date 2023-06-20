@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
+
+import 'datenbankabfrage.dart';
 
 List<CalendarResource> kalenderDataRecources() {
   List<CalendarResource> resourceColl = <CalendarResource>[];
@@ -29,19 +32,47 @@ List<CalendarResource> kalenderDataRecources() {
   return resourceColl;
 }
 
-List<Appointment> kalenderDataAppointments() {
+Future<List<Appointment>> kalenderDataAppointments() async {
   List<Appointment> appointments = <Appointment>[];
-  appointments.add(Appointment(
-    startTime: DateTime(2023, 06, 19),
-    endTime: DateTime(2023, 06, 25),
-    resourceIds: <Object>[1],
-    isAllDay: true,
-  ));
+
+  var results = await getAppointments();
+
+  print(results);
+
+  for (var row in results) {
+    //print(row['KundBeginMiete']);
+    var campNr = row['CampNr'] + 1;
+    DateTime kundBeginMiete =
+        DateFormat('yyyy-MM-dd').parse(row['KundBeginMiete'].toString());
+    DateTime kundEndeMiete =
+        DateFormat('yyyy-MM-dd').parse(row['KundEndeMiete'].toString());
+
+    if (campNr == 46) {
+      campNr = "45B";
+    }
+    if (campNr == 47) {
+      campNr = "46";
+    }
+    if (campNr == 48) {
+      campNr = "46B";
+    }
+    if (campNr > 48) {
+      campNr = campNr - 2;
+    }
+
+    appointments.add(Appointment(
+      startTime: kundBeginMiete,
+      endTime: kundEndeMiete,
+      resourceIds: <Object>[campNr],
+      isAllDay: true,
+    ));
+  }
 
   return appointments;
 }
 
-Future<void> showCalendar(BuildContext context) async {
+Future<void> showCalendar(BuildContext context, data) async {
+  List<Appointment> appointments = await kalenderDataAppointments();
   await showDialog<String>(
     context: context,
     builder: (BuildContext context) => Dialog(
@@ -53,11 +84,14 @@ Future<void> showCalendar(BuildContext context) async {
               view: CalendarView.timelineMonth,
               showNavigationArrow: true,
               dataSource: MeetingDataSource(
-                  kalenderDataAppointments(), kalenderDataRecources()),
+                appointments,
+                kalenderDataRecources(),
+              ),
               resourceViewSettings: const ResourceViewSettings(
-                  displayNameTextStyle: TextStyle(color: Colors.white),
-                  showAvatar: false,
-                  size: 30),
+                displayNameTextStyle: TextStyle(color: Colors.white),
+                showAvatar: false,
+                size: 30,
+              ),
             ),
           ),
           Positioned(

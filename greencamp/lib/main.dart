@@ -44,7 +44,6 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       _isLoading = true;
     });
-    getAppointments();
     var buttonOccupied = await selctAllCampsites(shownDate);
     for (int index = 0; index < positions.length; index++) {
       _isButtonFree[index] = false;
@@ -190,7 +189,8 @@ class _MyAppState extends State<MyApp> {
                                 Expanded(
                                   child: TextButton(
                                     onPressed: () {
-                                      showCalendar(context);
+                                      var data = getAppointments();
+                                      showCalendar(context, data);
                                     },
                                     style: TextButton.styleFrom(
                                       backgroundColor: Colors.transparent,
@@ -268,7 +268,7 @@ class _MyAppState extends State<MyApp> {
                                       splashColor: Colors.transparent,
                                       highlightColor: Colors.transparent,
                                       hoverColor: Colors.transparent,
-                                      key: ValueKey(index),
+                                      key: ValueKey(index + 1),
                                     ),
                               if (positions[index]['electricityConnection'] ==
                                   true)
