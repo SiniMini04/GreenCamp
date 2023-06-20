@@ -5,12 +5,12 @@ import 'package:intl/intl.dart';
 import 'datenbankabfrage.dart';
 import 'main.dart';
 
-class InputEnter extends StatefulWidget {
+class InputRenter extends StatefulWidget {
   @override
-  _InputEnterState createState() => _InputEnterState();
+  _InputRenterState createState() => _InputRenterState();
 }
 
-class _InputEnterState extends State<InputEnter> {
+class _InputRenterState extends State<InputRenter> {
   String vorname = "";
   String nachname = "";
   String mail = "";
@@ -415,12 +415,10 @@ class _InputEnterState extends State<InputEnter> {
                           campNr);
                       Navigator.of(context).pop();
                     }
-                    final MyAppData myAppData = MyAppData();
                     setState(() {
-                      myAppData.shownDate = DateFormat('dd.MM.yyyy')
-                          .format(mietBeginn as DateTime);
+                      shownDate = DateFormat('dd.MM.yyyy').format(pickedDate);
                     });
-                    myAppData.reloadButtons();
+                    reloadButtons();
                   },
                   child: const Text('Speichern'),
                 ),

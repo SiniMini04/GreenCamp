@@ -73,7 +73,7 @@ class _MyAppState extends State<MyApp> {
     myAppData.getButtonFreeStatuses();
   }
 
-  Future<void> _showDatePicker(BuildContext context) async {
+  Future<void> showDatePicker(BuildContext context) async {
     DateTime date = DateFormat('dd.MM.yyyy').parse(myAppData.shownDate);
     final DateTime? pickedDate = await showDatePicker(
       context: context,
@@ -82,9 +82,7 @@ class _MyAppState extends State<MyApp> {
       lastDate: DateTime(2100),
     );
     if (pickedDate != null && pickedDate != date) {
-      setState(() {
-        myAppData.shownDate = DateFormat('dd.MM.yyyy').format(pickedDate);
-      });
+      myAppData.shownDate = DateFormat('dd.MM.yyyy').format(pickedDate);
       myAppData.reloadButtons();
     }
   }
@@ -143,7 +141,7 @@ class _MyAppState extends State<MyApp> {
                               ),
                               TextButton(
                                 onPressed: () {
-                                  _showDatePicker(context);
+                                  showDatePicker(context);
                                 },
                                 child: Text(myAppData.shownDate),
                                 style: TextButton.styleFrom(

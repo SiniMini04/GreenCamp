@@ -178,8 +178,8 @@ Future<void> positioninfos(
                       child: TextButton(
                           onPressed: () {
                             Navigator.of(context).pop();
-                            InputEnter inputEnterWidget = InputEnter();
-                            inputEnterWidget
+                            InputRenter inputRenterWidget = InputRenter();
+                            inputRenterWidget
                                 .createState()
                                 .inputRenter(context, campNr, date);
                           },
