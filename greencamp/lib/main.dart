@@ -30,7 +30,6 @@ class MyAppData {
 
   Future<void> getButtonFreeStatuses() async {
     isLoading = true;
-
     var buttonOccupied = await selctAllCampsites(shownDate);
     for (int index = 0; index < positions.length; index++) {
       isButtonFree[index] = false;
@@ -50,9 +49,9 @@ class MyAppData {
         }
       }
     }
-    Future.delayed(const Duration(milliseconds: 500), () {
-      isLoading = false;
-    });
+
+    await Future.delayed(const Duration(milliseconds: 500));
+    isLoading = false;
   }
 
   Future<void> reloadButtons() async {
