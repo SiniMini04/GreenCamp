@@ -8,6 +8,8 @@ import 'package:desktop_window/desktop_window.dart';
 import 'dart:io';
 import 'login.dart';
 import 'logout.dart';
+import 'kalender.dart';
+
 
 void main() async {
   runApp(MyApp());
@@ -187,8 +189,23 @@ class _MyAppState extends State<MyApp> {
                           ))),
                           Expanded(
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
+                                Expanded(
+                                  child: TextButton(
+                                    onPressed: () {
+                                      var data = getAppointments();
+                                      showCalendar(context, data);
+                                    },
+                                    style: TextButton.styleFrom(
+                                      backgroundColor: Colors.transparent,
+                                      primary: Colors.white,
+                                    ),
+                                    child: Text(
+                                      'Kalender',
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ),
                                 Expanded(
                                   child: TextButton(
                                     onPressed: () async {
@@ -274,16 +291,28 @@ class _MyAppState extends State<MyApp> {
                                       splashColor: Colors.transparent,
                                       highlightColor: Colors.transparent,
                                       hoverColor: Colors.transparent,
-                                      key: ValueKey(index),
+                                      key: ValueKey(index + 1),
                                     ),
                               if (positions[index]['electricityConnection'] ==
                                   true)
                                 Positioned.fill(
                                   child: Container(
-                                    child: Icon(
-                                      Icons.bolt,
+                                    child: IconButton(
+                                      icon: const Icon(Icons.bolt),
                                       color: Colors.yellow,
-                                      size: 20.0,
+                                      onPressed: () async {
+                                        if (await checkWhichPopUp(index)) {
+                                          gridInfoAfterInsert(
+                                              context, index, shownDate);
+                                        } else {
+                                          positioninfos(
+                                              context, index, shownDate);
+                                        }
+                                      },
+                                      splashColor: Colors.transparent,
+                                      highlightColor: Colors.transparent,
+                                      hoverColor: Colors.transparent,
+                                      iconSize: 20,
                                     ),
                                   ),
                                 ),

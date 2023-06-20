@@ -213,3 +213,26 @@ Future<void> updateData(vorname, name, strasse, plzOrt, land, kreditkarteNr,
     throw Exception('Fehler beim Abrufen der KundId');
   }
 }
+
+Future<Results> getAppointments() async {
+  final conn = await MySqlConnection.connect(ConnectionSettings(
+    host: 'localhost',
+    port: 3306,
+    user: 'root',
+    password: '1234',
+    db: 'greencamp',
+  ));
+
+// Select Query
+  final results = await conn.query(
+    'select c.CampNr, KundBeginMiete, KundEndeMiete from TCampsite c, TBelege b, TKunden k where c.CampNr = b.CampNr and b.KundId = k.KundId;',
+  );
+
+  for (var row in results) {
+    logger.d(
+        'CampNr: ${row['CampNr']}, KundBeginMiete: ${row['KundBeginMiete']}, KundEndeMiete: ${row['KundEndeMiete']}');
+  }
+
+  await conn.close();
+  return results;
+}
