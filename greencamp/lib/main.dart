@@ -44,6 +44,7 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       _isLoading = true;
     });
+    getAppointments();
     var buttonOccupied = await selctAllCampsites(shownDate);
     for (int index = 0; index < positions.length; index++) {
       _isButtonFree[index] = false;
@@ -54,7 +55,6 @@ class _MyAppState extends State<MyApp> {
         ResultRow currentCampsite = buttonOccupied[index];
         int campsiteValue = currentCampsite.elementAt(0);
         for (int i = 0; i < positions.length; i++) {
-          logger.i(campsiteValue);
           if (_isButtonFree[i] == false) {
             if (identical(i, campsiteValue)) {
               setState(() {
