@@ -45,6 +45,26 @@ class _MyAppState extends State<MyApp> {
     exit(0);
   }
 
+  Future<void> showAlertDialog(BuildContext context, String message) async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Alert'),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Future<void> _getButtonFreeStatuses() async {
     setState(() {
       _isLoading = true;
@@ -276,13 +296,23 @@ class _MyAppState extends State<MyApp> {
                                   ? CircularProgressIndicator()
                                   : IconButton(
                                       onPressed: () async {
-                                        wasTheUserInserted = false;
-                                        if (await checkWhichPopUp(index)) {
-                                          await gridInfoAfterInsert(
-                                              context, index, shownDate);
+                                        if (isTheUserLoggedIn) {
+                                          wasTheUserInserted = false;
+                                          if (await checkWhichPopUp(index)) {
+                                            await gridInfoAfterInsert(
+                                                context, index, shownDate);
+                                          } else {
+                                            await positioninfos(
+                                                context, index, shownDate);
+                                          }
                                         } else {
-                                          await positioninfos(
-                                              context, index, shownDate);
+                                          await showAlertDialog(
+                                              context, "Non sei loggato");
+                                          await loginPopUp(context);
+                                          setState(() {
+                                            isTheUserLoggedIn =
+                                                getIfUserIsLoggedIn();
+                                          });
                                         }
                                       },
                                       icon:
@@ -303,12 +333,23 @@ class _MyAppState extends State<MyApp> {
                                       icon: const Icon(Icons.bolt),
                                       color: Colors.yellow,
                                       onPressed: () async {
-                                        if (await checkWhichPopUp(index)) {
-                                          gridInfoAfterInsert(
-                                              context, index, shownDate);
+                                        if (isTheUserLoggedIn) {
+                                          wasTheUserInserted = false;
+                                          if (await checkWhichPopUp(index)) {
+                                            await gridInfoAfterInsert(
+                                                context, index, shownDate);
+                                          } else {
+                                            await positioninfos(
+                                                context, index, shownDate);
+                                          }
                                         } else {
-                                          positioninfos(
-                                              context, index, shownDate);
+                                          await showAlertDialog(
+                                              context, "Non sei loggato");
+                                          await loginPopUp(context);
+                                          setState(() {
+                                            isTheUserLoggedIn =
+                                                getIfUserIsLoggedIn();
+                                          });
                                         }
                                       },
                                       splashColor: Colors.transparent,

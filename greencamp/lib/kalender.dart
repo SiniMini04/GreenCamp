@@ -43,9 +43,9 @@ Future<List<Appointment>> kalenderDataAppointments() async {
     //print(row['KundBeginMiete']);
     var campNr = row['CampNr'] + 1;
     DateTime kundBeginMiete =
-        DateFormat('yyyy-MM-dd').parse(row['KundBeginMiete'].toString());
+        DateFormat('yyyy-MM-dd').parse(row['BelegBeginMiete'].toString());
     DateTime kundEndeMiete =
-        DateFormat('yyyy-MM-dd').parse(row['KundEndeMiete'].toString());
+        DateFormat('yyyy-MM-dd').parse(row['BelegEndeMiete'].toString());
 
     if (campNr == 46) {
       campNr = "45B";
