@@ -21,14 +21,14 @@ USE greencamp ;
 -- -----------------------------------------------------
 -- Table `mydb`.`TCampsite`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS greencamp.TCampsite (
+CREATE TABLE IF NOT EXISTS TCampsite (
   CampNr INT NOT NULL AUTO_INCREMENT,
   CampActuallNr VARCHAR(4) NOT NULL,
   PRIMARY KEY (CampNr))
 ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS greencamp.TKunden (
+CREATE TABLE IF NOT EXISTS TKunden (
   KundId INT NOT NULL AUTO_INCREMENT,
   KundVorname VARCHAR(20) NOT NULL,
   KundName VARCHAR(20) NOT NULL,
@@ -45,9 +45,9 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `mydb`.`TBelege`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS greencamp.TBelege (
+CREATE TABLE IF NOT EXISTS TBelege (
   BelegId INT NOT NULL AUTO_INCREMENT,
-  KundenId INT NOT NULL,
+  KundId INT NOT NULL,
   CampNr INT NOT NULL,
   BelegBeginMiete DATE NOT NULL,
   BelegEndeMiete DATE NOT NULL,
@@ -59,7 +59,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `mydb`.`TBenutzer`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS greencamp.TBenutzer (
+CREATE TABLE IF NOT EXISTS TBenutzer (
   BenutzerId INT NOT NULL AUTO_INCREMENT,
   BenutzerName VARCHAR(45) NOT NULL,
   BenutzerPasswort VARCHAR(45) NOT NULL,

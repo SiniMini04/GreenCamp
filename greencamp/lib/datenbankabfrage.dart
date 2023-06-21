@@ -54,7 +54,6 @@ Future<List<dynamic>> selectQuery(int campNr, String ende) async {
     // Konvertiere die Antwort von JSON zu Dart-Objekten
 
     final jsonData = jsonDecode(response.body);
-
     return jsonData;
   } else {
     throw Exception('Errore durante il recupero dei dati');
