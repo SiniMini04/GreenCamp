@@ -4,7 +4,6 @@ import 'package:flutter_date_pickers/flutter_date_pickers.dart';
 import 'package:intl/intl.dart';
 import 'datenbankabfrage.dart';
 import 'gridinfos.dart';
-import 'main.dart';
 
 class InputRenter extends StatefulWidget {
   @override
