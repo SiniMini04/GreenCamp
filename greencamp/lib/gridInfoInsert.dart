@@ -92,22 +92,28 @@ Future<void> gridInfoAfterInsert(
                 ],
               ),
               // Person
-              Row(
+              const Row(
                 children: [
                   Expanded(
+
                       child: const Text('Persona:',
+
                           style: TextStyle(fontWeight: FontWeight.bold))),
                 ],
               ),
               Row(
                 children: [
+
                   Expanded(child: const Text('Nome:')),
+
                   Flexible(child: Text(vorname)),
                 ],
               ),
               Row(
                 children: [
+
                   Expanded(child: const Text('Cognome:')),
+
                   Flexible(child: Text(nachname)),
                 ],
               ),
@@ -125,10 +131,12 @@ Future<void> gridInfoAfterInsert(
               ),
               const SizedBox(height: 8),
               // Adresse
-              Row(
+              const Row(
                 children: [
                   Expanded(
+
                       child: const Text('Indirizzo:',
+
                           style: TextStyle(fontWeight: FontWeight.bold))),
                 ],
               ),
@@ -152,10 +160,12 @@ Future<void> gridInfoAfterInsert(
               ),
               const SizedBox(height: 8),
               // Zahlungsmittel
-              Row(
+              const Row(
                 children: [
                   Expanded(
+
                       child: const Text('Mezzi di pagamento:',
+
                           style: TextStyle(fontWeight: FontWeight.bold))),
                 ],
               ),
@@ -167,10 +177,12 @@ Future<void> gridInfoAfterInsert(
               ),
               const SizedBox(height: 8),
               // Miete
-              Row(
+              const Row(
                 children: [
                   Expanded(
+
                       child: const Text('Affitto:',
+
                           style: TextStyle(fontWeight: FontWeight.bold))),
                 ],
               ),
@@ -194,7 +206,11 @@ Future<void> gridInfoAfterInsert(
                       child: TextButton(
                           onPressed: () {
                             Navigator.of(context).pop();
-                            changeUser(context, campNr, date);
+                            gridBearbeiten gridBearbeitenWidget =
+                                gridBearbeiten();
+                            gridBearbeitenWidget
+                                .createState()
+                                .changeUser(context, campNr, date);
                           },
                           child: Text('Modifica')))
                 ],

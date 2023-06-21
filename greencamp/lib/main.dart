@@ -34,6 +34,8 @@ class _MyAppState extends State<MyApp> {
   bool isTheUserLoggedIn = false;
   String username = "";
 
+  bool wasTheUserInserted = false;
+
   @override
   void initState() {
     super.initState();
@@ -275,11 +277,12 @@ class _MyAppState extends State<MyApp> {
                                   ? CircularProgressIndicator()
                                   : IconButton(
                                       onPressed: () async {
+                                        wasTheUserInserted = false;
                                         if (await checkWhichPopUp(index)) {
-                                          gridInfoAfterInsert(
+                                          await gridInfoAfterInsert(
                                               context, index, shownDate);
                                         } else {
-                                          positioninfos(
+                                          await positioninfos(
                                               context, index, shownDate);
                                         }
                                       },
@@ -297,8 +300,10 @@ class _MyAppState extends State<MyApp> {
                                   true)
                                 Positioned.fill(
                                   child: Container(
+
                                     child: IconButton(
                                       icon: const Icon(Icons.bolt),
+
                                       color: Colors.yellow,
                                       onPressed: () async {
                                         if (await checkWhichPopUp(index)) {
@@ -334,13 +339,13 @@ class _MyAppState extends State<MyApp> {
                           Color.fromARGB(255, 227, 227, 227).withOpacity(0.8),
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Align(
+                    child: const Align(
                       alignment: Alignment.centerLeft,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
-                            children: const [
+                            children: [
                               Icon(
                                 Icons.fiber_manual_record,
                                 color: Colors.green,
@@ -356,7 +361,7 @@ class _MyAppState extends State<MyApp> {
                             ],
                           ),
                           Row(
-                            children: const [
+                            children: [
                               Icon(
                                 Icons.fiber_manual_record,
                                 color: Colors.red,
@@ -372,7 +377,7 @@ class _MyAppState extends State<MyApp> {
                             ],
                           ),
                           Row(
-                            children: const [
+                            children: [
                               Icon(
                                 Icons.bolt,
                                 color: Colors.yellow,

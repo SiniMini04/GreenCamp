@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:greencamp/datenbankabfrage.dart';
-import 'inputrenter.dart';
+
+import 'package:mysql1/src/single_connection.dart';
+import 'inputenter.dart';
+
 
 String vorname = "";
 String nachname = "";
@@ -13,6 +16,8 @@ String kreditKarte = "";
 String mietBeginn = "";
 String mietEnde = "";
 
+bool isUserInserted = false;
+
 void resetInputs() {
   vorname = "-";
   nachname = "-";
@@ -24,6 +29,18 @@ void resetInputs() {
   kreditKarte = "-";
   mietBeginn = "-";
   mietEnde = "-";
+}
+
+bool getIfUserIsInserted() {
+  if (isUserInserted) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+void changeIfUserIsInserted(bool newValueIfUserIsInserted) {
+  isUserInserted = newValueIfUserIsInserted;
 }
 
 Future<List<Map<String, dynamic>>> getLendStatus(
@@ -176,9 +193,13 @@ Future<void> positioninfos(
                           onPressed: () {}, child: Text('Modifica'))),
                   Expanded(
                       child: TextButton(
-                          onPressed: () {
+                          onPressed: () async {
                             Navigator.of(context).pop();
-                            inputRenter(context, campNr, date);
+                            InputRenter inputRenterWidget = InputRenter();
+                            await inputRenterWidget
+                                .createState()
+                                .inputRenter(context, campNr, date);
+                            Navigator.of(context).pop();
                           },
                           child: Text('Aggiungi')))
                 ],
