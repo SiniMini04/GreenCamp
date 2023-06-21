@@ -95,7 +95,6 @@ class _gridBearbeiten extends State<gridBearbeiten> {
         RegExp(r'^\d{2}\.\d{2}\.\d{4}$').hasMatch(mietBeginn);
     bool isMietEndeValid = RegExp(r'^\d{2}\.\d{2}\.\d{4}$').hasMatch(mietEnde);
 
-
     if (!isMailValid ||
         !isTelefonValid ||
         !isStrasseValid ||
@@ -105,37 +104,36 @@ class _gridBearbeiten extends State<gridBearbeiten> {
         !isMietEndeValid) {
       if (!isMailValid) {
         showAlertDialog(context,
-            "Please enter a valid E-mail address! \n(max.musterman@mustermail.ch)");
+            "Inserisci un indirizzo e-mail valido! \n(mario.rossi@esempio.it)");
       }
       if (!isTelefonValid) {
         showAlertDialog(
-            context, "Please enter a valid phone number! \n(+41 12 345 67 89)");
+            context, "Inserisci un numero di telefono valido! \n(+39 0123456789)");
       }
       if (!isStrasseValid) {
         showAlertDialog(context,
-            "Please enter a valid street address! \n(Maxmusterstrasse 5b)");
+            "Inserisci un indirizzo stradale valido! \n(Via Roma 10b)");
       }
       if (!isPlzOrtValid) {
         showAlertDialog(context,
-            "Please enter a valid postal code and city! \n(8500 Frauenfeld)");
+            "Inserire un codice postale e una città validi! \n(00100 Rom)");
       }
       if (!isKreditKarteValid) {
         showAlertDialog(context,
-            "Please enter a valid credit card number! \n(1234 5678 1234 5678)");
+            "Inserisci un numero di carta di credito valido! \n(1234 5678 1234 5678)");
       }
       if (!isMietBeginnValid) {
         showAlertDialog(
-            context, "Please enter a valid start date! \n(dd.mm.yyyy)");
+            context, "Inserire una data di inizio valida! \n(gg.mm.aaaa)");
       }
       if (!isMietEndeValid) {
         showAlertDialog(
-            context, "Please enter a valid end date! \n(dd.mm.yyyy)");
+            context, "Inserire una data di fine valida! \n(gg.mm.aaaa)");
       }
       validation = false;
     }
 
     return validation;
-
   }
 
   void _onSelectedDateChanged(DatePeriod newPeriod) {
@@ -183,15 +181,13 @@ class _gridBearbeiten extends State<gridBearbeiten> {
       int campNr, String date) async {
     List<Map<String, dynamic>> resultList = [];
 
-
-    Results queryResult = await selectQuery(campNr, date);
+    List<dynamic> queryResult = await selectQuery(campNr, date);
 
     for (var row in queryResult) {
       String mieteBeginUebergang =
           row['KundBeginMiete'].toString().substring(0, 11);
       String mieteEndeUebergang =
           row['KundEndeMiete'].toString().substring(0, 11);
-
 
       DateTime beginDate = DateFormat("yyyy-MM-dd").parse(mieteBeginUebergang);
       String fixedBegin = DateFormat("dd.MM.yyyy").format(beginDate);
@@ -216,7 +212,6 @@ class _gridBearbeiten extends State<gridBearbeiten> {
     return resultList;
   }
 
-
   Future<void> changeUser(BuildContext context, int campNr, String date) async {
     await getLendStatus(campNr, date);
     initState();
@@ -237,13 +232,11 @@ class _gridBearbeiten extends State<gridBearbeiten> {
                       icon: Icon(Icons.close),
                       onPressed: () {
                         Navigator.of(context).pop();
-
                       },
                       splashColor: Colors.transparent,
                       highlightColor: Colors.transparent,
                       hoverColor: Colors.transparent,
                     ),
-
                   ],
                 ),
                 // Person
@@ -270,10 +263,8 @@ class _gridBearbeiten extends State<gridBearbeiten> {
                           FilteringTextInputFormatter.allow(
                               RegExp(r'[a-zA-ZäöüÄÖÜ\- ]')),
                         ],
-
                       ),
                     ),
-
                   ],
                 ),
                 Row(
@@ -292,10 +283,8 @@ class _gridBearbeiten extends State<gridBearbeiten> {
                           FilteringTextInputFormatter.allow(
                               RegExp(r'[a-zA-ZäöüÄÖÜ\- ]')),
                         ],
-
                       ),
                     ),
-
                   ],
                 ),
                 Row(
@@ -310,10 +299,8 @@ class _gridBearbeiten extends State<gridBearbeiten> {
                         onChanged: (value) {
                           mail = value;
                         },
-
                       ),
                     ),
-
                   ],
                 ),
                 Row(
@@ -328,10 +315,8 @@ class _gridBearbeiten extends State<gridBearbeiten> {
                         onChanged: (value) {
                           telefon = value;
                         },
-
                       ),
                     ),
-
                   ],
                 ),
                 const SizedBox(height: 8),
@@ -355,10 +340,8 @@ class _gridBearbeiten extends State<gridBearbeiten> {
                         onChanged: (value) {
                           strasse = value;
                         },
-
                       ),
                     ),
-
                   ],
                 ),
                 Row(
@@ -373,10 +356,8 @@ class _gridBearbeiten extends State<gridBearbeiten> {
                         onChanged: (value) {
                           plzOrt = value;
                         },
-
                       ),
                     ),
-
                   ],
                 ),
                 Row(
@@ -395,10 +376,8 @@ class _gridBearbeiten extends State<gridBearbeiten> {
                           FilteringTextInputFormatter.allow(
                               RegExp(r'[a-zA-ZäöüÄÖÜ\- ]')),
                         ],
-
                       ),
                     ),
-
                   ],
                 ),
                 const SizedBox(height: 8),
@@ -422,10 +401,8 @@ class _gridBearbeiten extends State<gridBearbeiten> {
                         onChanged: (value) {
                           kreditKarte = value;
                         },
-
                       ),
                     ),
-
                   ],
                 ),
                 const SizedBox(height: 8),
@@ -452,10 +429,8 @@ class _gridBearbeiten extends State<gridBearbeiten> {
                         onChanged: (value) {
                           mietBeginn = value;
                         },
-
                       ),
                     ),
-
                   ],
                 ),
                 const SizedBox(height: 8),
@@ -513,7 +488,6 @@ class _gridBearbeiten extends State<gridBearbeiten> {
                 ),
               ],
             ),
-
           ),
         ),
       ),

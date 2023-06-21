@@ -214,25 +214,11 @@ Future<void> updateData(vorname, name, strasse, plzOrt, land, kreditkarteNr,
   }
 }
 
-Future<Results> getAppointments() async {
-  final conn = await MySqlConnection.connect(ConnectionSettings(
-    host: 'localhost',
-    port: 3306,
-    user: 'root',
-    password: '1234',
-    db: 'greencamp',
-  ));
+Future<List<dynamic>> getAppointments() async {
+  final response = await http
+      .post(Uri.parse("https://kleeblaetter.net/greencamp/getAppointment.php"));
 
-// Select Query
-  final results = await conn.query(
-    'select c.CampNr, KundBeginMiete, KundEndeMiete from TCampsite c, TBelege b, TKunden k where c.CampNr = b.CampNr and b.KundId = k.KundId;',
-  );
+  final jsonData = jsonDecode(response.body);
 
-  for (var row in results) {
-    logger.d(
-        'CampNr: ${row['CampNr']}, KundBeginMiete: ${row['KundBeginMiete']}, KundEndeMiete: ${row['KundEndeMiete']}');
-  }
-
-  await conn.close();
-  return results;
+  return jsonData;
 }

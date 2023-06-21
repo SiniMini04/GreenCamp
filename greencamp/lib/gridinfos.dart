@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:greencamp/datenbankabfrage.dart';
-
-import 'package:mysql1/src/single_connection.dart';
 import 'inputenter.dart';
-
 
 String vorname = "";
 String nachname = "";
@@ -61,8 +58,8 @@ Future<List<Map<String, dynamic>>> getLendStatus(
       plzOrt = row['KundPlzOrt'];
       land = row['KundLand'];
       kreditKarte = row['KundKreditkartenNr'].toString();
-      mietBeginn = row['KundBeginMiete'];
-      mietEnde = row['KundEndeMiete'];
+      mietBeginn = row['BelegBeginMiete'];
+      mietEnde = row['BelegEndeMiete'];
     }
   }
 
