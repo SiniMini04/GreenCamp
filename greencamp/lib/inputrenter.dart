@@ -37,11 +37,15 @@ Future<void> showAlertDialog(BuildContext context, String message) async {
 bool validateFields(BuildContext context) {
   bool validation = true;
   bool isMailValid = RegExp(r'^.+@[^\.].*\.[a-z]{2,3}$').hasMatch(mail);
-  bool isTelefonValid =
-      RegExp(r'^\+\d{1,3}\s?\(?\d{1,4}\)?[\s.-]?\d{1,9}[\s.-]?\d{1,9}$')
-          .hasMatch(telefon);
-  bool isStrasseValid =
-      RegExp(r'^[a-zA-Z0-9]+\s\d+[a-zA-ZäöüÄÖÜ]?$').hasMatch(strasse);
+  bool isTelefonValid = RegExp(
+          r'^\+\d{1,3}\s?\(?\d{1,4}\)?[\s.-]?\d{1,9}[\s.-]?\d{1,9}[\s.-]?\d{1,9}$')
+      .hasMatch(telefon);
+
+  bool isStrasseValid = false;
+  if (telefon != null) {
+    isStrasseValid = true;
+  }
+
   bool isPlzOrtValid = RegExp(r'^\d{4,5}\s[a-zA-ZäöüÄÖÜ]+$').hasMatch(plzOrt);
   bool isKreditKarteValid =
       RegExp(r'^\d{4}(\s?\d{4}){3}$').hasMatch(kreditKarte);
@@ -61,12 +65,12 @@ bool validateFields(BuildContext context) {
           "Inserisci un indirizzo e-mail valido! \n(mario.rossi@esempio.it)");
     }
     if (!isTelefonValid) {
-      showAlertDialog(
-          context, "Inserisci un numero di telefono valido! \n(+39 0123456789)");
+      showAlertDialog(context,
+          "Inserisci un numero di telefono valido! \n(+39 0123456789)");
     }
     if (!isStrasseValid) {
-      showAlertDialog(context,
-          "Inserisci un indirizzo stradale valido! \n(Via Roma 10b)");
+      showAlertDialog(
+          context, "Inserisci un indirizzo stradale valido! \n(Via Roma 10b)");
     }
     if (!isPlzOrtValid) {
       showAlertDialog(context,
@@ -81,7 +85,8 @@ bool validateFields(BuildContext context) {
           context, "Inserire una data di inizio valida! \n(gg.mm.aaaa)");
     }
     if (!isMietEndeValid) {
-      showAlertDialog(context, "Inserire una data di fine valida! \n(gg.mm.aaaa)");
+      showAlertDialog(
+          context, "Inserire una data di fine valida! \n(gg.mm.aaaa)");
     }
     validation = false;
   }

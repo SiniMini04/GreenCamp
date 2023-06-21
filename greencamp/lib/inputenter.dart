@@ -107,8 +107,12 @@ class _InputRenterState extends State<InputRenter> {
     bool isTelefonValid = RegExp(
             r'^\+\d{1,3}\s?\(?\d{1,4}\)?[\s.-]?\d{1,9}[\s.-]?\d{1,9}[\s.-]?\d{1,9}$')
         .hasMatch(telefon);
-    bool isStrasseValid =
-        RegExp(r'^[a-zA-Z0-9]+\s\d+[a-zA-ZäöüÄÖÜ]?$').hasMatch(strasse);
+
+    bool isStrasseValid = false;
+    if (telefon != null) {
+      isStrasseValid = true;
+    }
+
     bool isPlzOrtValid = RegExp(r'^\d{4,5}\s[a-zA-ZäöüÄÖÜ]+$').hasMatch(plzOrt);
     bool isKreditKarteValid =
         RegExp(r'^\d{4}(\s?\d{4}){3}$').hasMatch(kreditKarte);
