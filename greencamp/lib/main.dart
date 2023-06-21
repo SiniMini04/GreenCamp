@@ -182,7 +182,7 @@ class _MyAppState extends State<MyApp> {
                                         .format(DateTime.now());
                                   });
                                 },
-                                child: Text("Heute"),
+                                child: Text("Oggi"),
                                 style: TextButton.styleFrom(
                                     backgroundColor: Colors.transparent,
                                     primary: Colors.white),

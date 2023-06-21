@@ -120,7 +120,7 @@ Future<void> loginPopUp(BuildContext context) async {
                   Flexible(
                     child: TextField(
                       decoration: const InputDecoration(
-                        hintText: 'max.muster',
+                        hintText: 'mario.rossi',
                       ),
                       controller: TextEditingController(text: ''),
                       onChanged: (value) {
@@ -136,7 +136,7 @@ Future<void> loginPopUp(BuildContext context) async {
                   Flexible(
                     child: TextField(
                       decoration: const InputDecoration(
-                        hintText: 'mein Passwort',
+                        hintText: 'la mia password',
                       ),
                       controller: TextEditingController(text: ''),
                       onChanged: (value) {

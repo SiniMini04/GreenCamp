@@ -126,31 +126,31 @@ class _InputRenterState extends State<InputRenter> {
         !isMietEndeValid) {
       if (!isMailValid) {
         showAlertDialog(context,
-            "Please enter a valid E-mail address! \n(max.musterman@mustermail.ch)");
+            "Inserisci un indirizzo e-mail valido! \n(mario.rossi@esempio.it)");
       }
       if (!isTelefonValid) {
         showAlertDialog(
-            context, "Please enter a valid phone number! \n(+41 12 345 67 89)");
+            context, "Inserisci un numero di telefono valido! \n(+39 0123456789)");
       }
       if (!isStrasseValid) {
         showAlertDialog(context,
-            "Please enter a valid street address! \n(Maxmusterstrasse 5b)");
+            "Inserisci un indirizzo stradale valido! \n(Via Roma 10b)");
       }
       if (!isPlzOrtValid) {
         showAlertDialog(context,
-            "Please enter a valid postal code and city! \n(8500 Frauenfeld)");
+            "Inserire un codice postale e una città validi! \n(00100 Rom)");
       }
       if (!isKreditKarteValid) {
         showAlertDialog(context,
-            "Please enter a valid credit card number! \n(1234 5678 1234 5678)");
+            "Inserisci un numero di carta di credito valido! \n(1234 5678 1234 5678)");
       }
       if (!isMietBeginnValid) {
         showAlertDialog(
-            context, "Please enter a valid start date! \n(dd.mm.yyyy)");
+            context, "Inserire una data di inizio valida! \n(gg.mm.aaaa)");
       }
       if (!isMietEndeValid) {
         showAlertDialog(
-            context, "Please enter a valid end date! \n(dd.mm.yyyy)");
+            context, "Inserire una data di fine valida! \n(gg.mm.aaaa)");
       }
       validation = false;
     }
@@ -188,17 +188,17 @@ class _InputRenterState extends State<InputRenter> {
                 Row(
                   children: [
                     Expanded(
-                        child: const Text('Person:',
+                        child: const Text('Persona:',
                             style: TextStyle(fontWeight: FontWeight.bold))),
                   ],
                 ),
                 Row(
                   children: [
-                    Expanded(child: const Text('Vorname:')),
+                    Expanded(child: const Text('Nome:')),
                     Flexible(
                       child: TextField(
                         decoration: const InputDecoration(
-                          hintText: 'z.B. Peter',
+                          hintText: 'ad esempio Mario',
                         ),
                         controller: TextEditingController(text: ''),
                         onChanged: (value) {
@@ -214,11 +214,11 @@ class _InputRenterState extends State<InputRenter> {
                 ),
                 Row(
                   children: [
-                    Expanded(child: const Text('Nachname:')),
+                    Expanded(child: const Text('Cognome:')),
                     Flexible(
                       child: TextField(
                         decoration: const InputDecoration(
-                          hintText: 'z.b. Müller',
+                          hintText: 'ad esempio Rossi',
                         ),
                         controller: TextEditingController(text: ''),
                         onChanged: (value) {
@@ -238,7 +238,7 @@ class _InputRenterState extends State<InputRenter> {
                     Flexible(
                       child: TextField(
                         decoration: const InputDecoration(
-                          hintText: 'max.musterman@mustermail.ch',
+                          hintText: 'ad esempio mario.rossi@esempio.it',
                         ),
                         controller: TextEditingController(text: ''),
                         onChanged: (value) {
@@ -250,11 +250,11 @@ class _InputRenterState extends State<InputRenter> {
                 ),
                 Row(
                   children: [
-                    Expanded(child: const Text('Telefon:')),
+                    Expanded(child: const Text('Telefono:')),
                     Flexible(
                       child: TextField(
                         decoration: const InputDecoration(
-                          hintText: 'z.b. +41 12 345 67 89',
+                          hintText: 'ad esempio +39 0123456789',
                         ),
                         controller: TextEditingController(text: ''),
                         onChanged: (value) {
@@ -269,17 +269,17 @@ class _InputRenterState extends State<InputRenter> {
                 Row(
                   children: [
                     Expanded(
-                        child: const Text('Adresse:',
+                        child: const Text('Indirizzo:',
                             style: TextStyle(fontWeight: FontWeight.bold))),
                   ],
                 ),
                 Row(
                   children: [
-                    Expanded(child: const Text('Strasse:')),
+                    Expanded(child: const Text('Via:')),
                     Flexible(
                       child: TextField(
                         decoration: const InputDecoration(
-                          hintText: 'z.B. Maxmusterstrasse 5b',
+                          hintText: 'ad esempio Via Roma 10b',
                         ),
                         controller: TextEditingController(text: ''),
                         onChanged: (value) {
@@ -291,11 +291,11 @@ class _InputRenterState extends State<InputRenter> {
                 ),
                 Row(
                   children: [
-                    Expanded(child: const Text('PLZ/Ort:')),
+                    Expanded(child: const Text('Codice postale/luogo:')),
                     Flexible(
                       child: TextField(
                         decoration: const InputDecoration(
-                          hintText: 'z.b. 8500 Frauenfeld',
+                          hintText: 'ad esempio 00100 Rom',
                         ),
                         controller: TextEditingController(text: ''),
                         onChanged: (value) {
@@ -307,11 +307,11 @@ class _InputRenterState extends State<InputRenter> {
                 ),
                 Row(
                   children: [
-                    Expanded(child: const Text('Land:')),
+                    Expanded(child: const Text('Paese:')),
                     Flexible(
                       child: TextField(
                         decoration: const InputDecoration(
-                          hintText: 'z.b. Schweiz',
+                          hintText: 'ad esempio Italia',
                         ),
                         controller: TextEditingController(text: ''),
                         onChanged: (value) {
@@ -330,17 +330,17 @@ class _InputRenterState extends State<InputRenter> {
                 Row(
                   children: [
                     Expanded(
-                        child: const Text('Zahlungsmittel:',
+                        child: const Text('Mezzi di pagamento:',
                             style: TextStyle(fontWeight: FontWeight.bold))),
                   ],
                 ),
                 Row(
                   children: [
-                    Expanded(child: const Text('Kreditkarte:')),
+                    Expanded(child: const Text('Carta di credito:')),
                     Flexible(
                       child: TextField(
                         decoration: const InputDecoration(
-                          hintText: 'z.b. 1234 5678 9123 4567',
+                          hintText: 'ad esempio 1234 5678 9123 4567',
                         ),
                         controller: TextEditingController(text: ''),
                         onChanged: (value) {
@@ -355,13 +355,13 @@ class _InputRenterState extends State<InputRenter> {
                 Row(
                   children: [
                     Expanded(
-                        child: const Text('Miete:',
+                        child: const Text('Affitto:',
                             style: TextStyle(fontWeight: FontWeight.bold))),
                   ],
                 ),
                 Row(
                   children: [
-                    Expanded(child: const Text('Miet Beginn:')),
+                    Expanded(child: const Text('Inizio noleggio:')),
                     Flexible(
                       child: TextField(
                         decoration: const InputDecoration(
@@ -381,7 +381,7 @@ class _InputRenterState extends State<InputRenter> {
                 const SizedBox(height: 8),
                 Row(
                   children: [
-                    Expanded(child: const Text('Miete Ende:')),
+                    Expanded(child: const Text('Fine affitto:')),
                     Flexible(
                       child: TextField(
                         decoration: const InputDecoration(
@@ -419,7 +419,7 @@ class _InputRenterState extends State<InputRenter> {
                       Navigator.of(context).pop();
                     }
                   },
-                  child: const Text('Speichern'),
+                  child: const Text('Risparmiare'),
                 ),
               ],
             ),

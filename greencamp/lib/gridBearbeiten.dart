@@ -105,31 +105,31 @@ class _gridBearbeiten extends State<gridBearbeiten> {
         !isMietEndeValid) {
       if (!isMailValid) {
         showAlertDialog(context,
-            "Please enter a valid E-mail address! \n(max.musterman@mustermail.ch)");
+            "Inserisci un indirizzo e-mail valido! \n(mario.rossi@esempio.it)");
       }
       if (!isTelefonValid) {
         showAlertDialog(
-            context, "Please enter a valid phone number! \n(+41 12 345 67 89)");
+            context, "Inserisci un numero di telefono valido! \n(+39 0123456789)");
       }
       if (!isStrasseValid) {
         showAlertDialog(context,
-            "Please enter a valid street address! \n(Maxmusterstrasse 5b)");
+            "Inserisci un indirizzo stradale valido! \n(Via Roma 10b)");
       }
       if (!isPlzOrtValid) {
         showAlertDialog(context,
-            "Please enter a valid postal code and city! \n(8500 Frauenfeld)");
+            "Inserire un codice postale e una città validi! \n(00100 Rom)");
       }
       if (!isKreditKarteValid) {
         showAlertDialog(context,
-            "Please enter a valid credit card number! \n(1234 5678 1234 5678)");
+            "Inserisci un numero di carta di credito valido! \n(1234 5678 1234 5678)");
       }
       if (!isMietBeginnValid) {
         showAlertDialog(
-            context, "Please enter a valid start date! \n(dd.mm.yyyy)");
+            context, "Inserire una data di inizio valida! \n(gg.mm.aaaa)");
       }
       if (!isMietEndeValid) {
         showAlertDialog(
-            context, "Please enter a valid end date! \n(dd.mm.yyyy)");
+            context, "Inserire una data di fine valida! \n(gg.mm.aaaa)");
       }
       validation = false;
     }
