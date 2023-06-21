@@ -31,7 +31,7 @@ Future<void> logUserOut(BuildContext context) async {
                 children: [
                   Expanded(
                       child: const Text(
-                          'Sind Sie sicher, dass Sie sich ausloggen wollen?',
+                          'È sicuro di volersi disconnettere?',
                           style: TextStyle(fontWeight: FontWeight.bold))),
                 ],
               ),
@@ -43,13 +43,13 @@ Future<void> logUserOut(BuildContext context) async {
                             changeIfUserIsLoggedIn(false);
                             Navigator.of(context).pop();
                           },
-                          child: Text('Ausloggen'))),
+                          child: Text('Disconnettersi'))),
                   Expanded(
                       child: TextButton(
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
-                          child: Text('Abbrechen')))
+                          child: Text('Annullamento')))
                 ],
               ),
             ],

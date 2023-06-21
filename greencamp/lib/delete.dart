@@ -33,7 +33,7 @@ Future<void> deleteUser(BuildContext context, int campNr, String date) async {
                 children: [
                   Expanded(
                       child: const Text(
-                          'Sind Sie sicher, dass Sie die Reservation löschen wollen?:',
+                          'È sicuro di voler cancellare la prenotazione?:',
                           style: TextStyle(fontWeight: FontWeight.bold))),
                 ],
               ),
@@ -46,14 +46,14 @@ Future<void> deleteUser(BuildContext context, int campNr, String date) async {
                             Navigator.of(context).pop();
                             positioninfos(context, campNr, date);
                           },
-                          child: Text('Löschen'))),
+                          child: Text('Cancellare'))),
                   Expanded(
                       child: TextButton(
                           onPressed: () {
                             Navigator.of(context).pop();
                             gridInfoAfterInsert(context, campNr, date);
                           },
-                          child: Text('Abbrechen')))
+                          child: Text('Annullamento')))
                 ],
               ),
             ],

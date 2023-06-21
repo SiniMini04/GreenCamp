@@ -83,19 +83,19 @@ Future<void> positioninfos(
               Row(
                 children: [
                   Expanded(
-                      child: const Text('Person:',
+                      child: const Text('Persona:',
                           style: TextStyle(fontWeight: FontWeight.bold))),
                 ],
               ),
               Row(
                 children: [
-                  Expanded(child: const Text('Vorname:')),
+                  Expanded(child: const Text('Nome:')),
                   Flexible(child: Text(vorname)),
                 ],
               ),
               Row(
                 children: [
-                  Expanded(child: const Text('Nachname:')),
+                  Expanded(child: const Text('Cognome:')),
                   Flexible(child: Text(nachname)),
                 ],
               ),
@@ -107,7 +107,7 @@ Future<void> positioninfos(
               ),
               Row(
                 children: [
-                  Expanded(child: const Text('Telefon:')),
+                  Expanded(child: const Text('Telefono:')),
                   Flexible(child: Text(telefon)),
                 ],
               ),
@@ -116,25 +116,25 @@ Future<void> positioninfos(
               Row(
                 children: [
                   Expanded(
-                      child: const Text('Adresse:',
+                      child: const Text('Indirizzo:',
                           style: TextStyle(fontWeight: FontWeight.bold))),
                 ],
               ),
               Row(
                 children: [
-                  Expanded(child: const Text('Strasse:')),
+                  Expanded(child: const Text('Via:')),
                   Flexible(child: Text(strasse)),
                 ],
               ),
               Row(
                 children: [
-                  Expanded(child: const Text('PLZ/Ort:')),
+                  Expanded(child: const Text('Codice postale/luogo:')),
                   Flexible(child: Text(plzOrt)),
                 ],
               ),
               Row(
                 children: [
-                  Expanded(child: const Text('Land:')),
+                  Expanded(child: const Text('Paese:')),
                   Flexible(child: Text(land)),
                 ],
               ),
@@ -143,13 +143,13 @@ Future<void> positioninfos(
               Row(
                 children: [
                   Expanded(
-                      child: const Text('Zahlungsmittel:',
+                      child: const Text('Mezzi di pagamento:',
                           style: TextStyle(fontWeight: FontWeight.bold))),
                 ],
               ),
               Row(
                 children: [
-                  Expanded(child: const Text('Kreditkarte:')),
+                  Expanded(child: const Text('Carta di credito:')),
                   Flexible(child: Text(kreditKarte)),
                 ],
               ),
@@ -158,13 +158,13 @@ Future<void> positioninfos(
               Row(
                 children: [
                   Expanded(
-                      child: const Text('Miete:',
+                      child: const Text('Affitto:',
                           style: TextStyle(fontWeight: FontWeight.bold))),
                 ],
               ),
               Row(
                 children: [
-                  Expanded(child: const Text('Mietdauer:')),
+                  Expanded(child: const Text('Periodo di noleggio:')),
                   Flexible(child: Text(mietBeginn + ' - ' + mietEnde)),
                 ],
               ),
@@ -173,14 +173,14 @@ Future<void> positioninfos(
                 children: [
                   Expanded(
                       child: TextButton(
-                          onPressed: () {}, child: Text('Bearbeiten'))),
+                          onPressed: () {}, child: Text('Modifica'))),
                   Expanded(
                       child: TextButton(
                           onPressed: () {
                             Navigator.of(context).pop();
                             inputRenter(context, campNr, date);
                           },
-                          child: Text('Hinzufügen')))
+                          child: Text('Aggiungi')))
                 ],
               ),
             ],
