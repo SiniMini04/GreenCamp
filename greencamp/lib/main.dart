@@ -10,7 +10,6 @@ import 'login.dart';
 import 'logout.dart';
 import 'kalender.dart';
 
-
 void main() async {
   runApp(MyApp());
 }
@@ -300,10 +299,8 @@ class _MyAppState extends State<MyApp> {
                                   true)
                                 Positioned.fill(
                                   child: Container(
-
                                     child: IconButton(
                                       icon: const Icon(Icons.bolt),
-
                                       color: Colors.yellow,
                                       onPressed: () async {
                                         if (await checkWhichPopUp(index)) {

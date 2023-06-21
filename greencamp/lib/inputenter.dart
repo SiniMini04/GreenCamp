@@ -128,8 +128,8 @@ class _InputRenterState extends State<InputRenter> {
             "Inserisci un indirizzo e-mail valido! \n(mario.rossi@esempio.it)");
       }
       if (!isTelefonValid) {
-        showAlertDialog(
-            context, "Inserisci un numero di telefono valido! \n(+39 0123456789)");
+        showAlertDialog(context,
+            "Inserisci un numero di telefono valido! \n(+39 0123456789)");
       }
       if (!isStrasseValid) {
         showAlertDialog(context,
@@ -401,7 +401,7 @@ class _InputRenterState extends State<InputRenter> {
                 ElevatedButton(
                   onPressed: () async {
                     if (validateFields(context)) {
-                      insertData(
+                      await insertData(
                           vorname,
                           nachname,
                           strasse,

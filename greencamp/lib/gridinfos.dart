@@ -58,8 +58,8 @@ Future<List<Map<String, dynamic>>> getLendStatus(
       plzOrt = row['KundPlzOrt'];
       land = row['KundLand'];
       kreditKarte = row['KundKreditkartenNr'].toString();
-      mietBeginn = row['KundBeginMiete'];
-      mietEnde = row['KundEndeMiete'];
+      mietBeginn = row['BelegBeginMiete'];
+      mietEnde = row['BelegEndeMiete'];
     }
   }
 

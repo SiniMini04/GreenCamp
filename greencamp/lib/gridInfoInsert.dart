@@ -37,9 +37,9 @@ Future<List<Map<String, dynamic>>> getLendStatus(
 
   for (var row in queryResult) {
     String mieteBeginUebergang =
-        row['KundBeginMiete'].toString().substring(0, 10);
+        row['BelegBeginMiete'].toString().substring(0, 10);
     String mieteEndeUebergang =
-        row['KundEndeMiete'].toString().substring(0, 10);
+        row['BelegEndeMiete'].toString().substring(0, 10);
 
     DateTime beginDate = DateFormat("yyyy-MM-dd").parse(mieteBeginUebergang);
     String fixedBegin = DateFormat("dd.MM.yyyy").format(beginDate);
@@ -95,25 +95,19 @@ Future<void> gridInfoAfterInsert(
               const Row(
                 children: [
                   Expanded(
-
                       child: const Text('Persona:',
-
                           style: TextStyle(fontWeight: FontWeight.bold))),
                 ],
               ),
               Row(
                 children: [
-
                   Expanded(child: const Text('Nome:')),
-
                   Flexible(child: Text(vorname)),
                 ],
               ),
               Row(
                 children: [
-
                   Expanded(child: const Text('Cognome:')),
-
                   Flexible(child: Text(nachname)),
                 ],
               ),
@@ -134,9 +128,7 @@ Future<void> gridInfoAfterInsert(
               const Row(
                 children: [
                   Expanded(
-
                       child: const Text('Indirizzo:',
-
                           style: TextStyle(fontWeight: FontWeight.bold))),
                 ],
               ),
@@ -163,9 +155,7 @@ Future<void> gridInfoAfterInsert(
               const Row(
                 children: [
                   Expanded(
-
                       child: const Text('Mezzi di pagamento:',
-
                           style: TextStyle(fontWeight: FontWeight.bold))),
                 ],
               ),
@@ -180,9 +170,7 @@ Future<void> gridInfoAfterInsert(
               const Row(
                 children: [
                   Expanded(
-
                       child: const Text('Affitto:',
-
                           style: TextStyle(fontWeight: FontWeight.bold))),
                 ],
               ),
