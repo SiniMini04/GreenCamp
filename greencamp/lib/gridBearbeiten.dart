@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_date_pickers/flutter_date_pickers.dart';
 import 'datenbankabfrage.dart';
 import 'gridInfoInsert.dart';
-import 'package:mysql1/src/single_connection.dart';
 import 'package:intl/intl.dart';
 
 class gridBearbeiten extends StatefulWidget {
@@ -96,6 +95,7 @@ class _gridBearbeiten extends State<gridBearbeiten> {
         RegExp(r'^\d{2}\.\d{2}\.\d{4}$').hasMatch(mietBeginn);
     bool isMietEndeValid = RegExp(r'^\d{2}\.\d{2}\.\d{4}$').hasMatch(mietEnde);
 
+
     if (!isMailValid ||
         !isTelefonValid ||
         !isStrasseValid ||
@@ -135,6 +135,7 @@ class _gridBearbeiten extends State<gridBearbeiten> {
     }
 
     return validation;
+
   }
 
   void _onSelectedDateChanged(DatePeriod newPeriod) {
@@ -182,6 +183,7 @@ class _gridBearbeiten extends State<gridBearbeiten> {
       int campNr, String date) async {
     List<Map<String, dynamic>> resultList = [];
 
+
     Results queryResult = await selectQuery(campNr, date);
 
     for (var row in queryResult) {
@@ -189,6 +191,7 @@ class _gridBearbeiten extends State<gridBearbeiten> {
           row['KundBeginMiete'].toString().substring(0, 11);
       String mieteEndeUebergang =
           row['KundEndeMiete'].toString().substring(0, 11);
+
 
       DateTime beginDate = DateFormat("yyyy-MM-dd").parse(mieteBeginUebergang);
       String fixedBegin = DateFormat("dd.MM.yyyy").format(beginDate);
@@ -213,6 +216,7 @@ class _gridBearbeiten extends State<gridBearbeiten> {
     return resultList;
   }
 
+
   Future<void> changeUser(BuildContext context, int campNr, String date) async {
     await getLendStatus(campNr, date);
     initState();
@@ -233,11 +237,13 @@ class _gridBearbeiten extends State<gridBearbeiten> {
                       icon: Icon(Icons.close),
                       onPressed: () {
                         Navigator.of(context).pop();
+
                       },
                       splashColor: Colors.transparent,
                       highlightColor: Colors.transparent,
                       hoverColor: Colors.transparent,
                     ),
+
                   ],
                 ),
                 // Person
@@ -264,8 +270,10 @@ class _gridBearbeiten extends State<gridBearbeiten> {
                           FilteringTextInputFormatter.allow(
                               RegExp(r'[a-zA-ZäöüÄÖÜ\- ]')),
                         ],
+
                       ),
                     ),
+
                   ],
                 ),
                 Row(
@@ -284,8 +292,10 @@ class _gridBearbeiten extends State<gridBearbeiten> {
                           FilteringTextInputFormatter.allow(
                               RegExp(r'[a-zA-ZäöüÄÖÜ\- ]')),
                         ],
+
                       ),
                     ),
+
                   ],
                 ),
                 Row(
@@ -300,8 +310,10 @@ class _gridBearbeiten extends State<gridBearbeiten> {
                         onChanged: (value) {
                           mail = value;
                         },
+
                       ),
                     ),
+
                   ],
                 ),
                 Row(
@@ -316,8 +328,10 @@ class _gridBearbeiten extends State<gridBearbeiten> {
                         onChanged: (value) {
                           telefon = value;
                         },
+
                       ),
                     ),
+
                   ],
                 ),
                 const SizedBox(height: 8),
@@ -341,8 +355,10 @@ class _gridBearbeiten extends State<gridBearbeiten> {
                         onChanged: (value) {
                           strasse = value;
                         },
+
                       ),
                     ),
+
                   ],
                 ),
                 Row(
@@ -357,8 +373,10 @@ class _gridBearbeiten extends State<gridBearbeiten> {
                         onChanged: (value) {
                           plzOrt = value;
                         },
+
                       ),
                     ),
+
                   ],
                 ),
                 Row(
@@ -377,8 +395,10 @@ class _gridBearbeiten extends State<gridBearbeiten> {
                           FilteringTextInputFormatter.allow(
                               RegExp(r'[a-zA-ZäöüÄÖÜ\- ]')),
                         ],
+
                       ),
                     ),
+
                   ],
                 ),
                 const SizedBox(height: 8),
@@ -402,8 +422,10 @@ class _gridBearbeiten extends State<gridBearbeiten> {
                         onChanged: (value) {
                           kreditKarte = value;
                         },
+
                       ),
                     ),
+
                   ],
                 ),
                 const SizedBox(height: 8),
@@ -430,8 +452,10 @@ class _gridBearbeiten extends State<gridBearbeiten> {
                         onChanged: (value) {
                           mietBeginn = value;
                         },
+
                       ),
                     ),
+
                   ],
                 ),
                 const SizedBox(height: 8),
@@ -489,6 +513,7 @@ class _gridBearbeiten extends State<gridBearbeiten> {
                 ),
               ],
             ),
+
           ),
         ),
       ),

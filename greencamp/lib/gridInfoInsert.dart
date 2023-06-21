@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:greencamp/datenbankabfrage.dart';
-import 'package:mysql1/src/single_connection.dart';
 import 'package:intl/intl.dart';
 import 'delete.dart';
 import 'gridBearbeiten.dart';
@@ -34,13 +33,13 @@ Future<List<Map<String, dynamic>>> getLendStatus(
   resetInputs();
   List<Map<String, dynamic>> resultList = [];
 
-  Results queryResult = await selectQuery(campNr, date);
+  List<dynamic> queryResult = await selectQuery(campNr, date);
 
   for (var row in queryResult) {
     String mieteBeginUebergang =
-        row['KundBeginMiete'].toString().substring(0, 11);
+        row['KundBeginMiete'].toString().substring(0, 10);
     String mieteEndeUebergang =
-        row['KundEndeMiete'].toString().substring(0, 11);
+        row['KundEndeMiete'].toString().substring(0, 10);
 
     DateTime beginDate = DateFormat("yyyy-MM-dd").parse(mieteBeginUebergang);
     String fixedBegin = DateFormat("dd.MM.yyyy").format(beginDate);
@@ -96,19 +95,25 @@ Future<void> gridInfoAfterInsert(
               const Row(
                 children: [
                   Expanded(
-                      child: Text('Person:',
+
+                      child: const Text('Persona:',
+
                           style: TextStyle(fontWeight: FontWeight.bold))),
                 ],
               ),
               Row(
                 children: [
-                  const Expanded(child: Text('Vorname:')),
+
+                  Expanded(child: const Text('Nome:')),
+
                   Flexible(child: Text(vorname)),
                 ],
               ),
               Row(
                 children: [
-                  const Expanded(child: Text('Nachname:')),
+
+                  Expanded(child: const Text('Cognome:')),
+
                   Flexible(child: Text(nachname)),
                 ],
               ),
@@ -120,7 +125,7 @@ Future<void> gridInfoAfterInsert(
               ),
               Row(
                 children: [
-                  Expanded(child: const Text('Telefon:')),
+                  Expanded(child: const Text('Telefono:')),
                   Flexible(child: Text(telefon)),
                 ],
               ),
@@ -129,25 +134,27 @@ Future<void> gridInfoAfterInsert(
               const Row(
                 children: [
                   Expanded(
-                      child: Text('Adresse:',
+
+                      child: const Text('Indirizzo:',
+
                           style: TextStyle(fontWeight: FontWeight.bold))),
                 ],
               ),
               Row(
                 children: [
-                  Expanded(child: const Text('Strasse:')),
+                  Expanded(child: const Text('Via:')),
                   Flexible(child: Text(strasse)),
                 ],
               ),
               Row(
                 children: [
-                  Expanded(child: const Text('PLZ/Ort:')),
+                  Expanded(child: const Text('Codice postale/luogo:')),
                   Flexible(child: Text(plzOrt)),
                 ],
               ),
               Row(
                 children: [
-                  Expanded(child: const Text('Land:')),
+                  Expanded(child: const Text('Paese:')),
                   Flexible(child: Text(land)),
                 ],
               ),
@@ -156,13 +163,15 @@ Future<void> gridInfoAfterInsert(
               const Row(
                 children: [
                   Expanded(
-                      child: Text('Zahlungsmittel:',
+
+                      child: const Text('Mezzi di pagamento:',
+
                           style: TextStyle(fontWeight: FontWeight.bold))),
                 ],
               ),
               Row(
                 children: [
-                  Expanded(child: const Text('Kreditkarte:')),
+                  Expanded(child: const Text('Carta di credito:')),
                   Flexible(child: Text(kreditKarte)),
                 ],
               ),
@@ -171,13 +180,15 @@ Future<void> gridInfoAfterInsert(
               const Row(
                 children: [
                   Expanded(
-                      child: Text('Miete:',
+
+                      child: const Text('Affitto:',
+
                           style: TextStyle(fontWeight: FontWeight.bold))),
                 ],
               ),
               Row(
                 children: [
-                  Expanded(child: const Text('Mietdauer:')),
+                  Expanded(child: const Text('Periodo di noleggio:')),
                   Flexible(child: Text(mietBeginn + ' - ' + mietEnde)),
                 ],
               ),
@@ -190,7 +201,7 @@ Future<void> gridInfoAfterInsert(
                             Navigator.of(context).pop();
                             deleteUser(context, campNr, date);
                           },
-                          child: Text('Löschen'))),
+                          child: Text('Cancellare'))),
                   Expanded(
                       child: TextButton(
                           onPressed: () {
@@ -201,7 +212,7 @@ Future<void> gridInfoAfterInsert(
                                 .createState()
                                 .changeUser(context, campNr, date);
                           },
-                          child: Text('Bearbeiten')))
+                          child: Text('Modifica')))
                 ],
               ),
             ],

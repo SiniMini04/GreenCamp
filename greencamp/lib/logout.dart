@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:greencamp/datenbankabfrage.dart';
-import 'gridinfos.dart';
-import 'gridInfoInsert.dart';
+import 'login.dart';
 
-Future<void> deleteUser(BuildContext context, int campNr, String date) async {
+Future<void> logUserOut(BuildContext context) async {
   await showDialog<String>(
     context: context,
     builder: (BuildContext context) => Dialog(
@@ -33,7 +31,7 @@ Future<void> deleteUser(BuildContext context, int campNr, String date) async {
                 children: [
                   Expanded(
                       child: const Text(
-                          'È sicuro di voler cancellare la prenotazione?:',
+                          'È sicuro di volersi disconnettere?',
                           style: TextStyle(fontWeight: FontWeight.bold))),
                 ],
               ),
@@ -42,16 +40,14 @@ Future<void> deleteUser(BuildContext context, int campNr, String date) async {
                   Expanded(
                       child: TextButton(
                           onPressed: () async {
-                            await deleteReservation(campNr);
+                            changeIfUserIsLoggedIn(false);
                             Navigator.of(context).pop();
-                            positioninfos(context, campNr, date);
                           },
-                          child: Text('Cancellare'))),
+                          child: Text('Disconnettersi'))),
                   Expanded(
                       child: TextButton(
                           onPressed: () {
                             Navigator.of(context).pop();
-                            gridInfoAfterInsert(context, campNr, date);
                           },
                           child: Text('Annullamento')))
                 ],

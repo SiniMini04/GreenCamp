@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:mysql1/mysql1.dart';
 import 'positions.dart';
 import 'datenbankabfrage.dart';
 import 'gridinfos.dart';
 import 'gridInfoInsert.dart';
 import 'package:desktop_window/desktop_window.dart';
 import 'dart:io';
+import 'login.dart';
+import 'logout.dart';
+import 'kalender.dart';
+
 
 void main() async {
   runApp(MyApp());
@@ -28,6 +31,8 @@ class _MyAppState extends State<MyApp> {
   String shownDate = DateFormat('dd.MM.yyyy').format(DateTime.now());
   bool _isLoading = false;
   List<bool> _isButtonFree = List.filled(positions.length, false);
+  bool isTheUserLoggedIn = false;
+  String username = "";
 
   bool wasTheUserInserted = false;
 
@@ -52,8 +57,8 @@ class _MyAppState extends State<MyApp> {
 
     if (buttonOccupied.isNotEmpty) {
       for (int index = 0; index < buttonOccupied.length; index++) {
-        ResultRow currentCampsite = buttonOccupied[index];
-        int campsiteValue = currentCampsite.elementAt(0);
+        int currentCampsite = buttonOccupied[index];
+        int campsiteValue = currentCampsite;
         for (int i = 0; i < positions.length; i++) {
           if (_isButtonFree[i] == false) {
             if (identical(i, campsiteValue)) {
@@ -186,19 +191,53 @@ class _MyAppState extends State<MyApp> {
                           ))),
                           Expanded(
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Expanded(
                                   child: TextButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      var data = getAppointments();
+                                      showCalendar(context, data);
+                                    },
                                     style: TextButton.styleFrom(
                                       backgroundColor: Colors.transparent,
                                       primary: Colors.white,
                                     ),
                                     child: Text(
-                                      'User',
+                                      'Calendario',
                                       textAlign: TextAlign.center,
                                     ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: TextButton(
+                                    onPressed: () async {
+                                      if (isTheUserLoggedIn) {
+                                        await logUserOut(context);
+                                        setState(() {
+                                          isTheUserLoggedIn =
+                                              getIfUserIsLoggedIn();
+                                        });
+                                      } else {
+                                        await loginPopUp(context);
+                                        setState(() {
+                                          isTheUserLoggedIn =
+                                              getIfUserIsLoggedIn();
+                                        });
+                                      }
+                                    },
+                                    style: TextButton.styleFrom(
+                                      backgroundColor: Colors.transparent,
+                                      primary: Colors.white,
+                                    ),
+                                    child: isTheUserLoggedIn
+                                        ? Text(
+                                            'Disconnettersi',
+                                            textAlign: TextAlign.center,
+                                          )
+                                        : Text(
+                                            'Accedi',
+                                            textAlign: TextAlign.center,
+                                          ),
                                   ),
                                 ),
                                 IconButton(
@@ -255,16 +294,30 @@ class _MyAppState extends State<MyApp> {
                                       splashColor: Colors.transparent,
                                       highlightColor: Colors.transparent,
                                       hoverColor: Colors.transparent,
-                                      key: ValueKey(index),
+                                      key: ValueKey(index + 1),
                                     ),
                               if (positions[index]['electricityConnection'] ==
                                   true)
                                 Positioned.fill(
                                   child: Container(
-                                    child: const Icon(
-                                      Icons.bolt,
+
+                                    child: IconButton(
+                                      icon: const Icon(Icons.bolt),
+
                                       color: Colors.yellow,
-                                      size: 20.0,
+                                      onPressed: () async {
+                                        if (await checkWhichPopUp(index)) {
+                                          gridInfoAfterInsert(
+                                              context, index, shownDate);
+                                        } else {
+                                          positioninfos(
+                                              context, index, shownDate);
+                                        }
+                                      },
+                                      splashColor: Colors.transparent,
+                                      highlightColor: Colors.transparent,
+                                      hoverColor: Colors.transparent,
+                                      iconSize: 20,
                                     ),
                                   ),
                                 ),
